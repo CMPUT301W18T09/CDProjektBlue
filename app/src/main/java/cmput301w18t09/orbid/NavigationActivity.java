@@ -1,8 +1,12 @@
 package cmput301w18t09.orbid;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +86,23 @@ public class NavigationActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
+            // This currently works
+            MapActivity mapActivity = new MapActivity();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+
         } else if (id == R.id.nav_slideshow) {
+
+            // Example of calling child activity
+            Intent intent = new Intent(this, RecentListingsActivity.class);
+            this.startActivity(intent);
+            
 
         } else if (id == R.id.nav_manage) {
 
@@ -98,4 +116,6 @@ public class NavigationActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
