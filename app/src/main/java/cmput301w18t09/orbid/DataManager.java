@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class DataManager {
     private static JestDroidClient client;
+    private ArrayList<Task> cachedTasks;
+    private ArrayList<User> cachedUsers;
 
     public DataManager(){
         DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080/CMPUT301W18T09");
