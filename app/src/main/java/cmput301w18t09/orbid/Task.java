@@ -7,16 +7,21 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-public class Task {
+enum TaskStatus {
+    REQUESTED, ACCEPTED, DECLINED, COMPLETED;
+}
 
+public class Task {
     private User requester;
     private String description;
     private String title;
     private String ID;
     private double price;
     private int status;
+    private TaskStatus taskStatus;
     private LatLng location;
     private ArrayList<Bid> bidList;
+    private Bid acceptedBid;
     private ArrayList<Image> photoList;
 
     public Task(User requester, String description, String title, double price, int status)
@@ -25,7 +30,8 @@ public class Task {
         this.description = description;
         this.title = title;
         this.price = price;
-        this.status = status;
+        setStatus(status);
+
     }
 
     public User getRequester() {
@@ -74,6 +80,16 @@ public class Task {
 
     public void setStatus(int status) {
         this.status = status;
+        switch(status) {
+            case 1:
+                taskStatus = taskStatus.REQUESTED;
+            case 2:
+                taskStatus = taskStatus.ACCEPTED;
+            case 3:
+                taskStatus = taskStatus.DECLINED;
+            case 4:
+                taskStatus = taskStatus.COMPLETED;
+        }
     }
 
     public LatLng getLocation() {
@@ -100,29 +116,37 @@ public class Task {
         this.photoList = photoList;
     }
 
-    public void addBid(Bid bid)
-    {
+    public TaskStatus getTaskStatus() { return taskStatus; }
+
+
+    public Bid getAcceptedBid() { return acceptedBid; }
+
+    public void addBid(Bid bid) {
 
     }
 
-    public void repost()
-    {
+    public void repost() {
 
     }
 
-    public void addPhoto()
-    {
+    public void addPhoto() {
 
     }
 
-    public void acceptBid(int index)
-    {
+    public void acceptBid(int index) {
+        acceptedBid = bidList.get(index);
+    }
+
+    public void declineBid(int index) {
 
     }
 
-    public void declineBid(int index)
-    {
+    public Boolean containsBid(Bid bid) {
+        return bidList.contains(bid);
+    }
 
+    public Boolean containsPhoto(Image image) {
+        return photoList.contains(image);
     }
 
 
