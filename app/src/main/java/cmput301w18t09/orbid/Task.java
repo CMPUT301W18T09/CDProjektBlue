@@ -13,13 +13,13 @@ public class Task {
     private String description;
     private String title;
     private String ID;
-    private float price;
+    private double price;
     private int status;
     private LatLng location;
     private ArrayList<Bid> bidList;
     private ArrayList<Image> photoList;
 
-    public Task(User requester, String description, String title, float price, int status)
+    public Task(User requester, String description, String title, double price, int status)
     {
         this.requester = requester;
         this.description = description;
@@ -60,11 +60,11 @@ public class Task {
         this.ID = ID;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
