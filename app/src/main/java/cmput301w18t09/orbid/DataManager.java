@@ -53,7 +53,7 @@ public class DataManager {
         }
     }
 
-    public static boolean doesUserExits(String username){
+    public static boolean doesUserExist(String username){
 
         return false;
     }
