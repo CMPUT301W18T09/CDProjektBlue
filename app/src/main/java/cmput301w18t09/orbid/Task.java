@@ -19,9 +19,9 @@ public class Task {
     private double price;
     private int status;
     private TaskStatus taskStatus;
+    private Bid acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
-    private Bid acceptedBid;
     private ArrayList<Image> photoList;
 
     public Task(User requester, String description, String title, double price, int status)
