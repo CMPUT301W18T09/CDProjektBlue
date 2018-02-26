@@ -1,15 +1,13 @@
 package cmput301w18t09.orbid;
 
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-enum TaskStatus {
-    REQUESTED, ACCEPTED, DECLINED, COMPLETED;
-}
 
 public class Task {
     private User requester;
@@ -17,19 +15,24 @@ public class Task {
     private String title;
     private String ID;
     private double price;
-    private int status;
-    private TaskStatus taskStatus;
+    private TaskStatus status;
     private Bid acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
-    private ArrayList<Image> photoList;
+    private ArrayList<Bitmap> photoList;
 
-    public Task(User requester, String description, String title, double price, int status)
+    public enum TaskStatus {
+        REQUESTED, BIDDED, ASSIGNED, COMPLETED;
+    }
+
+    public Task(User requester, String description, String title, double price, TaskStatus status)
     {
         this.requester = requester;
         this.description = description;
         this.title = title;
         this.price = price;
+        this.bidList = new ArrayList<Bid>();
+        this.photoList = new ArrayList<Bitmap>();
         setStatus(status);
 
     }
@@ -51,7 +54,7 @@ public class Task {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -59,7 +62,7 @@ public class Task {
     }
 
     public String getID() {
-        return ID;
+        return this.ID;
     }
 
     public void setID(String ID) {
@@ -74,26 +77,16 @@ public class Task {
         this.price = price;
     }
 
-    public int getStatus() {
-        return status;
+    public TaskStatus getStatus() {
+        return this.status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
-        switch(status) {
-            case 1:
-                taskStatus = taskStatus.REQUESTED;
-            case 2:
-                taskStatus = taskStatus.ACCEPTED;
-            case 3:
-                taskStatus = taskStatus.DECLINED;
-            case 4:
-                taskStatus = taskStatus.COMPLETED;
-        }
     }
 
     public LatLng getLocation() {
-        return location;
+        return this.location;
     }
 
     public void setLocation(LatLng location) {
@@ -101,51 +94,54 @@ public class Task {
     }
 
     public ArrayList<Bid> getBidList() {
-        return bidList;
+        return this.bidList;
     }
 
     public void setBidList(ArrayList<Bid> bidList) {
         this.bidList = bidList;
     }
 
-    public ArrayList<Image> getPhotoList() {
-        return photoList;
+    public ArrayList<Bitmap> getPhotoList() {
+        return this.photoList;
     }
 
-    public void setPhotoList(ArrayList<Image> photoList) {
+    public void setPhotoList(ArrayList<Bitmap> photoList) {
         this.photoList = photoList;
     }
 
-    public TaskStatus getTaskStatus() { return taskStatus; }
 
-
-    public Bid getAcceptedBid() { return acceptedBid; }
+    public Bid getAcceptedBid() { return this.acceptedBid; }
 
     public void addBid(Bid bid) {
-
+        this.bidList.add(bid);
     }
 
     public void repost() {
 
+        // code to repost
+
+        this.status = TaskStatus.REQUESTED;
+
     }
 
-    public void addPhoto() {
-
+    public void addPhoto(Bitmap image) {
+        this.photoList.add(image);
     }
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);
+        status = TaskStatus.ASSIGNED;
     }
 
     public void declineBid(int index) {
-
+        bidList.remove(index);
     }
 
     public Boolean containsBid(Bid bid) {
         return bidList.contains(bid);
     }
 
-    public Boolean containsPhoto(Image image) {
+    public Boolean containsPhoto(Bitmap image) {
         return photoList.contains(image);
     }
 
