@@ -27,7 +27,7 @@ public class DataManagerTest extends ActivityInstrumentationTestCase2 {
         User user = new User("myUsername", "myemail@ualberta.ca",
                 "7805555555", "FirstName", "LastName");
         Task task = new Task(user, "Task Description", "Task Title",
-                20.00f, 1);
+                20.00f, Task.TaskStatus.REQUESTED);
 
         addObjectTask.execute(task);
         getObjectTask.execute("");
@@ -48,7 +48,7 @@ public class DataManagerTest extends ActivityInstrumentationTestCase2 {
         User user = new User("myUsername", "myemail@ualberta.ca",
                 "7805555555", "FirstName", "LastName");
         Task task = new Task(user, "Task Description", "Task Title1",
-                20.00f, 1);
+                20.00f, Task.TaskStatus.REQUESTED);
 
         //Create a task, add it to the server, check to ensure it's there
         addObjectTask.execute(task);
@@ -79,7 +79,8 @@ public class DataManagerTest extends ActivityInstrumentationTestCase2 {
                 "7805555555", "FirstName", "LastName");
 
         assertFalse(DataManager.doesUserExist(username));
-        addObjectTask.execute(user);
+//        Will change when implementation is solved
+//        addObjectTask.execute(user);
         assertTrue(DataManager.doesUserExist(username));
     }
 
