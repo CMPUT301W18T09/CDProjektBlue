@@ -2,12 +2,9 @@ package cmput301w18t09.orbid;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,7 +26,7 @@ public class AddEditTaskActivity extends NavigationActivity {
         Bid testBid = new Bid(testUser, 3.14, "test");
         bidList.add(testBid);
         ListView listView = (ListView) findViewById(R.id.BidList);
-        BidAdapter bidAdapter = new BidAdapter();
+        BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
         listView.setAdapter(bidAdapter);
     }
 
@@ -46,7 +43,7 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     }
 
-    class BidAdapter extends BaseAdapter {
+    /*class BidAdapter extends BaseAdapter {
         @Override
         public int getCount() {
             return bidList.size();
@@ -72,6 +69,6 @@ public class AddEditTaskActivity extends NavigationActivity {
 
             return view;
         }
-    }
+    }*/
 
 }

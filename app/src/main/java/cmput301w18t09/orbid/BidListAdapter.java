@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,15 +30,16 @@ public class BidListAdapter extends ArrayAdapter {
 
         // An short example of inflating a bid item in the list
 
-        // if(bidItem == null) {
-        //    bidItem = LayoutInflater.from(context).inflate(R.layout.bid_item, parent, false);
-        // }
+        if(bidItem == null) {
+            bidItem = LayoutInflater.from(context).inflate(R.layout.bid_listview_layout, parent, false);
+         }
 
-        // Bid bid = bidList.get(position);
-        // TextView tvDescription = (TextView) bidItem.findViewById(R.id.bid_list_layout);
-        // tvDescription.setText(bid.getDescription());
+        Bid bid = bidList.get(position);
+        TextView bidPrice = (TextView) bidItem.findViewById(R.id.BidPrice);
+        TextView bidComment = (TextView) bidItem.findViewById(R.id.BidComment);
 
-
+        bidPrice.setText(Double.toString(bid.getPrice()));
+        bidComment.setText(bid.getDescription());
         return bidItem;
     }
 }
