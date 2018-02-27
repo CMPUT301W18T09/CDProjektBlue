@@ -19,9 +19,8 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        setContentView(R.layout.activity_add_edit_task);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_edit_task);
         User testUser = new User("test", "test","test", "test", "test");
         Bid testBid = new Bid(testUser, 3.14, "test");
         bidList.add(testBid);

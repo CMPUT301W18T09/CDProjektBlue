@@ -100,7 +100,7 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
             // Example of calling child activity
-            Intent intent = new Intent(this, RecentListingsActivity.class);
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
             this.startActivity(intent);
             
 
