@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/TaskCommentTitle"
-        android:layout_width="300"
+        android:layout_width="300dp"
         android:layout_height="25dp"
         android:layout_above="@+id/TaskComment"
         android:layout_alignStart="@+id/TaskTitle"

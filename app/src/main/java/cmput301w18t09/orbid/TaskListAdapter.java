@@ -27,7 +27,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     {
         View taskItem = convertView;
 
-        // An short example of inflating a bid item in the list
+        // A short example of inflating a bid item in the list
 
         // if(taskItem == null) {
         //    bidItem = LayoutInflater.from(context).inflate(R.layout.bid_item, parent, false);
