@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 
+ // Todo: Repost
+
 public class Task {
     private User requester;
     private String description;
@@ -118,7 +120,7 @@ public class Task {
 
     public void repost() {
 
-        // code to repost
+        // Todo: code to repost
 
         this.status = TaskStatus.REQUESTED;
 
