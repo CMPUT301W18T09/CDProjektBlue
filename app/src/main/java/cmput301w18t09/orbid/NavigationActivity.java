@@ -117,5 +117,10 @@ public class NavigationActivity extends AppCompatActivity
         return true;
     }
 
+    public void goToAddEdit(View view) {
+        Intent intent = new Intent(NavigationActivity.this, AddEditTaskActivity.class);
+        this.startActivity(intent);
+    }
+
 
 }
