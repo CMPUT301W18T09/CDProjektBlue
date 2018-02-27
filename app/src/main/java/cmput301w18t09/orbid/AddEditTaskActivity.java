@@ -23,7 +23,11 @@ public class AddEditTaskActivity extends NavigationActivity {
         setContentView(R.layout.activity_add_edit_task);
         User testUser = new User("test", "test","test", "test", "test");
         Bid testBid = new Bid(testUser, 3.14, "test");
+        Bid testBid2 = new Bid(testUser, 3.14, "test");
+        Bid testBid3 = new Bid(testUser, 3.14, "test");
         bidList.add(testBid);
+        bidList.add(testBid2);
+        bidList.add(testBid3);
         ListView listView = (ListView) findViewById(R.id.BidList);
         BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
         listView.setAdapter(bidAdapter);
@@ -42,32 +46,5 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     }
 
-    /*class BidAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return bidList.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = getLayoutInflater().inflate(R.layout.bid_listview_layout, null);
-            TextView bidPrice = (TextView)view.findViewById(R.id.BidPrice);
-            TextView bidComment = (TextView)view.findViewById(R.id.BidComment);
-            bidPrice.setText("Price:" + Double.toString(bidList.get(i).getPrice()));
-            bidComment.setText(bidList.get(i).getDescription());
-
-            return view;
-        }
-    }*/
 
 }

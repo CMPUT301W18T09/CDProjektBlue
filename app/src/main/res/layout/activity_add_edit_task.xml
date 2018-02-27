@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity">
+    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    android:background="@color/appColor">
 
     <TextView
         android:id="@+id/TaskTitle"
@@ -138,7 +139,6 @@
         android:layout_below="@+id/TaskComment"
         android:layout_marginTop="29dp"
         android:background="@drawable/back"
-        app:layout_constraintVertical_bias="0.816"
-        android:visibility="gone"></ListView>
+        app:layout_constraintVertical_bias="0.816" />
 
 </RelativeLayout>
