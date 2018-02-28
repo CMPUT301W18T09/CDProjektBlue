@@ -9,9 +9,9 @@ import static org.junit.Assert.*;
 /**
  * Created by david on 24/02/18.
  */
-public class DataManagerTest extends ActivityInstrumentationTestCase2 {
+public class DataManagerTest  {
 
-    public DataManagerTest () { super(DataManager.class); }
+    //public DataManagerTest () { super(DataManager.class); }
 
     public void testAddObject() {
         //Same as testGetObject?

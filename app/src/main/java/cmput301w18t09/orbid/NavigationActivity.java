@@ -1,12 +1,14 @@
 package cmput301w18t09.orbid;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,15 +19,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_navigation);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,6 +51,16 @@ public class NavigationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Example of how to inflate your layout
+        int callerLayoutID = getIntent().getIntExtra("edit_profile_id", 0);
+        if (callerLayoutID == 1) {
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+            inflater.inflate(R.layout.activity_edit_profile, frameLayout);
+        }
+
+
     }
 
     @Override
@@ -100,11 +115,15 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
             // Example of calling child activity
-            Intent intent = new Intent(this, RecentListingsActivity.class);
+//            Intent intent = new Intent(this, RecentListingsActivity.class);
+//            this.startActivity(intent);
+
+            Intent intent = new Intent( this, EditProfileActivity.class);
+            intent.putExtra("edit_profile_id", 1);
             this.startActivity(intent);
-            
 
         } else if (id == R.id.nav_manage) {
+
 
         } else if (id == R.id.nav_share) {
 
