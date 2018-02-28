@@ -3,6 +3,8 @@ package cmput301w18t09.orbid;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
+
 public class User {
 
     private String username;
@@ -10,7 +12,10 @@ public class User {
     private String phoneNumber;
     private String firstName;
     private String lastName;
+
+    @JestId
     private String ID;
+
     private ArrayList<Review> reviewList;
 
 
