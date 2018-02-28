@@ -53,12 +53,15 @@ public class NavigationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Example of how to inflate your layout
-        int callerLayoutID = getIntent().getIntExtra("edit_profile_id", 0);
-        if (callerLayoutID == 1) {
+        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
+
+        // Uses actual ID of layout to inflate correct one
+        if (callerLayoutID != 0) {
             LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-            inflater.inflate(R.layout.activity_edit_profile, frameLayout);
+            inflater.inflate(callerLayoutID, frameLayout);
         }
+
 
 
     }
@@ -119,7 +122,7 @@ public class NavigationActivity extends AppCompatActivity
 //            this.startActivity(intent);
 
             Intent intent = new Intent( this, EditProfileActivity.class);
-            intent.putExtra("edit_profile_id", 1);
+            intent.putExtra("layout_id", R.layout.activity_edit_profile);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
