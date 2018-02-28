@@ -43,7 +43,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".ListTaskActivity" />
-        <activity android:name=".AddEditTaskActivity" />
+        <activity android:name=".AddEditTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditProfileActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".TaskDetailsActivity" />
