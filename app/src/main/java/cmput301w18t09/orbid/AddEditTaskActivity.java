@@ -1,6 +1,9 @@
 package cmput301w18t09.orbid;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.content.Context;
@@ -21,15 +24,18 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddEditTaskActivity extends NavigationActivity {
 
     private Button btnSavePost;
+    private Button btnAddImage;
     private EditText etDescription;
     private EditText etTitle;
     private EditText etLocation;
     private TextView etPrice;
+    private static final int SELECT_PICTURE = 1;
     private int isAdd;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private Task task;
@@ -86,6 +92,40 @@ public class AddEditTaskActivity extends NavigationActivity {
         finish();
     }
 
+    /**
+     * When the button is tapped, it will prompt the user to take/select an image
+     * @param view
+     */
+    public void addImage(View view) {
+        Intent pickIntent = new Intent();
+        pickIntent.setType("image/*");
+        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+        chooserIntent.putExtra
+                (
+                        Intent.EXTRA_INITIAL_INTENTS,
+                        new Intent[] { takePhotoIntent }
+                );
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                //Display an error
+                return;
+            }
+            InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
+            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+        }
+    }
 
 
     /**
