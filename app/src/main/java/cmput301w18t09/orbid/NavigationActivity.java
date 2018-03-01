@@ -122,7 +122,8 @@ public class NavigationActivity extends AppCompatActivity
 //            Intent intent = new Intent(this, RecentListingsActivity.class);
 //            this.startActivity(intent);
 
-            intent.putExtra("layout_id", R.layout.activity_edit_profile);
+            Intent intent = new Intent( this, AddEditTaskActivity.class);
+            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
