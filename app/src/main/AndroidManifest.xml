@@ -26,10 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>/>
+        <activity android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>/>
         <activity
-            android:name=".RecentListingsActivity" />
+            android:name=".RecentListingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -47,10 +50,15 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditProfileActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".TaskDetailsActivity" />
-        <activity android:name=".DisplayAssignedTaskActivity" />
-        <activity android:name=".PlaceBidActivity" />
-        <activity android:name=".TaskBidListActivity"></activity>
+        <activity android:name=".TaskDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".DisplayAssignedTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>/>
+        <activity android:name=".PlaceBidActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>/>
+        <activity android:name=".TaskBidListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
