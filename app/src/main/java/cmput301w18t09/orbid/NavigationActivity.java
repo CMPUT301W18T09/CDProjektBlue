@@ -100,6 +100,11 @@ public class NavigationActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+
+            Intent intent = new Intent(this, RecentListingsActivity.class);
+            intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+            this.startActivity(intent);
+
         } else if (id == R.id.nav_gallery) {
 
             // This currently works
