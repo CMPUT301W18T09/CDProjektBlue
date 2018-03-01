@@ -19,16 +19,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class AddEditTaskActivity extends NavigationActivity {
 
-    private Button btnSave;
+    private Button btnSavePost;
     private EditText etDescription;
     private EditText etTitle;
     private EditText etLocation;
-    private EditText etPrice;
+    private TextView etPrice;
+    private int isAdd;
+    private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private Task task;
     private DrawerLayout mDrawerLayout;
 
@@ -37,6 +40,8 @@ public class AddEditTaskActivity extends NavigationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
+        isAdd = getIntent().getIntExtra("isAdd", 0);
+
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
@@ -44,12 +49,23 @@ public class AddEditTaskActivity extends NavigationActivity {
         etDescription = findViewById(R.id.EditTaskComment);
         User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
         task = new Task(testUser, "", "", 0, Task.TaskStatus.REQUESTED);
-        /* an example of setting up list view
-        Bid testBid = new Bid(testUser, 3.14, "test");
-        bidList.add(testBid);
-        ListView listView = (ListView) findViewById(R.id.BidList);
-        BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
-        listView.setAdapter(bidAdapter);*/
+
+        btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
+
+        if(isAdd == 1) {
+            btnSavePost.setText("Post");
+        } else {
+            //show the price and bid list if you're only editting a task
+            btnSavePost.setText("Save");
+            etPrice = (TextView)findViewById(R.id.AddEditPrice);
+            etPrice.setText(Double.toString(task.getPrice()));
+            Bid testBid = new Bid(testUser, 3.14, "test");
+            task.addBid(testBid);
+            bidList = task.getBidList();
+            ListView listView = (ListView) findViewById(R.id.BidList);
+            BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
+            listView.setAdapter(bidAdapter);
+        }
     }
 
     @Override
@@ -66,13 +82,10 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     }
 
-    private void postTask(View view) {
-
+    public void postEditTask(View view) {
+        finish();
     }
 
-    private void editTask(View view) {
-
-    }
 
 
     /**
