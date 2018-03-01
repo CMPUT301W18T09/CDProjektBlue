@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
@@ -67,7 +67,7 @@
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:text="Fulfilled"
         android:onClick="fulfillBid"/>
-        android:text="Fulfilled" />
+    android:text="Fulfilled" />
 
     <Button
         android:id="@+id/RepostButton"
@@ -79,7 +79,7 @@
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:text="Repost"
         android:onClick="repostBid"/>
-        android:text="Repost" />
+    android:text="Repost" />
 
     <Button
         android:id="@+id/BidButton"
