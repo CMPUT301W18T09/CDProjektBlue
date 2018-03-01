@@ -1,6 +1,7 @@
 package cmput301w18t09.orbid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -41,18 +42,26 @@ public class RecentListingsActivity extends NavigationActivity {
         change_view_switch.setTextOn("List");
         change_view_switch.setTextOff("Map");
         change_view_switch.setChecked(true);
-//        change_view_switch.setOnCheckedChangeListener(new OnCheckedChangedListener(
-//
-//        );
+        change_view_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+//                    Intent intent = new Intent(this, RecentListingsActivity.class);
+//                    intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+//                    this.startActivity(intent);
+                }
+                else {
+                    MapActivity mapActivity = new MapActivity();
+                    FragmentManager fm = getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+                }
+            }
+        });
         toolbar.addView(change_view_switch);
 
 
     }
 
-    @Override
-    public void onCheckChanged(CompoundButton buttonView, boolean isChecked) {
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
