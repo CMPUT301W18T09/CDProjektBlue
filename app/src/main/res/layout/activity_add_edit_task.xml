@@ -23,9 +23,10 @@
     <EditText
         android:id="@+id/EditTaskComment"
         android:layout_width="300dp"
-        android:layout_height="170dp"
+        android:layout_height="150dp"
         android:layout_alignStart="@+id/EditTaskTitle"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/AddImageButton"
+        android:layout_marginTop="45dp"
         android:background="@drawable/back"
         android:ems="10"
         android:gravity="top|left"
@@ -37,7 +38,7 @@
     <Button
         android:id="@+id/SavePostTaskButton"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/common_google_signin_btn_text_dark_default"
