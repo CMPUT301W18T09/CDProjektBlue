@@ -2,6 +2,8 @@ package cmput301w18t09.orbid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +37,7 @@ public class AddEditTaskActivity extends NavigationActivity {
     private EditText etTitle;
     private EditText etLocation;
     private TextView etPrice;
+    private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private int isAdd;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
@@ -114,6 +117,8 @@ public class AddEditTaskActivity extends NavigationActivity {
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -122,8 +127,8 @@ public class AddEditTaskActivity extends NavigationActivity {
                 //Display an error
                 return;
             }
-            InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
-            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+            InputStream inputStream = getContentResolver().openInputStream(data.getData());
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);//Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }
     }
 
