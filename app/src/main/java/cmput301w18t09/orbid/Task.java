@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
  // Todo: Repost
 
-public class Task {
+public class Task extends RecyclerView.ViewHolder {
     private User requester;
     private String description;
     private String title;
