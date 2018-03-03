@@ -32,8 +32,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         Task task = taskList.get(position);
-        holder.task_image.
-
+//        holder.task_image.setImage(task.getPhotoList());
+        holder.task_title.setText(task.getTitle());
+        holder.task_description.setText(task.getDescription());
     }
 
 
