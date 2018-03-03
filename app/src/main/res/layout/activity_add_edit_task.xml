@@ -45,7 +45,7 @@
         android:onClick="postEditTask"
         android:text="" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/BidList"
         android:layout_width="300dp"
         android:layout_height="140dp"
@@ -53,7 +53,7 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:layout_marginBottom="56dp"
-        android:background="@drawable/back"></ListView>
+        android:background="@drawable/back"></android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/AddEditPrice"
