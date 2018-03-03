@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
@@ -64,11 +66,21 @@ public class RecentListingsActivity extends NavigationActivity {
 
 
 
+        // FOR TESTING PURPOSES
+        taskList = new ArrayList<>();
+        User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
+        Task task = new Task(user, "SOME TASK", "TESTING TASK", 10, Task.TaskStatus.BIDDED);
+        taskList.add(task);
+
         TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
-        RecyclerView recentListings = findViewById(R.id.recent_listings);
-        recentListings.setLayoutManager(new LinearLayoutManager(this));
-        recentListings.setAdapter(taskListAdapter);
-        recentListings.setHasFixedSize(true);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        Log.i("ERROR", "BEFORE");
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Log.i("ERROR", "SETTING");
+        recyclerView.setAdapter(taskListAdapter);
+        Log.i("ERROR", "ADAPTER");
+        recyclerView.setHasFixedSize(true);
 
     }
 

@@ -24,7 +24,7 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
     @Override
     public BidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(R.layout.activity_recent_listings, parent, false);
+        View view = inflater.inflate(R.layout.layout_recent_listings_view, parent, false);
         return new BidViewHolder(view, this.context);
     }
 
@@ -33,7 +33,8 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
     public void onBindViewHolder(BidViewHolder holder, int position) {
         Bid bid = bidList.get(position);
 
-        // Fill out bid information
+        // Todo fill out bid information here
+
     }
 
 
