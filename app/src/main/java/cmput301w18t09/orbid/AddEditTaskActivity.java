@@ -127,8 +127,8 @@ public class AddEditTaskActivity extends NavigationActivity {
                 //Display an error
                 return;
             }
-            InputStream inputStream = getContentResolver().openInputStream(data.getData());
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);//Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+            //InputStream inputStream = getContentResolver().openInputStream(data.getData());
+            //Bitmap bitmap = BitmapFactory.decodeStream(inputStream);//Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }
     }
 
