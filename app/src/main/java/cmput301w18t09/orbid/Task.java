@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
  // Todo: Repost
 
-public class Task extends RecyclerView.ViewHolder {
+public class Task {
     private User requester;
     private String description;
     private String title;

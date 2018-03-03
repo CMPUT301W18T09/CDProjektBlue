@@ -19,7 +19,9 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     public TaskViewHolder(View view, final Context context) {
         super(view);
-
+        task_image = view.findViewById(R.id.task_image);
+        task_title = view.findViewById(R.id.task_title);
+        task_description = view.findViewById(R.id.task_description);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
