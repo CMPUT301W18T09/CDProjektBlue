@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,15 +51,15 @@ public class RecentListingsActivity extends NavigationActivity {
         change_view_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-//                    Intent intent = new Intent(this, RecentListingsActivity.class);
-//                    intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
-//                    this.startActivity(intent);
-                }
-                else {
+                if (!isChecked) {
                     MapActivity mapActivity = new MapActivity();
                     FragmentManager fm = getSupportFragmentManager();
                     fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+                }
+                else {
+                    Intent intent = new Intent(getBaseContext(), RecentListingsActivity.class);
+                    intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+                    getBaseContext().startActivity(intent);
                 }
             }
         });
