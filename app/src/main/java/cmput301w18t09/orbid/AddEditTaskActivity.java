@@ -2,8 +2,10 @@ package cmput301w18t09.orbid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -25,9 +27,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -39,10 +43,14 @@ public class AddEditTaskActivity extends NavigationActivity {
     private EditText etTitle;
     private EditText etLocation;
     private TextView etPrice;
+    private Context context = this;
+    private Bitmap bitmap;
     private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private int isAdd;
+    private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
+    private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
     private DrawerLayout mDrawerLayout;
 
@@ -50,12 +58,14 @@ public class AddEditTaskActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Receive the layout ID from navigation activity
         int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
         isAdd = getIntent().getIntExtra("isAdd", 0);
-
+        // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
+        // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
@@ -63,12 +73,21 @@ public class AddEditTaskActivity extends NavigationActivity {
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
 
+        // Setting up the recycler view for the images when you add a Task
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.ImageList);
+        imageAdapter = new ImageViewAdapter(this, imageList);
+        LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(imageAdapter);
+        mRecyclerView.setHasFixedSize(true);
+
         if(isAdd == 1) {
             btnSavePost.setText("Post");
         } else {
-            //show the price and bid list if you're only editting a task
+            // Show the price and bid list if you're only editting a task
             btnSavePost.setText("Save");
             etPrice = (TextView)findViewById(R.id.AddEditPrice);
+            // Set text to the price
             etPrice.setText(Double.toString(task.getPrice()));
             Bid testBid = new Bid(testUser, 3.14, "test");
             task.addBid(testBid);
@@ -103,9 +122,11 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     /**
      * When the button is tapped, it will prompt the user to take/select an image
+     * Code taken from https://stackoverflow.com/questions/2708128/single-intent-to-let-user-take-picture-or-pick-image-from-gallery-in-android
      * @param view
      */
     public void addImage(View view) {
+
         Intent pickIntent = new Intent();
         pickIntent.setType("image/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -128,15 +149,23 @@ public class AddEditTaskActivity extends NavigationActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                //Display an error
-                return;
+        //Updates the recycler image view to show the image selected
+        if(resultCode==RESULT_OK)
+        {
+            Uri selectedimg = data.getData();
+            try {
+                imageList.add(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
+                //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
+            } catch (IOException e) {
+
             }
-            //InputStream inputStream = getContentResolver().openInputStream(data.getData());
-            //Bitmap bitmap = BitmapFactory.decodeStream(inputStream);//Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+            imageAdapter.notifyDataSetChanged();
         }
+
     }
+
+
+
 
 
     /**
