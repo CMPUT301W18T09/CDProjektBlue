@@ -2,7 +2,6 @@ package cmput301w18t09.orbid;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(R.layout.layout_recent_listings_view, parent, false);
+        View view = inflater.inflate(R.layout.layout_task_card, parent, false);
         return new TaskViewHolder(view, this.context);
     }
 

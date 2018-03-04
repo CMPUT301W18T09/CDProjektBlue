@@ -17,8 +17,8 @@ public class BidViewHolder extends RecyclerView.ViewHolder {
 
     public BidViewHolder(View view, final Context context) {
         super(view);
-        bid_price = view.findViewById(R.id.task_description);
-        bid_description = view.findViewById(R.id.task_title);
+        bid_price = view.findViewById(R.id.bid_price);
+        bid_description = view.findViewById(R.id.bid_description);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

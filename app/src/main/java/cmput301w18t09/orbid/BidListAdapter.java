@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
     @Override
     public BidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(R.layout.layout_recent_listings_view, parent, false);
+        View view = inflater.inflate(R.layout.layout_bid_card, parent, false);
         return new BidViewHolder(view, this.context);
     }
 
@@ -34,6 +32,8 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
         Bid bid = bidList.get(position);
 
         // Todo fill out bid information here
+        holder.bid_description.setText(bid.getDescription());
+        holder.bid_price.setText(Double.toString(bid.getPrice()));
 
     }
 
