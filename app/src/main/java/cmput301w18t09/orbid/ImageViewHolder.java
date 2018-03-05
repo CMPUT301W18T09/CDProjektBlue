@@ -1,6 +1,12 @@
 package cmput301w18t09.orbid;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -34,16 +40,16 @@ public class ImageViewHolder extends RecyclerView.ViewHolder {
              */
             @Override
             public void onClick(View v) {
-                if(isImageFitToScreen) {
-                    isImageFitToScreen=false;
-                    image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-                    image.setAdjustViewBounds(true);
-                }else{
-                    isImageFitToScreen=true;
-                    image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-                    image.setScaleType(ImageView.ScaleType.FIT_XY);
-                }
+                // Build/retrieve the bitmap
+                image.buildDrawingCache();
+                Bitmap bitmap = image.getDrawingCache();
+
+                Intent intent = new Intent(context, FullScreenImage.class);
+                // Pass the bitmap as an exta to the fullscreen activity
+                intent.putExtra("BitmapImage", bitmap);
+                context.startActivity(intent);
             }
         });
     }
+
 }

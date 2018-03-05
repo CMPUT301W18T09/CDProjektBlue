@@ -115,7 +115,7 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
             Intent intent = new Intent( this, ListTaskActivity.class);
-            intent.putExtra("tasks_layout_id", R.layout.activity_add_edit_task);
+            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
             intent.putExtra("isMyBids",0);
             this.startActivity(intent);
 

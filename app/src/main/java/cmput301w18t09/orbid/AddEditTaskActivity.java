@@ -58,6 +58,7 @@ public class AddEditTaskActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Receive the layout ID from navigation activity
         int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
         isAdd = getIntent().getIntExtra("isAdd", 0);

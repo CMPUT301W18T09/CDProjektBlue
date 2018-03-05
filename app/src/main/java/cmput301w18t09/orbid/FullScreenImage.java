@@ -10,36 +10,16 @@ import android.widget.ImageView;
 
 public class FullScreenImage  extends Activity {
 
-
-    @SuppressLint("NewApi")
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_full_screen_image);
-
-        Bundle extras = getIntent().getExtras();
-        Bitmap bmp = (Bitmap) extras.getParcelable("imagebitmap");
-
+        Bitmap bitmap = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
         ImageView imgDisplay;
-        Button btnClose;
+        imgDisplay = (ImageView) findViewById(R.id.BigImage);
 
-
-        imgDisplay = (ImageView) findViewById(R.id.imgDisplay);
-        btnClose = (Button) findViewById(R.id.btnClose);
-
-
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FullScreenImage.this.finish();
-            }
-        });
-
-
-        imgDisplay.setImageBitmap(bmp);
+        imgDisplay.setImageBitmap(bitmap);
 
     }
 
