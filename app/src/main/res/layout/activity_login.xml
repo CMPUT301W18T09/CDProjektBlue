@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.LoginActivity">
+    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    android:background="@color/colorTheme">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/App_Name"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:fontFamily="monospace"
+        android:text="@string/app_name"
+
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/black"
+        android:textSize="50sp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:id="@+id/Username_enter"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/back"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/username"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/signin_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Username_enter"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="@string/signin_Button" />
+
+    <Button
+        android:id="@+id/Signup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/signin_button"
+        android:layout_below="@+id/signin_button"
+        android:layout_marginTop="20dp"
+        android:text="@string/signup_button" />
+</RelativeLayout>

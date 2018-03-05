@@ -44,15 +44,7 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Example of how to inflate your layout
-        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
 
-        // Uses actual ID of layout to inflate correct one
-        if (callerLayoutID != 0) {
-            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-            inflater.inflate(callerLayoutID, frameLayout);
-        }
 
 
 
@@ -109,8 +101,8 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-            Intent intent = new Intent( this, AddEditTaskActivity.class);
-            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+            Intent intent = new Intent( this, LoginActivity.class);
+            intent.putExtra("layout_id", R.layout.activity_login);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
