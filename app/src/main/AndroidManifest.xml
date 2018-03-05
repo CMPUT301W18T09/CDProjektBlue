@@ -26,8 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".RecentListingsActivity" />
         <!--
