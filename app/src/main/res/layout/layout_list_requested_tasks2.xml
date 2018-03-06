@@ -17,47 +17,13 @@
         android:onClick="addTask"
         android:text="Add2" />
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/RequestedTasksFinished"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:cardBackgroundColor="@color/colorTheme"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/AddTaskButton">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="171dp"
-            android:padding="16dp">
-
-            <ImageView
-                android:id="@+id/task_image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/task_image" />
-
-            <TextView
-                android:id="@+id/task_title"
-                android:layout_width="300dp"
-                android:layout_height="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/task_image"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/task_description"
-                android:layout_width="300dp"
-                android:layout_height="55dp"
-                android:layout_below="@+id/task_title"
-                android:layout_toEndOf="@+id/task_image" />
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible" />
 
 
 
