@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +24,7 @@ import android.widget.ToggleButton;
 
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class RecentListingsActivity extends NavigationActivity {
 
@@ -70,12 +72,17 @@ public class RecentListingsActivity extends NavigationActivity {
         });
         toolbar.addView(change_view_switch);
 
+        DataManager.verifySettings();
+        DataManager.getTasks getTasks = new DataManager.getTasks();
+        getTasks.execute();
+        try {
+            taskList = getTasks.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        // FOR TESTING PURPOSES
-        taskList = new ArrayList<>();
-        User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
-        Task task = new Task(user, "SOME TASK", "TESTING TASK", 10, Task.TaskStatus.BIDDED);
-        taskList.add(task);
 
         TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
