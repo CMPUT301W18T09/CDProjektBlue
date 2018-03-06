@@ -18,6 +18,9 @@ import android.widget.TextView;
 /**
  * Created by chadyhaidar on 2018-03-03.
  */
+
+
+// Todo we need to delete this as its no longer needed, just hanging on to it for a bit :)
 public class ImageViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView image;

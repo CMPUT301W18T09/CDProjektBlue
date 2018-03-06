@@ -114,13 +114,5 @@ public class RecentListingsActivity extends NavigationActivity {
 
     }
 
-    public void onTaskClick(int position) {
-        Intent intent = new Intent(this, TaskDetailsActivity.class);
-        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-        intent.putExtra("position", position);
-        startActivity(intent);
-    }
-
-
 
 }
