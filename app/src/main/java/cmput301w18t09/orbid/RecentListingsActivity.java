@@ -1,10 +1,13 @@
 package cmput301w18t09.orbid;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.ToggleButton;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -18,15 +21,13 @@ public class RecentListingsActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Must call in this order, NOT super first
-        setContentView(R.layout.activity_recent_listings);
         super.onCreate(savedInstanceState);
+        int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+        inflater.inflate(layoutID, frameLayout);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
-        Switch change_view_switch = new Switch(getBaseContext());
-        change_view_switch.setTextOn("List View");
-        change_view_switch.setTextOff("Map View");
-        change_view_switch.setChecked(true);
-        toolbar.addView(change_view_switch);
 
     }
 
