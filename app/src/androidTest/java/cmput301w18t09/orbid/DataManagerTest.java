@@ -9,12 +9,17 @@ import static org.junit.Assert.*;
 /**
  * Created by david on 24/02/18.
  */
+<<<<<<< HEAD:app/src/androidTest/java/cmput301w18t09/orbid/DataManagerTest.java
 <<<<<<< HEAD
 public class DataManagerTest //extends ActivityInstrumentationTestCase2
 {
 =======
 public class DataManagerTest  {
 >>>>>>> workingUI
+=======
+public class DataManagerTest //extends ActivityInstrumentationTestCase2
+{
+>>>>>>> origin/DataManager:app/src/androidTest/java/cmput301w18t09/orbid/DataManagerTest.java
 
     //public DataManagerTest () { super(DataManager.class); }
 
