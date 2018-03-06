@@ -25,7 +25,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AddEditTaskActivity extends NavigationActivity {
+public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private Button btnSavePost;
     private Button btnAddImage;
@@ -86,6 +86,7 @@ public class AddEditTaskActivity extends NavigationActivity {
 
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidList);
             BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
+            bidAdapter.setClickListener(this);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
@@ -156,8 +157,10 @@ public class AddEditTaskActivity extends NavigationActivity {
 
     }
 
-
-
+    @Override
+    public void onClick(View view, int position) {
+        // Todo do what you want to do when a bid is clicked, here you can access the Array of bids
+    }
 
 
     /**

@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -26,9 +27,9 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class RecentListingsActivity extends NavigationActivity {
+public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
-    private ArrayList<Task> taskList;
+    private ArrayList<Task> taskList = new ArrayList<>();
     private RecyclerView recyclerView;
     private TaskListAdapter taskListAdapter;
     private ToggleButton tbtnToggle;
@@ -72,13 +73,11 @@ public class RecentListingsActivity extends NavigationActivity {
         });
         toolbar.addView(change_view_switch);
 
-
-        DataManager.verifySettings();
-        ArrayList<String> list = new ArrayList<>();
-        list.add("username");
-        list.add("NanTheMAN");
+        ArrayList<String> query = new ArrayList<>();
+        query.add("_type");
+        query.add("task");
         DataManager.getTasks getTasks = new DataManager.getTasks();
-        getTasks.execute(list);
+        getTasks.execute(query);
         try {
             taskList = getTasks.get();
         } catch (InterruptedException e) {
@@ -87,8 +86,8 @@ public class RecentListingsActivity extends NavigationActivity {
             e.printStackTrace();
         }
 
-
         TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
+        taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -149,6 +148,15 @@ public class RecentListingsActivity extends NavigationActivity {
     public void openUserProfileDialog()
     {
 
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Intent intent = new Intent(this, TaskDetailsActivity.class);
+        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+        Task task = taskList.get(position);
+        intent.putExtra("id", task.getID());
+        this.startActivity(intent);
     }
 
 
