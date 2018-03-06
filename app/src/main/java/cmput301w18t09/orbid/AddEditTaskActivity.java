@@ -38,6 +38,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private int isAdd;
+    private int position;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
@@ -52,6 +53,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Receive the layout ID from navigation activity
         int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
         isAdd = getIntent().getIntExtra("isAdd", 0);
+        position = getIntent().getIntExtra("position", 0);
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -65,12 +67,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
 
         // Setting up the stack view for the images when you add a Task
-        StackView stackView = findViewById(R.id.BidList);
+        StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
         stackView.setOutAnimation(this, android.R.animator.fade_out);
-
-        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
-        stackView.setAdapter(imageViewAdapter);
+        imageAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
+        stackView.setAdapter(imageAdapter);
 
         if(isAdd == 1) {
             btnSavePost.setText("Post");
@@ -84,7 +85,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             task.addBid(testBid);
             bidList = task.getBidList();
 
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidList);
+
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
+            recyclerView.setVisibility(View.VISIBLE);
             BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
             bidAdapter.setClickListener(this);
 
@@ -133,7 +136,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                         Intent.EXTRA_INITIAL_INTENTS,
                         new Intent[] { takePhotoIntent }
                 );
-
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
@@ -147,7 +149,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         {
             Uri selectedimg = data.getData();
             try {
-                imageList.add(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
+                task.addPhoto(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
                 //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
             } catch (IOException e) {
 
@@ -206,14 +208,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
          * @param count
          */
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (view.getId() == R.id.TaskTitle) {
+            if (view.getId() == R.id.EditTaskTitle) {
                 String r = s.toString();
                 //checks if any parts of the string are alphanumeric(forbidden)
                 if (0 < r.length()) {
                     task.setTitle(r);
                 }
             }
-            if (view.getId() == R.id.TaskComment) {
+            if (view.getId() == R.id.EditTaskComment) {
                 String r = s.toString();
                 //checks if any parts of the string are alphanumeric(forbidden)
                 if (0 < r.length()) {
