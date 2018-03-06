@@ -15,23 +15,17 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:onClick="addTask"
-        android:text="Add" />
+        android:text="Add2" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/RequestedTasks"
+        android:id="@+id/RequestedTasksFinished"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/dots"
-        android:layout_width="70dp"
-        android:layout_height="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/cast_ic_notification_connecting" />
+
 
 
 </RelativeLayout>
