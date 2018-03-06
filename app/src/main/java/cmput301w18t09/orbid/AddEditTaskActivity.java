@@ -75,7 +75,7 @@ public class AddEditTaskActivity extends NavigationActivity {
         if(isAdd == 1) {
             btnSavePost.setText("Post");
         } else {
-            // Show the price and bid list if you're only editting a task
+            // Show the price and bid list if you're only editing a task
             btnSavePost.setText("Save");
             etPrice = (TextView)findViewById(R.id.AddEditPrice);
             // Set text to the price
