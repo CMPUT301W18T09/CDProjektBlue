@@ -16,6 +16,8 @@ public class Task {
     private User requester;
     private String description;
     private String title;
+
+    @JestId
     private String ID;
     private double price;
     private TaskStatus status;
