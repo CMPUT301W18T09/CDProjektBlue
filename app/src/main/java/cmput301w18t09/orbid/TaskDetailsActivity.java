@@ -20,6 +20,11 @@ public class TaskDetailsActivity extends NavigationActivity{
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList;
 
+    /**
+     * Inflates the layout for task details. Sets the details of the task
+     * being viewed. Initialises the stackView for the images of the task.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,11 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     }
 
+    /**
+     * Function for when an options menu item is selected.
+     * @param item
+     * @return boolean if the item was selected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
