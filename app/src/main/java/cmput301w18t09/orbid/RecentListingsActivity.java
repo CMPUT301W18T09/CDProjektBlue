@@ -33,6 +33,11 @@ public class RecentListingsActivity extends NavigationActivity {
     private DrawerLayout mDrawerLayout;
 
 
+    /**
+     * Sets the switch for list view and map view in the toolbar, creates onClick
+     * for the switch and initialises the recyclerView for the task.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,6 +87,11 @@ public class RecentListingsActivity extends NavigationActivity {
     }
 
 
+    /**
+     * Function for when an options item is selected.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -92,23 +102,39 @@ public class RecentListingsActivity extends NavigationActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Will need to parse string for individual keywords
+    /**
+     * Parses a string of keywords and returns a result list of
+     * the matching tasks.
+     * @param string
+     * @return resultList
+     */
     public ArrayList<Task> search(String string)
     {
         ArrayList<Task> resultList = new ArrayList<Task>();
         return resultList;
     }
 
+    /**
+     * Opens the MapActivity on the switch from List View to Map View
+     */
     public void openMapActivity()
     {
 
     }
 
+    /**
+     * Opens the place bid activity when the user chooses to place
+     * a bid on a task.
+     */
     public void openPlaceBidActivity()
     {
 
     }
 
+    /**
+     * When the user clicks on a username of the requester
+     * It opens a dialog with that user's information
+     */
     public void openUserProfileDialog()
     {
 
