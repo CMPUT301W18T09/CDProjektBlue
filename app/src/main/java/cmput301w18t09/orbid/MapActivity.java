@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Intent intent = new Intent(getContext(), TaskDetailsActivity.class);
+                Log.i("TEST OLD TEST", marker.getId());
                 intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
                 intent.putExtra("id", marker.getId());
                 startActivity(intent);

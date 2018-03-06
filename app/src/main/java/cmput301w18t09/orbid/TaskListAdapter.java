@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 
 
@@ -14,10 +13,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     private Context context;
     private ArrayList<Task> taskList;
+    private ItemClickListener clickListener;
 
     public TaskListAdapter(final Context context, ArrayList<Task> taskList) {
         this.context = context;
         this.taskList = taskList;
+    }
+
+    public void setClickListener(ItemClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -30,10 +34,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
+        holder.setClickListener(clickListener);
         Task task = taskList.get(position);
 //        holder.task_image.setImage(task.getPhotoList());
         holder.task_title.setText(task.getTitle());
         holder.task_description.setText(task.getDescription());
+
     }
 
 
@@ -43,3 +49,4 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     }
 
 }
+

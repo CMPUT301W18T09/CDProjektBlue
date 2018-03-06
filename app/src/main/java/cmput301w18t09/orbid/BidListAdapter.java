@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
 
     private Context context;
+    private ItemClickListener clickListener;
     private ArrayList<Bid> bidList;
 
     public BidListAdapter(final Context context, ArrayList<Bid> bidList) {
@@ -26,11 +27,14 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
         return new BidViewHolder(view, this.context);
     }
 
+    public void setClickListener(ItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     @Override
     public void onBindViewHolder(BidViewHolder holder, int position) {
         Bid bid = bidList.get(position);
-
+        holder.setClickListener(clickListener);
         // Todo fill out bid information here
         holder.bid_description.setText(bid.getDescription());
         holder.bid_price.setText(Double.toString(bid.getPrice()));
