@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    tools:context="cmput301w18t09.orbid.LoginActivity"
     android:background="@color/colorTheme">
 
     <TextView
-        android:id="@+id/App_Name"
+        android:id="@+id/login_tvAppName"
         android:layout_width="300dp"
         android:layout_height="70dp"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
         android:textStyle="bold|italic" />
 
     <EditText
-        android:id="@+id/Username_enter"
+        android:id="@+id/login_etUsername"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
@@ -39,20 +39,20 @@
         android:textColor="@android:color/black" />
 
     <Button
-        android:id="@+id/signin_button"
+        android:id="@+id/login_btnSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Username_enter"
+        android:layout_below="@+id/login_etUsername"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
         android:text="@string/signin_Button" />
 
     <Button
-        android:id="@+id/Signup_button"
+        android:id="@+id/login_btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/signin_button"
-        android:layout_below="@+id/signin_button"
+        android:layout_alignStart="@+id/login_btnSignIn"
+        android:layout_below="@+id/login_btnSignIn"
         android:layout_marginTop="20dp"
         android:text="@string/signup_button" />
 </RelativeLayout>
