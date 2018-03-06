@@ -1,38 +1,27 @@
 package cmput301w18t09.orbid;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.StackView;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddEditTaskActivity extends NavigationActivity {
@@ -74,13 +63,13 @@ public class AddEditTaskActivity extends NavigationActivity {
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
 
-        // Setting up the recycler view for the images when you add a Task
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.ImageList);
-        imageAdapter = new ImageViewAdapter(this, imageList);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(imageAdapter);
-        mRecyclerView.setHasFixedSize(true);
+        // Setting up the stack view for the images when you add a Task
+        StackView stackView = findViewById(R.id.BidList);
+        stackView.setInAnimation(this, android.R.animator.fade_in);
+        stackView.setOutAnimation(this, android.R.animator.fade_out);
+
+        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
+        stackView.setAdapter(imageViewAdapter);
 
         if(isAdd == 1) {
             btnSavePost.setText("Post");

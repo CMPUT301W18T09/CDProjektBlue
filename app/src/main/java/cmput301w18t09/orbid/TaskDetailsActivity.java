@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.StackView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,6 +49,14 @@ public class TaskDetailsActivity extends NavigationActivity{
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
         // Todo set lowest bid
+
+        // Setting up the stack view for the images when you add a Task
+        StackView stackView = findViewById(R.id.stackView);
+        stackView.setInAnimation(this, android.R.animator.fade_in);
+        stackView.setOutAnimation(this, android.R.animator.fade_out);
+
+        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
+        stackView.setAdapter(imageViewAdapter);
 
     }
 
