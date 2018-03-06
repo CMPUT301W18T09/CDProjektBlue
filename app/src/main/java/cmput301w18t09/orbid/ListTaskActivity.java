@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ public class ListTaskActivity extends NavigationActivity {
     private ListView listView;
     private TaskListAdapter taskListAdapter;
     private int currentPage=0;
-    private CardView cardView;
+    private RecyclerView recyclerView;
     private int isMyBids;
 
     @Override
@@ -41,7 +42,7 @@ public class ListTaskActivity extends NavigationActivity {
         } else {
             Button addButton = (Button) findViewById(R.id.AddTaskButton);
         }
-        loadTasks();
+        //loadTasks();
         swipeInit();
     }
 
@@ -58,7 +59,7 @@ public class ListTaskActivity extends NavigationActivity {
 
 
     private void swipeInit() {
-        cardView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
+        recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
             public void onSwipeRight() {
                 if(currentPage>0) {
                     currentPage--;
@@ -66,7 +67,7 @@ public class ListTaskActivity extends NavigationActivity {
                 }
             }
             public void onSwipeLeft() {
-                if(currentPage<3) {
+                if(currentPage<1) {
                     currentPage++;
                     changeLayout();
                 }
@@ -87,18 +88,23 @@ public class ListTaskActivity extends NavigationActivity {
             case 0:
                 view = R.id.RequestedTasks;
                 getSupportActionBar().setTitle("My requested Tasks");
+                //taskList = loadTasks();
                 inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
 
                 break;
             case 1:
                 view = R.id.RequestedTasksFinished;
                 inflater.inflate(R.layout.layout_list_requested_tasks2, frameLayout);
+                //taskList = loadTasks();
                 getSupportActionBar().setTitle("My Finished Tasks");
                 break;
         }
         // Setup the card view to show tasks
-        cardView = (CardView) findViewById(view);
+        recyclerView = (RecyclerView) findViewById(view);
         TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     // Used on some type of swipe functionality
@@ -108,9 +114,14 @@ public class ListTaskActivity extends NavigationActivity {
 
     }
 
-    private void loadTasks() {
+    /**
+     * Returns an arrayList of tasks to be displayed
+     * @return
+     */
+    /*
+    private ArrayList<Task> loadTasks() {
 
-    }
+    }*/
 
     private void openUserProfileDialog()
     {
