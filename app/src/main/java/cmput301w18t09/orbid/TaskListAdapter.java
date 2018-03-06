@@ -14,10 +14,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     private Context context;
     private ArrayList<Task> taskList;
     private ItemClickListener clickListener;
+    private int type;
 
-    public TaskListAdapter(final Context context, ArrayList<Task> taskList) {
+    public TaskListAdapter(final Context context, ArrayList<Task> taskList, int type) {
         this.context = context;
         this.taskList = taskList;
+        // 0 for recent listings, 1 for my requested
+        this.type = type;
     }
 
     public void setClickListener(ItemClickListener clickListener) {
@@ -28,7 +31,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.layout_task_card, parent, false);
-        return new TaskViewHolder(view, this.context);
+        return new TaskViewHolder(view, this.context, type);
     }
 
 

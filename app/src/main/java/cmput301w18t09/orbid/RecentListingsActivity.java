@@ -86,7 +86,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             e.printStackTrace();
         }
 
-        TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
+        TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
