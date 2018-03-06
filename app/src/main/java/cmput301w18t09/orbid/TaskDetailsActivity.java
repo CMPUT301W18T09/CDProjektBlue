@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,12 @@ public class TaskDetailsActivity extends NavigationActivity{
         TextView task_title = findViewById(R.id.task_title);
         TextView task_description = findViewById(R.id.task_description);
 //        TextView task_lowest_bid = findViewById(R.id.lowest_bid);
+        task_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Todo set on click to show user details
+            }
+        });
 
         taskList = new ArrayList<Task>();
         User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
