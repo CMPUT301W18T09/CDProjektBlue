@@ -18,13 +18,15 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public TextView task_title;
     public TextView task_description;
     private Context context;
+    private int type;
 
-    public TaskViewHolder(View view, final Context context) {
+    public TaskViewHolder(View view, final Context context, int type) {
         super(view);
         task_image = view.findViewById(R.id.task_image);
         task_title = view.findViewById(R.id.task_title);
         task_description = view.findViewById(R.id.task_description);
         this.context = context;
+        this.type = type;
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,9 +39,17 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void onTaskClick(int position) {
-        Intent intent = new Intent(context, TaskDetailsActivity.class);
-        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-        intent.putExtra("position", position);
-        context.startActivity(intent);
+        if(type == 0) {
+            Intent intent = new Intent(context, TaskDetailsActivity.class);
+            intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+            intent.putExtra("position", position);
+            context.startActivity(intent);
+        } else {
+            Intent intent = new Intent(context, AddEditTaskActivity.class);
+            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+            intent.putExtra("position", position);
+            intent.putExtra("isAdd", 0);
+            context.startActivity(intent);
+        }
     }
 }
