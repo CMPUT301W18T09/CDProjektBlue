@@ -72,9 +72,13 @@ public class RecentListingsActivity extends NavigationActivity {
         });
         toolbar.addView(change_view_switch);
 
+
         DataManager.verifySettings();
+        ArrayList<String> list = new ArrayList<>();
+        list.add("username");
+        list.add("NanTheMAN");
         DataManager.getTasks getTasks = new DataManager.getTasks();
-        getTasks.execute();
+        getTasks.execute(list);
         try {
             taskList = getTasks.get();
         } catch (InterruptedException e) {
