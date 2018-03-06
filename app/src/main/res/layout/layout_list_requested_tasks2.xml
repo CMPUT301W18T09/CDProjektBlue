@@ -15,10 +15,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:onClick="addTask"
-        android:text="Add" />
+        android:text="Add2" />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/RequestedTasks"
+        android:id="@+id/RequestedTasksFinished"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         app:cardBackgroundColor="@color/colorTheme"
@@ -59,13 +59,7 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <ImageView
-        android:id="@+id/dots"
-        android:layout_width="70dp"
-        android:layout_height="15dp"
-        android:layout_below="@+id/RequestedTasks"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/cast_ic_notification_connecting" />
+
 
 
 </RelativeLayout>
