@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class RecentListingsActivity extends NavigationActivity {
 
     private ArrayList<Task> taskList;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private TaskListAdapter taskListAdapter;
     private ToggleButton tbtnToggle;
     private DrawerLayout mDrawerLayout;
@@ -66,7 +66,6 @@ public class RecentListingsActivity extends NavigationActivity {
         toolbar.addView(change_view_switch);
 
 
-
         // FOR TESTING PURPOSES
         taskList = new ArrayList<>();
         User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
@@ -74,13 +73,10 @@ public class RecentListingsActivity extends NavigationActivity {
         taskList.add(task);
 
         TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        Log.i("ERROR", "BEFORE");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Log.i("ERROR", "SETTING");
         recyclerView.setAdapter(taskListAdapter);
-        Log.i("ERROR", "ADAPTER");
         recyclerView.setHasFixedSize(true);
 
     }
@@ -116,6 +112,13 @@ public class RecentListingsActivity extends NavigationActivity {
     public void openUserProfileDialog()
     {
 
+    }
+
+    public void onTaskClick(int position) {
+        Intent intent = new Intent(this, TaskDetailsActivity.class);
+        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 
 

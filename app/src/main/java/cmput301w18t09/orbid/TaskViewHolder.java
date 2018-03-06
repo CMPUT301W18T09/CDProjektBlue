@@ -26,7 +26,9 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Timber", "NICE CLICK BRO");
+
+                int position = getAdapterPosition();
+                ((RecentListingsActivity) context).onTaskClick(position);
             }
         });
     }

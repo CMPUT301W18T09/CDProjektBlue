@@ -98,8 +98,8 @@ public class NavigationActivity extends AppCompatActivity
 
 
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_recent_listings) {
+            // Go to the recent listings section
 
             Intent intent = new Intent(this, RecentListingsActivity.class);
             intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
@@ -112,7 +112,7 @@ public class NavigationActivity extends AppCompatActivity
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_add) {
 
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
@@ -120,6 +120,10 @@ public class NavigationActivity extends AppCompatActivity
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
+            // Go to the details of a task
+            Intent intent = new Intent(this, TaskDetailsActivity.class);
+            intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+            this.startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 

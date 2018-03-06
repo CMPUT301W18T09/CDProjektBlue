@@ -21,11 +21,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ArrayList<Task> taskList;
     private ToggleButton tbtnToggle;
 
 
@@ -60,10 +64,24 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent intent = new Intent(getContext(), TaskDetailsActivity.class);
+                intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+                intent.putExtra("id", marker.getId());
+                startActivity(intent);
+                return false;
+            }
+        });
+
+        User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
+        Task task = new Task(user, "SOME TASK", "TESTING TASK", 10, Task.TaskStatus.BIDDED);
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng task_location = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(task_location).title(task.getTitle()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(task_location));
     }
 
     private void displayAllListings()

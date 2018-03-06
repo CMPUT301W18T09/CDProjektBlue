@@ -9,58 +9,72 @@
 
     <TextView
         android:id="@+id/task_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TASK TITLE"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"/>
 
     <StackView
         android:id="@+id/stackView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_title"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
     </StackView>
 
     <TextView
         android:id="@+id/task_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TASK DESCRIPTION"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/stackView"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/white_text_box"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lowest_bid"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/task_description"
         android:text="LOWEST BID" />
 
-    <TextView
+    <EditText
         android:id="@+id/my_bid_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/white_text_box"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_below="@+id/lowest_bid"
-        android:text="MY BID TITLE" />
+        android:hint="@string/bid_title"
+        android:inputType="text" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:id="@+id/my_bid_description"
         android:layout_centerHorizontal="true"
         android:background="@drawable/white_text_box"
         android:layout_below="@+id/my_bid_title"
-        android:text="MY BID DESCRIPTION"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/bid_description"
+        android:inputType="text" />
 
 
 </RelativeLayout>
