@@ -88,7 +88,7 @@ public class RecentListingsActivity extends NavigationActivity {
         }
 
 
-        TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList);
+        TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList, 0);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
