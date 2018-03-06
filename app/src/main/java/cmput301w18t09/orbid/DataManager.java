@@ -23,7 +23,7 @@ import io.searchbox.core.SearchResult;
  * Handles all communication between the application and the server
  */
 
-public class git DataManager {
+public class DataManager {
     private static JestDroidClient client;
     private ArrayList<Task> cachedTasks;
     private ArrayList<User> cachedUsers;

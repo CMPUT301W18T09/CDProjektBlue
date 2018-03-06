@@ -9,8 +9,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
 
- // Todo: Repost
+
+// Todo: Repost
 
 public class Task {
     private User requester;
