@@ -155,11 +155,18 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
     @Override
     public void onClick(View view, int position, int type) {
-        Intent intent = new Intent(this, TaskDetailsActivity.class);
-        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-        Task task = taskList.get(position);
-        intent.putExtra("id", task.getID());
-        this.startActivity(intent);
+         if(type == 0) {
+             Intent intent = new Intent(this, TaskDetailsActivity.class);
+             intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+             intent.putExtra("position", position);
+             this.startActivity(intent);
+         } else {
+             Intent intent = new Intent(this, AddEditTaskActivity.class);
+             intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+             intent.putExtra("position", position);
+             intent.putExtra("isAdd", 0);
+             this.startActivity(intent);
+         }
     }
 
 
