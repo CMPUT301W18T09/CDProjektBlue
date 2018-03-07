@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -112,6 +113,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         // Setup the card view to show tasks
 
         filterList();
+        Log.i("LENGTH", Integer.toString(taskList.size()));
+        Log.i("PAGE", Integer.toString(currentPage));
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
         TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
         taskAdapter.setClickListener(this);
@@ -127,8 +130,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void filterList() {
         // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
-        query.add("username");
-        query.add("NanTheMAN");
+//        query.add("username");
+//        query.add("NanTheMAN");
         query.add("status");
         query.add(Integer.toString(currentPage));
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
