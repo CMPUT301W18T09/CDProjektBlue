@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
@@ -151,7 +152,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         {
             Uri selectedimg = data.getData();
             try {
-                task.addPhoto(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
+                if(bitmap.getByteCount() > 64000) {
+                    Toast.makeText(this, "Image size too large", Toast.LENGTH_SHORT).show();
+                } else {
+                    task.addPhoto(bitmap);
+                }
                 //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
             } catch (IOException e) {
 
