@@ -32,16 +32,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     private Button btnSavePost;
     private Button btnAddImage;
+    private Button delete;
     private EditText etDescription;
     private EditText etTitle;
     private EditText etLocation;
-    private TextView etPrice;
+    private TextView tPrice;
     private Context context = this;
     private Bitmap bitmap;
     private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private int isAdd;
     private int position;
+    private String id;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
@@ -58,6 +60,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
         isAdd = getIntent().getIntExtra("isAdd", 0);
         position = getIntent().getIntExtra("position", 0);
+        id = getIntent().getStringExtra("_id");
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -65,31 +68,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
-        testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
-        task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
+        tPrice = (TextView)findViewById(R.id.AddEditPrice);
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
 
-        // Setting up the stack view for the images when you add a Task
-        StackView stackView = findViewById(R.id.ImageStack);
-        stackView.setInAnimation(this, android.R.animator.fade_in);
-        stackView.setOutAnimation(this, android.R.animator.fade_out);
-        imageAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
-        stackView.setAdapter(imageAdapter);
-
         if(isAdd == 1) {
             btnSavePost.setText("Post");
+            testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
+            task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
         } else {
             // Show the price and bid list if you're only editing a task
+            loadTask();
             btnSavePost.setText("Save");
-            etPrice = (TextView)findViewById(R.id.AddEditPrice);
-            // Set text to the price
-            etPrice.setText(Double.toString(task.getPrice()));
-            Bid testBid = new Bid(testUser, 3.14, "test");
-            task.addBid(testBid);
-            bidList = task.getBidList();
-
+            delete = (Button) findViewById(R.id.DeleteButton);
+            delete.setVisibility(View.VISIBLE);
             // Initiate the recycler view for bids
+            bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
             recyclerView.setVisibility(View.VISIBLE);
             BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
@@ -98,6 +92,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
         }
+        etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
+        etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
+        // Setting up the stack view for the images when you add a Task
+        StackView stackView = findViewById(R.id.ImageStack);
+        stackView.setInAnimation(this, android.R.animator.fade_in);
+        stackView.setOutAnimation(this, android.R.animator.fade_out);
+        imageAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
+        stackView.setAdapter(imageAdapter);
     }
 
     @Override
@@ -114,18 +116,35 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
-        DataManager.addUsers addUser = new DataManager.addUsers(this);
-        addUser.execute(testUser);
         DataManager.addTasks object = new DataManager.addTasks(this);
         object.execute(task);
     }
 
     /**
      * loads the task that was opened
-     * @param type
      */
-    private void loadTasks(String type) {
-
+    private void loadTask() {
+        ArrayList<Task> taskList = new ArrayList<>();
+        ArrayList<String> query = new ArrayList<>();
+        query.add("_id");
+        query.add(id);
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        getTasks.execute(query);
+        try {
+            taskList = getTasks.get();
+            task = taskList.get(0);
+            if (task == null) {
+                Toast.makeText(this, "NULL", Toast.LENGTH_SHORT).show();
+            } else {
+                etTitle.setText(task.getTitle());
+                etDescription.setText(task.getDescription());
+                tPrice.setText(Double.toString(task.getPrice()));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -136,6 +155,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     public void postEditTask(View view) {
         save();
+        finish();
+    }
+
+    /**
+     * Deletes the current task that is being worked on
+     * @param view
+     */
+    public void deleteButton(View view) {
+        ArrayList<String> n = new ArrayList<>();
+        n.add(task.getID());
+        DataManager.deleteTasks object = new DataManager.deleteTasks(this);
+        object.execute(n);
         finish();
     }
 
@@ -250,18 +281,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
          */
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (view.getId() == R.id.EditTaskTitle) {
+                System.out.println("EDITTING TITLE");
                 String r = s.toString();
                 //checks if any parts of the string are alphanumeric(forbidden)
-                if (0 < r.length()) {
-                    task.setTitle(r);
-                }
+                task.setTitle(r);
             }
             if (view.getId() == R.id.EditTaskComment) {
                 String r = s.toString();
                 //checks if any parts of the string are alphanumeric(forbidden)
-                if (0 < r.length()) {
-                    task.setDescription(r);
-                }
+                task.setDescription(r);
             }
         }
     }
