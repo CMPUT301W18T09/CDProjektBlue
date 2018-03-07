@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class ListTaskActivity extends NavigationActivity {
 
@@ -149,6 +150,11 @@ public class ListTaskActivity extends NavigationActivity {
     @Override
     public void onResume(){
         super.onResume();
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         changeLayout();
     }
 
