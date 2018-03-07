@@ -1,31 +1,21 @@
 package cmput301w18t09.orbid;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.ToggleButton;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class MapActivity extends Fragment implements OnMapReadyCallback {
 
@@ -45,8 +35,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
 
@@ -77,13 +65,46 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        User user = new User("NAN", "nan@gmail.com", "1", "NAN", "THE MAN");
-        Task task = new Task(user, "SOME TASK", "TESTING TASK", 10, Task.TaskStatus.BIDDED);
+        Bundle bundle = getArguments();
+        String came_from = bundle.getString("type");
+        ArrayList<String> query = new ArrayList<>();
 
-        // Add a marker in Sydney and move the camera
-        LatLng task_location = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(task_location).title(task.getTitle()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(task_location));
+        // If we came from recent_listings
+        if (came_from.equals("recent_listings")) {
+            query.add("_type");
+            query.add("task");
+        }
+        // If we came from a single ad - * id needs to be passed in arguments *
+        else if (came_from.equals("single_ad")) {
+            String id = bundle.getString("id");
+            query.add("_id");
+            query.add(id);
+        }
+        // If we are looking at a users ads - * username needs to be passed in arguments *
+        else {
+            String username = bundle.getString("username");
+            query.add("username");
+            query.add(username);
+        }
+
+        DataManager.getTasks getTasks = new DataManager.getTasks();
+        getTasks.execute(query);
+        try {
+            if (!taskList.isEmpty()) {
+                taskList = getTasks.get();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        // Todo place markers
+        for (Task task : taskList) {
+            if (task.getLocation() != null) {
+                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+            }
+        }
     }
 
     private void displayAllListings()
