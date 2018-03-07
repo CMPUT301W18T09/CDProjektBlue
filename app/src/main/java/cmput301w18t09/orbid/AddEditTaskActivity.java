@@ -162,7 +162,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view, int position, int type) {
         // Todo do what you want to do when a bid is clicked, here you can access the Array of bids
         Bid bid = bidList.get(position);
         LayoutInflater layoutInflater = this.getLayoutInflater();

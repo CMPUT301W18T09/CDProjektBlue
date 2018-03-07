@@ -91,19 +91,18 @@ public class ListTaskActivity extends NavigationActivity {
             case 0:
                 getSupportActionBar().setTitle("My Requested Tasks");
                 loadTasks("REQUESTED");
-
                 break;
             case 1:
-                loadTasks("COMPLETED");
-                getSupportActionBar().setTitle("My Completed Tasks");
+                loadTasks("BIDDED");
+                getSupportActionBar().setTitle("My Bidded Tasks");
                 break;
             case 2:
                 loadTasks("ASSIGNED");
                 getSupportActionBar().setTitle("My Assigned Tasks");
                 break;
             case 3:
-                loadTasks("BIDDED");
-                getSupportActionBar().setTitle("My Bidded Tasks");
+                loadTasks("COMPLETED");
+                getSupportActionBar().setTitle("My Completed Tasks");
                 break;
         }
         // Re-initiate recycler view
@@ -117,6 +116,21 @@ public class ListTaskActivity extends NavigationActivity {
      */
     private void initRecyclerView() {
         // Setup the card view to show tasks
+
+        // Todo figure out how the status works in data manager (I think its fine as is)
+        ArrayList<String> query = new ArrayList<>();
+        query.add("status");
+        query.add(Integer.toString(currentPage));
+        DataManager.getTasks getTasks = new DataManager.getTasks();
+        getTasks.execute(query);
+        try {
+            taskList = getTasks.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
         TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
