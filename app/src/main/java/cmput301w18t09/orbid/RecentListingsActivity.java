@@ -158,7 +158,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
          if(type == 0) {
              Intent intent = new Intent(this, TaskDetailsActivity.class);
              intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-             intent.putExtra("position", position);
+             intent.putExtra("_id", taskList.get(position).getID());
              this.startActivity(intent);
          } else {
              Intent intent = new Intent(this, AddEditTaskActivity.class);

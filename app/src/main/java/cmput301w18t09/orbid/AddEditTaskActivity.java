@@ -113,7 +113,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
-        DataManager.addTasks object = new DataManager.addTasks();
+        DataManager.addTasks object = new DataManager.addTasks(this);
         object.execute(task);
     }
 
