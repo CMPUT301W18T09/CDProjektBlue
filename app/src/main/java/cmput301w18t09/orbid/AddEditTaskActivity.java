@@ -46,6 +46,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
+    private User testUser;
     private DrawerLayout mDrawerLayout;
 
 
@@ -64,7 +65,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
-        User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
+        testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
         task = new Task(testUser, "", "", 0, Task.TaskStatus.REQUESTED);
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
@@ -113,6 +114,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
+        DataManager.addUsers addUser = new DataManager.addUsers(this);
+        addUser.execute(testUser);
         DataManager.addTasks object = new DataManager.addTasks(this);
         object.execute(task);
     }
