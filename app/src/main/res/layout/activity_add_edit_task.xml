@@ -90,13 +90,11 @@
         android:id="@+id/DeleteButton"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/BidListEdit"
-        android:layout_marginEnd="53dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/BidListEdit"
         android:background="@color/common_google_signin_btn_text_dark_default"
-        android:onClick="postEditTask"
-        android:text="Delete"
-        android:visibility="gone" />
+        android:onClick="deleteButton"
+        android:text="Delete" />
 
 
 </RelativeLayout>

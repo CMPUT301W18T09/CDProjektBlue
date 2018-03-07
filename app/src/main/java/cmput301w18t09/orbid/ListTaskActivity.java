@@ -137,6 +137,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
+            TimeUnit.MILLISECONDS.sleep(500);
             taskList = getTasks.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -152,11 +153,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     public void onResume(){
         super.onResume();
         Toast.makeText(this, "RESUME", Toast.LENGTH_SHORT).show();
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         changeLayout();
     }
 
