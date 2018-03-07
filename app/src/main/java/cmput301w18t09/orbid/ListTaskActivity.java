@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class ListTaskActivity extends NavigationActivity {
+public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
     private ListView listView;
@@ -37,8 +37,6 @@ public class ListTaskActivity extends NavigationActivity {
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
-        getSupportActionBar().setTitle("My Requested Tasks");
-
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         if(isMyBids==1) {
@@ -116,6 +114,7 @@ public class ListTaskActivity extends NavigationActivity {
         filterList();
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
         TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
+        taskAdapter.setClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
@@ -154,11 +153,21 @@ public class ListTaskActivity extends NavigationActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        currentPage = 0;
         changeLayout();
     }
 
     private void openUserProfileDialog()
     {
 
+    }
+
+    @Override
+    public void onClick(View view, int position, int type) {
+        Intent intent = new Intent(this, AddEditTaskActivity.class);
+        intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+        intent.putExtra("position", position);
+        intent.putExtra("isAdd", 0);
+        this.startActivity(intent);
     }
 }
