@@ -71,17 +71,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         tPrice = (TextView)findViewById(R.id.AddEditPrice);
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
+        delete = (Button) findViewById(R.id.DeleteButton);
+
 
         if(isAdd == 1) {
             btnSavePost.setText("Post");
             testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
             task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, 0);
+            delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
             loadTask();
             btnSavePost.setText("Save");
-            delete = (Button) findViewById(R.id.DeleteButton);
-            delete.setVisibility(View.VISIBLE);
             // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
@@ -116,8 +117,17 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
-        DataManager.addTasks object = new DataManager.addTasks(this);
-        object.execute(task);
+        // Add the task to DB if it's new
+        if(isAdd ==1 ) {
+            DataManager.addTasks object = new DataManager.addTasks(this);
+            object.execute(task);
+        } else {
+            // Update the task if it's being editted
+            ArrayList<Task> n = new ArrayList<>();
+            n.add(task);
+            DataManager.updateTasks object = new DataManager.updateTasks(this);
+            object.execute(n);
+        }
     }
 
     /**
