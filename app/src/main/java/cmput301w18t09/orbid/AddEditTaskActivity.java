@@ -175,7 +175,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Uri selectedimg = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                if(bitmap.getByteCount() > 64000) {
+                if(bitmap.getByteCount() > 65536) {
                     Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                 } else {
                     task.addPhoto(bitmap);
