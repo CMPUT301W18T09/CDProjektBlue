@@ -28,7 +28,7 @@ public class BidViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     }
     @Override
     public void onClick(View view) {
-        if (clickListener != null) clickListener.onClick(view, getAdapterPosition());
+        if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), 0);
     }
 
 }
