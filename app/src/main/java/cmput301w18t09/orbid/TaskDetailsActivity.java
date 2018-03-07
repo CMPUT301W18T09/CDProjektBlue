@@ -54,7 +54,6 @@ public class TaskDetailsActivity extends NavigationActivity{
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        Log.i("INFOPLS", id);
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
