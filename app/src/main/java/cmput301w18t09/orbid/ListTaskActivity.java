@@ -37,10 +37,8 @@ public class ListTaskActivity extends NavigationActivity {
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
         getSupportActionBar().setTitle("My Requested Tasks");
-        initRecyclerView();
+        changeLayout();
 
-        Task task = new Task(testUser, "", "", 0, Task.TaskStatus.REQUESTED);
-        taskList.add(task);
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         if(isMyBids==1) {
@@ -49,7 +47,6 @@ public class ListTaskActivity extends NavigationActivity {
             Button addButton = (Button) findViewById(R.id.AddTaskButton);
         }
         //loadTasks();
-        swipeInit();
     }
 
     /**
@@ -93,18 +90,14 @@ public class ListTaskActivity extends NavigationActivity {
         switch(currentPage){
             case 0:
                 getSupportActionBar().setTitle("My Requested Tasks");
-                loadTasks("REQUESTED");
                 break;
             case 1:
-                loadTasks("BIDDED");
                 getSupportActionBar().setTitle("My Bidded Tasks");
                 break;
             case 2:
-                loadTasks("ASSIGNED");
                 getSupportActionBar().setTitle("My Assigned Tasks");
                 break;
             case 3:
-                loadTasks("COMPLETED");
                 getSupportActionBar().setTitle("My Completed Tasks");
                 break;
         }
@@ -120,8 +113,23 @@ public class ListTaskActivity extends NavigationActivity {
     private void initRecyclerView() {
         // Setup the card view to show tasks
 
+        filterList();
+        recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
+        TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setHasFixedSize(true);
+    }
+
+    /**
+     * Returns an arrayList of tasks to be displayed
+     * @return
+     */
+    private void filterList() {
         // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
+        //query.add("username");
+        //query.add("NanTheMAN");
         query.add("status");
         query.add(Integer.toString(currentPage));
         DataManager.getTasks getTasks = new DataManager.getTasks();
@@ -133,43 +141,9 @@ public class ListTaskActivity extends NavigationActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
-        TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(taskAdapter);
-        recyclerView.setHasFixedSize(true);
     }
 
-    // Used on some type of swipe functionality
-    // Will use data man to search server for results
-    private void filterList(String key, String value)
-    {
 
-    }
-
-    /**
-     * Returns an arrayList of tasks to be displayed
-     * @return
-     */
-
-    private void loadTasks(String type) {
-        DataManager.verifySettings();
-        ArrayList<String> list = new ArrayList<>();
-        list.add("username");
-        list.add("NanTheMAN");
-        //list.add("status");
-        //list.add(type);
-        DataManager.getTasks getTasks = new DataManager.getTasks();
-        getTasks.execute(list);
-        try {
-            taskList = getTasks.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void openUserProfileDialog()
     {
