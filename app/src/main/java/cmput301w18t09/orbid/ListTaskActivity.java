@@ -130,8 +130,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void filterList() {
         // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
-//        query.add("username");
-//        query.add("NanTheMAN");
+        query.add("username");
+        query.add("NanTheMAN");
         query.add("status");
         query.add(Integer.toString(currentPage));
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
@@ -157,7 +157,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        currentPage = 0;
         changeLayout();
     }
 
@@ -170,7 +169,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     public void onClick(View view, int position, int type) {
         Intent intent = new Intent(this, AddEditTaskActivity.class);
         intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-        intent.putExtra("position", position);
+        intent.putExtra("_id", taskList.get(position).getID());
         intent.putExtra("isAdd", 0);
         this.startActivity(intent);
     }

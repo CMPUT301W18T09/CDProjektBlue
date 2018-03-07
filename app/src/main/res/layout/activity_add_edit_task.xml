@@ -18,7 +18,9 @@
         android:hint="Title:"
         android:text=""
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <EditText
         android:id="@+id/EditTaskComment"
@@ -33,14 +35,16 @@
         android:hint="Comment:"
         android:inputType="textPersonName"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <Button
         android:id="@+id/SavePostTaskButton"
         android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:onClick="postEditTask"
         android:text="" />
@@ -58,8 +62,8 @@
         android:id="@+id/AddEditPrice"
         android:layout_width="100dp"
         android:layout_height="25dp"
-        android:layout_alignStart="@+id/SavePostTaskButton"
         android:layout_below="@+id/EditTaskTitle"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/back"
         android:gravity="center_vertical|center_horizontal"
         android:text="Price: $0" />
@@ -82,8 +86,17 @@
         android:layout_alignStart="@+id/EditTaskComment"
         android:visibility="gone"/>
 
-
-
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/BidListEdit"
+        android:layout_marginEnd="53dp"
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:onClick="postEditTask"
+        android:text="Delete"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
