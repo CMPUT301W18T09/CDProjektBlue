@@ -40,19 +40,5 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View view) {
         if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), type);
     }
-    // Todo this will have to be done differently sorry
-    // public void onTaskClick(int position) {
-    //     if(type == 0) {
-    //         Intent intent = new Intent(context, TaskDetailsActivity.class);
-    //         intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-    //         intent.putExtra("position", position);
-    //         context.startActivity(intent);
-    //     } else {
-    //         Intent intent = new Intent(context, AddEditTaskActivity.class);
-    //         intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-    //         intent.putExtra("position", position);
-    //         intent.putExtra("isAdd", 0);
-    //         context.startActivity(intent);
-    //     }
-    // }
+
 }
