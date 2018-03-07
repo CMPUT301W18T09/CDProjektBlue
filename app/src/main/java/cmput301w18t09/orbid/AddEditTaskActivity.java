@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -162,6 +164,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @Override
     public void onClick(View view, int position) {
         // Todo do what you want to do when a bid is clicked, here you can access the Array of bids
+        Bid bid = bidList.get(position);
+        LayoutInflater layoutInflater = this.getLayoutInflater();
+        final View dialog_view = layoutInflater.inflate(R.layout.dialog_accept_bid, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddEditTaskActivity.this)
+                .setMessage("Accept bid for " + Double.toString(bid.getPrice()) + "?")
+                .setTitle("Accept or Decline bid?")
+                .setView(dialog_view);
+
     }
 
 
