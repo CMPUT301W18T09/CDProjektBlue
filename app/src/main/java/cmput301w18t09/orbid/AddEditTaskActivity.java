@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +66,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
+
+        frameLayout.requestFocus();
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
@@ -77,7 +80,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         if(isAdd == 1) {
             btnSavePost.setText("Post");
             testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
-            task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, 0);
+            task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
@@ -95,6 +98,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
+
         // Setting up the stack view for the images when you add a Task
         StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
@@ -118,7 +122,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void save() {
         // Add the task to DB if it's new
-        if(isAdd ==1 ) {
+        if(isAdd ==1) {
             DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {
@@ -148,7 +152,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             } else {
                 etTitle.setText(task.getTitle());
                 etDescription.setText(task.getDescription());
-                tPrice.setText(Double.toString(task.getPrice()));
+                tPrice.setText("$" + Double.toString(task.getPrice()));
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -291,14 +295,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
          */
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (view.getId() == R.id.EditTaskTitle) {
-                System.out.println("EDITTING TITLE");
                 String r = s.toString();
-                //checks if any parts of the string are alphanumeric(forbidden)
                 task.setTitle(r);
             }
             if (view.getId() == R.id.EditTaskComment) {
                 String r = s.toString();
-                //checks if any parts of the string are alphanumeric(forbidden)
                 task.setDescription(r);
             }
         }

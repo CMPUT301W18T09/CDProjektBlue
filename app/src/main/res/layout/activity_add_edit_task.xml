@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme">
+    android:background="@color/colorTheme"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <EditText
         android:id="@+id/EditTaskTitle"
@@ -18,26 +20,21 @@
         android:hint="Title:"
         android:text=""
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="22sp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:textSize="22sp" />
 
     <EditText
         android:id="@+id/EditTaskComment"
         android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:layout_alignStart="@+id/EditTaskTitle"
-        android:layout_below="@+id/AddImageButton"
-        android:layout_marginTop="82dp"
+        android:layout_below="@+id/ImageStack"
         android:background="@drawable/back"
         android:ems="10"
         android:gravity="top|left"
         android:hint="Comment:"
         android:inputType="textPersonName"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="15sp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/SavePostTaskButton"
@@ -45,6 +42,7 @@
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:onClick="postEditTask"
         android:text="" />
@@ -66,7 +64,8 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/back"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Price: $0" />
+        android:text="Price: $0"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <ImageButton
         android:id="@+id/AddImageButton"
@@ -91,7 +90,8 @@
         android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/BidListEdit"
+        android:layout_marginEnd="18dp"
+        android:layout_toStartOf="@+id/AddEditPrice"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:onClick="deleteButton"
         android:text="Delete" />

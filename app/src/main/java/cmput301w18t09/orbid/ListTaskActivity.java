@@ -121,6 +121,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
+        taskAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -133,11 +134,25 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         query.add("username");
         query.add("NanTheMAN");
         query.add("status");
-        query.add(Integer.toString(currentPage));
+        // Select filter based on which page you're on
+        switch(currentPage) {
+            case 0:
+                query.add(Task.TaskStatus.REQUESTED.toString());
+                break;
+            case 1:
+                query.add(Task.TaskStatus.BIDDED.toString());
+                break;
+            case 2:
+                query.add(Task.TaskStatus.ASSIGNED.toString());
+                break;
+            case 3:
+                query.add(Task.TaskStatus.COMPLETED.toString());
+                break;
+        }
+
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
-            TimeUnit.MILLISECONDS.sleep(500);
             taskList = getTasks.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -152,7 +167,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public void onResume(){
         super.onResume();
-        Toast.makeText(this, "RESUME", Toast.LENGTH_SHORT).show();
         changeLayout();
     }
 
