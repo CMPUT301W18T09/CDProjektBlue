@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ArrayList<Task> taskList;
+    private ArrayList<Task> taskList = new ArrayList<>();
     private ToggleButton tbtnToggle;
 
 
