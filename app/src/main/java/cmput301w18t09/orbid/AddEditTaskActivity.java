@@ -66,7 +66,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
-        task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, 0);
+        task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
 
