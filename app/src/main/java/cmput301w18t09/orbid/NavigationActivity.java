@@ -112,7 +112,7 @@ public class NavigationActivity extends AppCompatActivity
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
 
-        } else if (id == R.id.nav_add) {
+        } else if (id == R.id.nav_my_tasks) {
 
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
@@ -120,10 +120,7 @@ public class NavigationActivity extends AppCompatActivity
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
-            // Go to the details of a task
-            Intent intent = new Intent(this, TaskDetailsActivity.class);
-            intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-            this.startActivity(intent);
+
 
         } else if (id == R.id.nav_share) {
 

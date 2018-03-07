@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +50,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
 
         // Todo get task from data manager
-        String id = getIntent().getStringExtra("id");
+        String id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
