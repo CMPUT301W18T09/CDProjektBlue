@@ -22,7 +22,7 @@ public class Task {
     @JestId
     private String ID;
     private double price;
-    private TaskStatus status;
+    private int status;
     private Bid acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
@@ -32,7 +32,7 @@ public class Task {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
     }
 
-    public Task(User requester, String description, String title, double price, TaskStatus status)
+    public Task(User requester, String description, String title, double price, int status)
     {
         this.requester = requester;
         this.description = description;
@@ -40,7 +40,7 @@ public class Task {
         this.price = price;
         this.bidList = new ArrayList<Bid>();
         this.photoList = new ArrayList<Bitmap>();
-        setStatus(status);
+        this.status = status;
 
     }
 
@@ -84,11 +84,11 @@ public class Task {
         this.price = price;
     }
 
-    public TaskStatus getStatus() {
+    public int getStatus() {
         return this.status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -127,7 +127,7 @@ public class Task {
 
         // Todo: code to repost
 
-        this.status = TaskStatus.REQUESTED;
+        this.status = 0;
 
     }
 
@@ -137,7 +137,7 @@ public class Task {
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);
-        status = TaskStatus.ASSIGNED;
+        status = 2;
     }
 
     public void declineBid(int index) {
