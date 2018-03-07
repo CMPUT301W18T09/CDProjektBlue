@@ -6,6 +6,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+// AKA myRequests
 public class TaskBidListActivity extends TaskDetailsActivity {
 
     private ArrayList<Bid> bidList;
