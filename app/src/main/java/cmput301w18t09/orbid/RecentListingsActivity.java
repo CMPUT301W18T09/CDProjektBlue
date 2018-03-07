@@ -60,9 +60,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-                    MapActivity mapActivity = new MapActivity();
-                    FragmentManager fm = getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+                    openMapActivity();
                 }
                 else {
                     Intent intent = new Intent(getBaseContext(), RecentListingsActivity.class);
@@ -129,7 +127,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     public void openMapActivity()
     {
-
+        MapActivity mapActivity = new MapActivity();
+        FragmentManager fm = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "recent_listings");
+        mapActivity.setArguments(bundle);
+        fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
     }
 
     /**
