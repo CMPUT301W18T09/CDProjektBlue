@@ -38,7 +38,6 @@ public class ListTaskActivity extends NavigationActivity {
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
         getSupportActionBar().setTitle("My Requested Tasks");
-        changeLayout();
 
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
@@ -133,7 +132,7 @@ public class ListTaskActivity extends NavigationActivity {
         //query.add("NanTheMAN");
         query.add("status");
         query.add(Integer.toString(currentPage));
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
