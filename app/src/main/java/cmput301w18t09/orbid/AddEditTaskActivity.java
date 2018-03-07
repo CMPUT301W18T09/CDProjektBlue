@@ -113,7 +113,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
-
+        DataManager.addTasks object = new DataManager.addTasks();
+        object.execute(task);
     }
 
     /**
@@ -131,7 +132,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @param view
      */
     public void postEditTask(View view) {
-        //save();
+        save();
         finish();
     }
 

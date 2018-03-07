@@ -143,7 +143,14 @@ public class ListTaskActivity extends NavigationActivity {
         }
     }
 
-
+    /**
+     * Reloads the tasks when the activity is resumed
+     */
+    @Override
+    public void onResume(){
+        super.onResume();
+        changeLayout();
+    }
 
     private void openUserProfileDialog()
     {
