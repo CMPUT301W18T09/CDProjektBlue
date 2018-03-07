@@ -88,12 +88,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             task.addBid(testBid);
             bidList = task.getBidList();
 
-
+            // Initiate the recycler view for bids
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
             recyclerView.setVisibility(View.VISIBLE);
             BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
             bidAdapter.setClickListener(this);
-
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
@@ -110,12 +109,29 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Saves the current task in the database
+     */
     private void save() {
 
     }
 
+    /**
+     * loads the task that was opened
+     * @param type
+     */
+    private void loadTasks(String type) {
+
+    }
+
+    /**
+     * Post/Edit button is clicked, the task
+     * must be saved and posted to the
+     * top of recent listings if it is being added.
+     * @param view
+     */
     public void postEditTask(View view) {
+        //save();
         finish();
     }
 
@@ -143,7 +159,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
 
-
+    /**
+     * Adds the bitmap to the image list after a user selects/takes a photo
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -154,7 +175,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
                 if(bitmap.getByteCount() > 64000) {
-                    Toast.makeText(this, "Image size too large", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                 } else {
                     task.addPhoto(bitmap);
                 }

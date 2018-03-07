@@ -38,7 +38,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     }
     @Override
     public void onClick(View view) {
-        if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), 0);
+        if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), type);
     }
     // Todo this will have to be done differently sorry
     // public void onTaskClick(int position) {
