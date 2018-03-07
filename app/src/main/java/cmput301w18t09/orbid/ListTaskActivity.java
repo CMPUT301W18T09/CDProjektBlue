@@ -133,7 +133,7 @@ public class ListTaskActivity extends NavigationActivity {
         //query.add("NanTheMAN");
         query.add("status");
         query.add(Integer.toString(currentPage));
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
