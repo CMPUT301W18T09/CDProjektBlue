@@ -63,7 +63,9 @@ public class ListTaskActivity extends NavigationActivity {
         startActivity(addTask);
     }
 
-
+    /**
+     * Setup the swipe to switch between pages
+     */
     private void swipeInit() {
         recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
             public void onSwipeRight() {
@@ -80,6 +82,7 @@ public class ListTaskActivity extends NavigationActivity {
             }
         });
     }
+
 
     /**
      * Handles setting up which
