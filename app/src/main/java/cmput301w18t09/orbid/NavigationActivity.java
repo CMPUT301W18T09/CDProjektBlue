@@ -1,12 +1,14 @@
 package cmput301w18t09.orbid;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,26 +19,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_navigation);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -46,6 +43,19 @@ public class NavigationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Example of how to inflate your layout
+        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
+
+        // Uses actual ID of layout to inflate correct one
+        if (callerLayoutID != 0) {
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+            inflater.inflate(callerLayoutID, frameLayout);
+        }
+
+
+
     }
 
     @Override
@@ -88,8 +98,13 @@ public class NavigationActivity extends AppCompatActivity
 
 
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_recent_listings) {
+            // Go to the recent listings section
+
+            Intent intent = new Intent(this, RecentListingsActivity.class);
+            intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+            this.startActivity(intent);
+
         } else if (id == R.id.nav_gallery) {
 
             // This currently works
@@ -97,14 +112,15 @@ public class NavigationActivity extends AppCompatActivity
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_my_tasks) {
 
-            // Example of calling child activity
-            Intent intent = new Intent(this, RecentListingsActivity.class);
+            Intent intent = new Intent( this, ListTaskActivity.class);
+            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+            intent.putExtra("isMyBids",0);
             this.startActivity(intent);
-            
 
         } else if (id == R.id.nav_manage) {
+
 
         } else if (id == R.id.nav_share) {
 
@@ -115,6 +131,11 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void goToAddEdit(View view) {
+        Intent intent = new Intent(NavigationActivity.this, AddEditTaskActivity.class);
+        this.startActivity(intent);
     }
 
 
