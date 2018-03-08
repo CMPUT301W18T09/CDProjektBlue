@@ -12,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.StackView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -23,6 +26,8 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
+    private String id;
+    private Task task;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -40,6 +45,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         TextView task_title = findViewById(R.id.task_title);
         TextView task_description = findViewById(R.id.task_description);
+        TextView text_lowest_bid = findViewById(R.id.lowest_bid);
 //        TextView task_lowest_bid = findViewById(R.id.lowest_bid);
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +56,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
 
         // Todo get task from data manager
-        String id = getIntent().getStringExtra("_id");
+        id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
@@ -58,13 +64,28 @@ public class TaskDetailsActivity extends NavigationActivity{
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            Task task = taskList.get(0);
+            task = taskList.get(0);
             task_title.setText(task.getTitle());
             task_description.setText(task.getDescription());
             // Todo set lowest bid
 
             task_title.setText(task.getTitle());
             task_description.setText(task.getDescription());
+
+            // find lowest bid
+            Bid lowest_bid = null;
+            for (Bid bid : task.getBidList()) {
+                if (lowest_bid == null) {
+                    lowest_bid = bid;
+                } else {
+                    if (bid.getPrice() < lowest_bid.getPrice()) {
+                        lowest_bid = bid;
+                    }
+                }
+            }
+            assert lowest_bid != null;
+            text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+
 
 //             Setting up the stack view for the images when you add a Task
 //            StackView stackView = findViewById(R.id.stackView);
@@ -96,6 +117,24 @@ public class TaskDetailsActivity extends NavigationActivity{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void placeBid(View view) {
+        EditText bid_amount = findViewById(R.id.my_bid_amount);
+        EditText bid_desc = findViewById(R.id.my_bid_description);
+
+        if (!bid_amount.getText().toString().isEmpty() && !bid_desc.getText().toString().isEmpty()) {
+            User user = new User("McChicken Man", "", "", "Nan", "Man");
+            Bid bid = new Bid(user, Double.parseDouble(bid_amount.getText().toString()), bid_desc.getText().toString());
+            task.addBid(bid);
+            task.setStatus(Task.TaskStatus.BIDDED);
+            DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+            updateTasks.execute(taskList);
+
+        } else {
+            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 

@@ -247,6 +247,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 .setMessage("Accept bid for " + Double.toString(bid.getPrice()) + "?")
                 .setTitle("Accept or Decline bid?")
                 .setView(dialog_view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 
