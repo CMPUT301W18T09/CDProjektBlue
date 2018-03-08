@@ -34,7 +34,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private ArrayList<Task> taskList = new ArrayList<>();
     private RecyclerView recyclerView;
     private TaskListAdapter taskListAdapter;
-    private ToggleButton tbtnToggle;
+    private Switch tbtnToggle;
     private DrawerLayout mDrawerLayout;
 
 
@@ -54,11 +54,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         inflater.inflate(layoutID, frameLayout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        Switch change_view_switch = new Switch(getBaseContext());
-        change_view_switch.setTextOn("List");
-        change_view_switch.setTextOff("Map");
-        change_view_switch.setChecked(true);
-        change_view_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        tbtnToggle = new Switch(getBaseContext());
+        tbtnToggle.setTextOn("List");
+        tbtnToggle.setTextOff("Map");
+        tbtnToggle.setChecked(true);
+        tbtnToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
@@ -71,7 +71,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                 }
             }
         });
-        toolbar.addView(change_view_switch);
+        toolbar.addView(tbtnToggle);
 
         DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(new ArrayList<String>());
@@ -83,7 +83,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             e.printStackTrace();
         }
 
-        TaskListAdapter taskListAdapter = new TaskListAdapter(this, taskList, 0);
+        taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -161,7 +161,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     @Override
     public void onClick(View view, int position, int type) {
         Intent intent = new Intent(this, PlaceBidActivity.class);
-        intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
+        intent.putExtra("layout_id", R.layout.activity_place_bid);
         intent.putExtra("_id", taskList.get(position).getID());
         this.startActivity(intent);
     }
