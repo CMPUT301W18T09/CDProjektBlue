@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.PlaceBidActivity">
+    tools:context="cmput301w18t09.orbid.PlaceBidActivity"
+    android:background="@color/colorTheme">
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:id="@+id/RelativeLayout"
+        layout="@layout/activity_task_details" />
+    <EditText
+        android:id="@+id/my_bid_amount"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
+        android:background="@drawable/white_text_box"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_above="@+id/my_bid_description"
+        android:hint="@string/bid_amount"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/my_bid_description"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_above="@+id/btnBid"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/white_text_box"
+        android:hint="@string/bid_description"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/btnBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/bid"
+        android:onClick="makeBid" />
+
+
+</RelativeLayout>
