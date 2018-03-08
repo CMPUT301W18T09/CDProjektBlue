@@ -24,6 +24,8 @@ import android.widget.Switch;
 import android.widget.ToggleButton;
 
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -158,7 +160,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     public void onClick(View view, int position, int type) {
-        Intent intent = new Intent(this, TaskDetailsActivity.class);
+        Intent intent = new Intent(this, PlaceBidActivity.class);
         intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
         intent.putExtra("_id", taskList.get(position).getID());
         this.startActivity(intent);
