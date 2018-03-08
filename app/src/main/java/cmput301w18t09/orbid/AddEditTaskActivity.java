@@ -221,24 +221,21 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Updates the recycler image view to show the image selected
-        if(resultCode==RESULT_OK)
-        {
+        if(resultCode==RESULT_OK) {
             Uri selectedimg = data.getData();
             try {
-                Toast.makeText(this, selectedimg.toString(), Toast.LENGTH_LONG).show();
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
                 if(bitmap.getByteCount() > 65536) {
                     Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                 } else {
                     task.addPhoto(bitmap);
+                    imageAdapter.notifyDataSetChanged();
                 }
                 //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
             } catch (IOException e) {
 
             }
-            imageAdapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
