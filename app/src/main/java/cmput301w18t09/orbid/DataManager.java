@@ -118,6 +118,7 @@ public class DataManager {
                     Log.e("Error", "The application has failed to build and send the task");
                 }
             }
+
             return null;
         }
     }
@@ -172,7 +173,7 @@ public class DataManager {
     }
 
     /**
-     * gets a list of tasks based on the search parameters
+     * gets a list of users based on the search parameters
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
@@ -279,7 +280,7 @@ public class DataManager {
 
         /**
          * @see updateUsers
-         * @param passed An array list of tasks to update
+         * @param passed An array list of users to update
          * @return no return
          */
         @Override

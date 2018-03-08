@@ -1,6 +1,10 @@
 package cmput301w18t09.orbid;
 
 
+import android.util.Log;
+
+import java.util.ArrayList;
+
 public class Review {
 
     private double rating;
@@ -27,4 +31,5 @@ public class Review {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }
