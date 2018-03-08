@@ -43,6 +43,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
 
+        // Find the text views in the layout
         TextView task_title = findViewById(R.id.task_title);
         TextView task_description = findViewById(R.id.task_description);
         TextView text_lowest_bid = findViewById(R.id.lowest_bid);
@@ -55,7 +56,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         });
 
 
-        // Todo get task from data manager
+        // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
@@ -65,26 +66,31 @@ public class TaskDetailsActivity extends NavigationActivity{
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-            task_title.setText(task.getTitle());
-            task_description.setText(task.getDescription());
-            // Todo set lowest bid
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-            task_title.setText(task.getTitle());
-            task_description.setText(task.getDescription());
+        // Set the text for the text views
+        task_title.setText(task.getTitle());
+        task_description.setText(task.getDescription());
+        task_title.setText(task.getTitle());
+        task_description.setText(task.getDescription());
 
-            // find lowest bid
-            Bid lowest_bid = null;
-            for (Bid bid : task.getBidList()) {
-                if (lowest_bid == null) {
+        // find lowest bid
+        Bid lowest_bid = null;
+        for (Bid bid : task.getBidList()) {
+            if (lowest_bid == null) {
+                lowest_bid = bid;
+            } else {
+                if (bid.getPrice() < lowest_bid.getPrice()) {
                     lowest_bid = bid;
-                } else {
-                    if (bid.getPrice() < lowest_bid.getPrice()) {
-                        lowest_bid = bid;
-                    }
                 }
             }
-            assert lowest_bid != null;
-            text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+        }
+        assert lowest_bid != null;
+        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
 
 
 //             Setting up the stack view for the images when you add a Task
@@ -94,13 +100,6 @@ public class TaskDetailsActivity extends NavigationActivity{
 //
 //            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
 //            stackView.setAdapter(imageViewAdapter);
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -119,6 +118,12 @@ public class TaskDetailsActivity extends NavigationActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * On click function for the bid button. Adds the bid if the inputted information
+     * is valid. Otherwise, it makes a toast telling the user to properly fill out
+     * the fields.
+     * @param view
+     */
     public void placeBid(View view) {
         EditText bid_amount = findViewById(R.id.my_bid_amount);
         EditText bid_desc = findViewById(R.id.my_bid_description);

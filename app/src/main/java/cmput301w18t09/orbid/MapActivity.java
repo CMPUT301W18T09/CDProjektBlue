@@ -48,6 +48,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     * @param googleMap
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -65,41 +66,40 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        // Get the bundle from the previous activity
         Bundle bundle = getArguments();
         String came_from = bundle.getString("type");
-        ArrayList<String> query = new ArrayList<>();
 
         // If we came from recent_listings
         if (came_from.equals("recent_listings")) {
-            query.add("_type");
-            query.add("task");
+            displayAllListings();
         }
         // If we came from a single ad - * id needs to be passed in arguments *
         else if (came_from.equals("single_ad")) {
             String id = bundle.getString("id");
-            query.add("_id");
-            query.add(id);
+            displaySingleListing(id);
         }
-        // If we are looking at a users ads - * username needs to be passed in arguments *
-        else {
-            String username = bundle.getString("username");
-            query.add("username");
-            query.add(username);
-        }
+    }
 
+    /**
+     * Displays all the tasks on the map. Used when coming from recent
+     * listings list view mode.
+     */
+    private void displayAllListings()
+    {
+        // Todo
+        // Get the task using the query
         DataManager.getTasks getTasks = new DataManager.getTasks();
-        getTasks.execute(query);
+        getTasks.execute(new ArrayList<String>());
         try {
-            if (!taskList.isEmpty()) {
-                taskList = getTasks.get();
-            }
+            taskList = getTasks.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        // Todo place markers
+        // Place all of the markers on the map and center on current location
         for (Task task : taskList) {
             if (task.getLocation() != null) {
                 mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
@@ -107,18 +107,41 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void displayAllListings()
+    /**
+     * Displays the map with just one task. Centers the camera on that task.
+     * @param id
+     */
+    private void displaySingleListing(String id)
     {
+        // Todo
+        // Get the task using the query
+        ArrayList<String> query = new ArrayList<>();
+        query.add("_id");
+        query.add(id);
 
+        DataManager.getTasks getTasks = new DataManager.getTasks();
+        getTasks.execute(new ArrayList<String>());
+        try {
+            taskList = getTasks.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        // Place all of the markers on the map and center on Task
+        for (Task task : taskList) {
+            if (task.getLocation() != null) {
+                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+            }
+        }
     }
 
-    private void displaySingleListing()
-    {
-
-    }
-
+    /**
+     * opens the recent listings activity in list view mode.
+     */
     private void openRecentListingsActivity()
     {
-
+        // Todo
     }
 }
