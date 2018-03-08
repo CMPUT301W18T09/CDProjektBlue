@@ -166,7 +166,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 break;
         }
 
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -193,10 +193,21 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     @Override
     public void onClick(View view, int position, int type) {
-        Intent intent = new Intent(this, AddEditTaskActivity.class);
-        intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-        intent.putExtra("_id", taskList.get(position).getID());
-        intent.putExtra("isAdd", 0);
-        this.startActivity(intent);
+        if (currentPage == 0) {
+            // is on my requested tasks so should open as edit
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
+            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+            intent.putExtra("_id", taskList.get(position).getID());
+            intent.putExtra("isAdd", 0);
+            this.startActivity(intent);
+        }
+        if (currentPage == 1) {
+            // is my bidded page so should open no editable, with bid list
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
+            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+            intent.putExtra("_id", taskList.get(position).getID());
+            intent.putExtra("isAdd", 0);
+            this.startActivity(intent);
+        }
     }
 }
