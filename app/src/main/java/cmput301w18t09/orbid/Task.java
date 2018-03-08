@@ -2,13 +2,19 @@ package cmput301w18t09.orbid;
 
 
 import android.graphics.Bitmap;
+
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
+
+// Todo: Repost
 
 public class Task {
     private User requester;
@@ -17,13 +23,13 @@ public class Task {
 
     @JestId
     private String ID;
-
     private double price;
     private TaskStatus status;
     private Bid acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
-    private ArrayList<Bitmap> photoList;
+    //private ArrayList<Bitmap> photoList;
+    private ArrayList<byte[]> photoList;
 
     public enum TaskStatus {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
@@ -36,8 +42,9 @@ public class Task {
         this.title = title;
         this.price = price;
         this.bidList = new ArrayList<Bid>();
-        this.photoList = new ArrayList<Bitmap>();
-        setStatus(status);
+        //this.photoList = new ArrayList<Bitmap>();
+        this.photoList = new ArrayList<byte[]>();
+        this.status = status;
 
     }
 
@@ -105,12 +112,30 @@ public class Task {
         this.bidList = bidList;
     }
 
+  /*  public ArrayList<Bitmap> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(ArrayList<Bitmap> b) {
+        this.photoList = b;
+    }*/
+
     public ArrayList<Bitmap> getPhotoList() {
-        return this.photoList;
+        ArrayList<Bitmap> list = new ArrayList<>();
+        for(byte[] g : photoList) {
+            list.add(BitmapFactory.decodeByteArray(g, 0, g.length));
+        }
+        return list;
     }
 
     public void setPhotoList(ArrayList<Bitmap> photoList) {
-        this.photoList = photoList;
+        ArrayList<byte[]> tempList = new ArrayList<>();
+        for(Bitmap g:photoList) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            g.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            tempList.add(stream.toByteArray());
+        }
+        this.photoList = tempList;
     }
 
 
@@ -122,15 +147,20 @@ public class Task {
 
     public void repost() {
 
-        // code to repost
-
+        // Todo: code to repost
         this.status = TaskStatus.REQUESTED;
 
     }
 
     public void addPhoto(Bitmap image) {
-        this.photoList.add(image);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        this.photoList.add(stream.toByteArray());
     }
+/*
+    public void addPhoto(Bitmap image) {
+        this.photoList.add(image);
+    }*/
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);
@@ -146,7 +176,9 @@ public class Task {
     }
 
     public Boolean containsPhoto(Bitmap image) {
-        return photoList.contains(image);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return photoList.contains(stream.toByteArray());
     }
 
 

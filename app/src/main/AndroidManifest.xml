@@ -5,9 +5,10 @@
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality. 
+         location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,8 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateAccountActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
+        <activity
+            android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
+        <activity
+            android:name=".ListTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
         <activity
             android:name=".RecentListingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -37,19 +48,33 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ListTaskActivity" />
-        <activity android:name=".AddEditTaskActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".TaskDetailsActivity" />
-        <activity android:name=".DisplayAssignedTaskActivity" />
-        <activity android:name=".PlaceBidActivity" />
-        <activity android:name=".TaskBidListActivity"></activity>
+        <activity
+            android:name=".AddEditTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TaskDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DisplayAssignedTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
+        <activity
+            android:name=".PlaceBidActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
+        <activity
+            android:name=".TaskBidListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FullScreenImage"></activity>
     </application>
 
 </manifest>

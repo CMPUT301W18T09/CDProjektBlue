@@ -477,6 +477,4 @@ public class DataManager {
         }
         Log.i("Offline", "cached tasks have been stored");
     }
-
-
 }
