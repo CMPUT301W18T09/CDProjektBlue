@@ -15,9 +15,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -27,7 +30,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
-    private Task task;
+    public Task task;
+    public Bid lowest_bid;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -38,24 +42,13 @@ public class TaskDetailsActivity extends NavigationActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int layoutID = getIntent().getIntExtra("task_details_layout_id", 0);
+        // Layout the XML that goes to the corresponding child that is being inflated
+        // Then setup the generic parts.
+        int layoutID = getIntent().getIntExtra("layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
-
-        // Find the text views in the layout
-        TextView task_title = findViewById(R.id.task_title);
-        TextView task_description = findViewById(R.id.task_description);
-        TextView text_lowest_bid = findViewById(R.id.lowest_bid);
-//        TextView task_lowest_bid = findViewById(R.id.lowest_bid);
-        task_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Todo set on click to show user details
-            }
-        });
-
-
+        setContentView(R.layout.activity_place_bid);
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
@@ -71,22 +64,16 @@ public class TaskDetailsActivity extends NavigationActivity{
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        // Set the text for the text views
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
-
+        // Find the text views in the layout
+        TextView task_title = findViewById(R.id.task_title);
+        TextView task_description = findViewById(R.id.task_description);
+        TextView text_lowest_bid = findViewById(R.id.lowest_bid);
         // find lowest bid
-        Bid lowest_bid = null;
+        User user = new User("nan", "", "", "" ,"" );
+        Bid lowest_bid = new Bid(user, 0, "");
         for (Bid bid : task.getBidList()) {
-            if (lowest_bid == null) {
+            if (bid.getPrice() < lowest_bid.getPrice()) {
                 lowest_bid = bid;
-            } else {
-                if (bid.getPrice() < lowest_bid.getPrice()) {
-                    lowest_bid = bid;
-                }
             }
         }
         assert lowest_bid != null;
@@ -95,6 +82,20 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
 
 
+        task_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Todo set on click to show user details
+            }
+        });
+
+        task_title.setText(task.getTitle());
+        task_description.setText(task.getDescription());
+        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+
+
+        //assert lowest_bid != null;
+
 //             Setting up the stack view for the images when you add a Task
 //            StackView stackView = findViewById(R.id.stackView);
 //            stackView.setInAnimation(this, android.R.animator.fade_in);
@@ -102,7 +103,6 @@ public class TaskDetailsActivity extends NavigationActivity{
 //
 //            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
 //            stackView.setAdapter(imageViewAdapter);
-
     }
 
     /**
@@ -144,6 +144,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         finish();
 
     }
+
 
 
 
