@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
 
-        // If the user name was taken, tell the user
+        // If the user name does not exist, tell the user
         if (returnUsers.isEmpty()) {
             Toast.makeText(this, "That user name does not exist", Toast.LENGTH_SHORT).show();
             return;
@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity{
     {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         this.startActivity(intent);
+        return;
     }
 
     public static String getCurrentUsername() {
