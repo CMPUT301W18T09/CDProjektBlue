@@ -42,7 +42,7 @@ public class EditProfileActivity extends NavigationActivity {
 
         // Get the currently logged in user
         String username = LoginActivity.getCurrentUsername();
-        DataManager.getUsers getUsers = new DataManager.getUsers();
+        DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
         queryParameters.add("username");
@@ -81,7 +81,7 @@ public class EditProfileActivity extends NavigationActivity {
     {
         User user;
 
-        DataManager.updateUsers updateUsers = new DataManager.updateUsers();
+        DataManager.updateUsers updateUsers = new DataManager.updateUsers(this);
         ArrayList<User> queryParameters = new ArrayList<>();
 
         String username = tvUsername.getText().toString();
