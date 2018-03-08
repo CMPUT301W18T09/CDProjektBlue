@@ -3,16 +3,16 @@ package cmput301w18t09.orbid;
 
 public class Review {
 
-    private float rating;
+    private double rating;
     private String description;
 
-    public Review(float rating, String description)
+    public Review(double rating, String description)
     {
         this.rating = rating;
         this.description = description;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
