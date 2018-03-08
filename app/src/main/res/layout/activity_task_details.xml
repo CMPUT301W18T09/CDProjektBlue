@@ -42,15 +42,17 @@
         android:background="@drawable/white_text_box"/>
 
     <TextView
+        android:id="@+id/lowest_bid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lowest_bid"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/task_description"
-        android:text="LOWEST BID" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Lowest bid: N/A"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/my_bid_amount"

@@ -90,7 +90,9 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         }
         assert lowest_bid != null;
-        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+        if(lowest_bid != null) {
+            text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+        }
 
 
 //             Setting up the stack view for the images when you add a Task
@@ -139,6 +141,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
+        finish();
 
     }
 

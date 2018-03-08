@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -223,6 +225,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         {
             Uri selectedimg = data.getData();
             try {
+                Toast.makeText(this, selectedimg.toString(), Toast.LENGTH_LONG).show();
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
                 if(bitmap.getByteCount() > 65536) {
                     Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
