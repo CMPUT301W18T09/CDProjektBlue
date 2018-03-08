@@ -22,5 +22,6 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("cmput301w18t09.orbid", appContext.getPackageName());
+
     }
 }

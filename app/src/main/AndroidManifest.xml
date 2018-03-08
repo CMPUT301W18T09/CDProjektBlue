@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cmput301w18t09.orbid">
+    <uses-sdk
+        android:maxSdkVersion="26"
+        android:minSdkVersion="18" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -17,10 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
-            android:name=".NavigationActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,20 +32,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        />
+            android:name=".NavigationActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        />
+            android:name=".RecentListingsActivity"/>
+
         <activity
             android:name=".ListTaskActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        />
-        <activity
-            android:name=".RecentListingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -66,15 +70,13 @@
         <activity
             android:name=".DisplayAssignedTaskActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        />
         <activity
             android:name=".PlaceBidActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        />
         <activity
             android:name=".TaskBidListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FullScreenImage"></activity>
+        <activity android:name=".FullScreenImage"/>
     </application>
 
 </manifest>

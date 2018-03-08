@@ -89,7 +89,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     {
         // Todo
         // Get the task using the query
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(getActivity());
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();
@@ -119,7 +119,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         query.add("_id");
         query.add(id);
 
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(getActivity());
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();

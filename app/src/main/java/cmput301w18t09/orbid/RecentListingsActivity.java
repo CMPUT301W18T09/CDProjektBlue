@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.ToggleButton;
 
-
 import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Must call in this order, NOT super first
+
         super.onCreate(savedInstanceState);
         int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -73,7 +73,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(tbtnToggle);
 
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();

@@ -126,13 +126,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
         // Add the task to DB if it's new
         if(isAdd ==1) {
-            DataManager.addTasks object = new DataManager.addTasks();
+            DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {
             // Update the task if it's being editted
             ArrayList<Task> n = new ArrayList<>();
             n.add(task);
-            DataManager.updateTasks object = new DataManager.updateTasks();
+            DataManager.updateTasks object = new DataManager.updateTasks(context);
             object.execute(n);
         }
     }
@@ -145,7 +145,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -182,7 +182,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void deleteButton(View view) {
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());
-        DataManager.deleteTasks object = new DataManager.deleteTasks();
+        DataManager.deleteTasks object = new DataManager.deleteTasks(this);
         object.execute(n);
         finish();
     }
@@ -262,7 +262,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 ArrayList<Bid> assignedBid = new ArrayList<>();
                 assignedBid.add(bid);
                 task.setBidList(assignedBid);
-                DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
                 ArrayList<Task> tasks = new ArrayList<>();
                 tasks.add(task);
                 updateTasks.execute(tasks);
@@ -283,7 +283,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 bidList = task.getBidList();
                 bidList.remove(bid);
                 task.setBidList(bidList);
-                DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
                 ArrayList<Task> tasks = new ArrayList<>();
                 tasks.add(task);
                 updateTasks.execute(tasks);
