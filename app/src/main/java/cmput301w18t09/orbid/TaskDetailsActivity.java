@@ -54,7 +54,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -135,7 +135,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             Bid bid = new Bid(user, Double.parseDouble(bid_amount.getText().toString()), bid_desc.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
 
         } else {
