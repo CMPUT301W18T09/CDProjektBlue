@@ -240,15 +240,55 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @Override
     public void onClick(View view, int position, int type) {
         // Todo do what you want to do when a bid is clicked, here you can access the Array of bids
-        Bid bid = bidList.get(position);
+        final Bid bid = bidList.get(position);
         LayoutInflater layoutInflater = this.getLayoutInflater();
         final View dialog_view = layoutInflater.inflate(R.layout.dialog_accept_bid, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(AddEditTaskActivity.this)
                 .setMessage("Accept bid for " + Double.toString(bid.getPrice()) + "?")
                 .setTitle("Accept or Decline bid?")
                 .setView(dialog_view);
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
+
+        Button btnAccept = dialog_view.findViewById(R.id.btnAccept);
+        Button btnDecline = dialog_view.findViewById(R.id.btnDecline);
+        Button btnCancel = dialog_view.findViewById(R.id.btnCancel);
+
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                task.setStatus(Task.TaskStatus.ASSIGNED);
+                ArrayList<Bid> assignedBid = new ArrayList<>();
+                assignedBid.add(bid);
+                task.setBidList(assignedBid);
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+                ArrayList<Task> tasks = new ArrayList<>();
+                tasks.add(task);
+                updateTasks.execute(tasks);
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnDecline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bidList = task.getBidList();
+                bidList.remove(bid);
+                task.setBidList(bidList);
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+                ArrayList<Task> tasks = new ArrayList<>();
+                tasks.add(task);
+                updateTasks.execute(tasks);
+                dialog.dismiss();
+            }
+        });
 
     }
 
