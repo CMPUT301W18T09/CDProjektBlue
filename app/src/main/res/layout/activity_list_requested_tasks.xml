@@ -2,10 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/requestedLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.ListTaskActivity"
-    android:background="@color/colorTheme">
+    android:background="@color/colorTheme"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
 
     <Button
@@ -32,6 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/cast_ic_notification_connecting" />
+
 
 
 </RelativeLayout>

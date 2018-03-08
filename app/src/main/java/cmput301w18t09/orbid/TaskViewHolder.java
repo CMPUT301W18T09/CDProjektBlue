@@ -41,4 +41,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), type);
     }
 
+
+
+
 }
