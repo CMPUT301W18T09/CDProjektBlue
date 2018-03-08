@@ -87,7 +87,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             query.add(username);
         }
 
-        DataManager.getTasks getTasks = new DataManager.getTasks(getContext());
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(query);
         try {
             if (!taskList.isEmpty()) {

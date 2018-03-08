@@ -123,13 +123,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
         // Add the task to DB if it's new
         if(isAdd ==1) {
-            DataManager.addTasks object = new DataManager.addTasks(this);
+            DataManager.addTasks object = new DataManager.addTasks();
             object.execute(task);
         } else {
             // Update the task if it's being editted
             ArrayList<Task> n = new ArrayList<>();
             n.add(task);
-            DataManager.updateTasks object = new DataManager.updateTasks(this);
+            DataManager.updateTasks object = new DataManager.updateTasks();
             object.execute(n);
         }
     }
@@ -142,7 +142,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -179,7 +179,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void deleteButton(View view) {
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());
-        DataManager.deleteTasks object = new DataManager.deleteTasks(this);
+        DataManager.deleteTasks object = new DataManager.deleteTasks();
         object.execute(n);
         finish();
     }

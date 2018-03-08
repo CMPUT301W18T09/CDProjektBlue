@@ -71,7 +71,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(change_view_switch);
 
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();
