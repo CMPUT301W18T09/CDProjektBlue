@@ -20,6 +20,8 @@ import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -28,8 +30,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
-    private Task task;
-    public View view;
+    public Task task;
+    public Bid lowest_bid;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -45,7 +47,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         int layoutID = getIntent().getIntExtra("layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        view = inflater.inflate(layoutID, frameLayout);
+        inflater.inflate(layoutID, frameLayout);
+        setContentView(R.layout.activity_place_bid);
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
@@ -62,31 +65,19 @@ public class TaskDetailsActivity extends NavigationActivity{
             e.printStackTrace();
         }
 
+        // find lowest bid
+        User user = new User("nan", "", "", "" ,"" );
+        Bid lowest_bid = new Bid(user, 0, "");
+        for (Bid bid : task.getBidList()) {
+            if (bid.getPrice() < lowest_bid.getPrice()) {
+                lowest_bid = bid;
+            }
+        }
+
         // Find the text views in the layout
-        included_view = (View) view.findViewById(R.id.RelativeLayout);
-        if (included_view == null) {
-            Log.e("UGH", "view not found");
-        } else {
-            Log.e("UGH", "found view");
-        }
-        task_title = included_view.findViewById(R.id.task_title);
-        if (task_title == null) {
-            Log.e("UGH", "title not found");
-        } else {
-            Log.e("UGH", "found title: " + task.getTitle());
-        }
-        task_description = included_view.findViewById(R.id.task_description);
-        if (task_description == null) {
-            Log.e("UGH", "desc not found");
-        } else {
-            Log.e("UGH", "found desc: " + task.getDescription());
-        }
-        text_lowest_bid = included_view.findViewById(R.id.lowest_bid);
-        if (text_lowest_bid == null) {
-            Log.e("UGH", "lowest not found");
-        } else {
-            Log.e("UGH", "found lowest");
-        }
+        TextView task_title = findViewById(R.id.task_title);
+        TextView task_description = findViewById(R.id.task_description);
+        TextView text_lowest_bid = findViewById(R.id.lowest_bid);
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,17 +85,11 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         });
 
-        // find lowest bid
-        Bid lowest_bid = null;
-        for (Bid bid : task.getBidList()) {
-            if (lowest_bid == null) {
-                lowest_bid = bid;
-            } else {
-                if (bid.getPrice() < lowest_bid.getPrice()) {
-                    lowest_bid = bid;
-                }
-            }
-        }
+        task_title.setText(task.getTitle());
+        task_description.setText(task.getDescription());
+        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+
+
         //assert lowest_bid != null;
 
 //             Setting up the stack view for the images when you add a Task
