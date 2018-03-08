@@ -42,6 +42,7 @@ public class Task {
         this.title = title;
         this.price = price;
         this.bidList = new ArrayList<Bid>();
+        //this.photoList = new ArrayList<Bitmap>();
         this.photoList = new ArrayList<byte[]>();
         this.status = status;
 
@@ -111,6 +112,14 @@ public class Task {
         this.bidList = bidList;
     }
 
+  /*  public ArrayList<Bitmap> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(ArrayList<Bitmap> b) {
+        this.photoList = b;
+    }*/
+
     public ArrayList<Bitmap> getPhotoList() {
         ArrayList<Bitmap> list = new ArrayList<>();
         for(byte[] g : photoList) {
@@ -149,6 +158,10 @@ public class Task {
         image.compress(Bitmap.CompressFormat.PNG, 0, stream);
         this.photoList.add(stream.toByteArray());
     }
+/*
+    public void addPhoto(Bitmap image) {
+        this.photoList.add(image);
+    }*/
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);
@@ -164,7 +177,9 @@ public class Task {
     }
 
     public Boolean containsPhoto(Bitmap image) {
-        return photoList.contains(image);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return photoList.contains(stream.toByteArray());
     }
 
 
