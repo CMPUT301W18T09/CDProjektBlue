@@ -17,6 +17,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="signup_button">Sign Up</string>
     <string name="create_account_title">Create Account</string>
+
     <string name="title_activity_add_edit_real">AddEditReal</string>
     <string name="title_activity_list_requested_tasks">listRequestedTasks</string>
     <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
@@ -29,4 +30,8 @@
     <string name="cancel">Cancel</string>
     <string name="bid">Bid</string>
     <string name="bid_amount">Bid Amount</string>
+
+    <string name="cancel_action">Exit</string>
+    <string name="ok">ok</string>
+
 </resources>
