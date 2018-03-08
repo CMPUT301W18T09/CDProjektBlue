@@ -72,7 +72,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         User user = new User("nan", "", "", "" ,"" );
         Bid lowest_bid = new Bid(user, 0, "");
         for (Bid bid : task.getBidList()) {
-            if (bid.getPrice() < lowest_bid.getPrice()) {
+            if (bid.getPrice() < lowest_bid.getPrice() || lowest_bid.getPrice() == 0) {
                 lowest_bid = bid;
             }
         }
@@ -142,7 +142,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
         finish();
-
     }
 
 

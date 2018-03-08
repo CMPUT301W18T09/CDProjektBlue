@@ -5,8 +5,7 @@
     android:id="@+id/RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorTheme"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity">
+    android:background="@color/colorTheme">
 
     <TextView
         android:id="@+id/task_title"
@@ -57,14 +56,7 @@
         android:textColor="@android:color/holo_green_light"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/my_bid_amount"
-        android:layout_width="105dp"
-        android:layout_height="40dp"
-        android:background="@drawable/white_text_box"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="LOWEST BID" />
+
 
 
 </RelativeLayout>

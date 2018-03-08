@@ -51,7 +51,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
-    private User testUser;
+    private User user;
     private DrawerLayout mDrawerLayout;
 
 
@@ -77,12 +77,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
         delete = (Button) findViewById(R.id.DeleteButton);
+        DataManager.getUsers userDM = new DataManager.getUsers(this);
+        ArrayList<String> n = new ArrayList<>();
+        ArrayList<User> usersList = new ArrayList<>();
+        n.add("username");
+        n.add(thisUser);
+        userDM.execute(n);
+        try{
+            usersList = userDM.get();
+            user = usersList.get(0);
+        } catch(Exception e) {
 
+        }
 
         if(isAdd == 1) {
             btnSavePost.setText("Post");
-            testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
-            task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(user, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
@@ -225,12 +235,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Uri selectedimg = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                if(bitmap.getByteCount() > 65536) {
-                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
-                } else {
+                //if(bitmap.getByteCount() > 65536) {
+                //    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
+                //} else {
                     task.addPhoto(bitmap);
-                    imageAdapter.notifyDataSetChanged();
-                }
+                    imageAdapter.updateList(task.getPhotoList());
+                //}
                 //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
             } catch (IOException e) {
 
