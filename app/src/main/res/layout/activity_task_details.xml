@@ -53,28 +53,37 @@
         android:text="LOWEST BID" />
 
     <EditText
-        android:id="@+id/my_bid_title"
-        android:layout_width="match_parent"
+        android:id="@+id/my_bid_amount"
+        android:layout_width="105dp"
         android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/white_text_box"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_below="@+id/lowest_bid"
-        android:hint="@string/bid_title"
-        android:inputType="text" />
+        android:layout_marginTop="16dp"
+        android:layout_above="@+id/my_bid_description"
+        android:hint="@string/bid_amount"
+        android:inputType="numberDecimal" />
 
     <EditText
+        android:id="@+id/my_bid_description"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/my_bid_description"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/white_text_box"
-        android:layout_below="@+id/my_bid_title"
+        android:layout_above="@+id/btnBid"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/white_text_box"
         android:hint="@string/bid_description"
         android:inputType="text" />
+
+    <Button
+        android:id="@+id/btnBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/bid"
+        android:onClick="placeBid"/>
 
 
 </RelativeLayout>
