@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "cmput301w18t09.orbid"
-        minSdkVersion 18
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -33,5 +33,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'org.elasticsearch:elasticsearch:1.2.4'
     implementation files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
-
+    implementation 'com.android.support:multidex:1.0.3'
 }
+
