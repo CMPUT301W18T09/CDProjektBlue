@@ -103,7 +103,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
         stackView.setOutAnimation(this, android.R.animator.fade_out);
-        imageAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
+        imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
         stackView.setAdapter(imageAdapter);
     }
 

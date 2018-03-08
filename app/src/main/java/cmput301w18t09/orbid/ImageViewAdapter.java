@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -15,23 +16,22 @@ import java.util.ArrayList;
 /**
  * Adapter class for the Recycler view to display images
  */
-public class ImageViewAdapter extends ArrayAdapter {
+public class ImageViewAdapter extends BaseAdapter {
 
     private Context context;
-    private int imageLayout;
     private ArrayList<Bitmap> imageList;
+    private ImageViewHolder holder = null;
+    private LayoutInflater inflater;
 
     /**
      * Constructor for the adapter
      * @param context
      * @param imageList
-     * @param imageLayout
      */
-    public ImageViewAdapter(final Context context, ArrayList<Bitmap> imageList, int imageLayout) {
-        super(context, imageLayout, imageList);
+    public ImageViewAdapter(final Context context, ArrayList<Bitmap> imageList) {
         this.context = context;
         this.imageList = imageList;
-        this.imageLayout = imageLayout;
+        this.inflater = LayoutInflater.from(context);
     }
 
 
@@ -47,13 +47,15 @@ public class ImageViewAdapter extends ArrayAdapter {
 
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(imageLayout, parent, false);
+                    .inflate(R.layout.layout_stack_view_item, parent, false);
+            holder = new ImageViewHolder();
+            holder.image = (ImageView) view.findViewById(R.id.stack_image);
+            view.setTag(holder);
+        } else {
+            holder = (ImageViewHolder) view.getTag();
         }
+        holder.image.setImageBitmap(imageList.get(position));
 
-        Bitmap image = imageList.get(position);
-        ImageView image_view = (ImageView) view.findViewById(R.id.stack_image);
-
-        image_view.setImageBitmap(image);
 
         return view;
     }
@@ -61,6 +63,11 @@ public class ImageViewAdapter extends ArrayAdapter {
     @Override
     public Bitmap getItem(int position) {
         return imageList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
     }
 
     /**
