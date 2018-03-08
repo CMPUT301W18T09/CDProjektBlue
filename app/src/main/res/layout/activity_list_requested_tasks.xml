@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/requestedLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cmput301w18t09.orbid.ListTaskActivity"
+    android:background="@color/colorTheme"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <Button
+        android:id="@+id/AddTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:onClick="addTask"
+        android:text="Add" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RequestedTasks"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/dots"
+        android:layout_width="70dp"
+        android:layout_height="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/cast_ic_notification_connecting" />
+
+
+
+</RelativeLayout>

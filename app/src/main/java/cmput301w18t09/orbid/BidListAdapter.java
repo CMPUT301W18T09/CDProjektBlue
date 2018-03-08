@@ -1,45 +1,50 @@
 package cmput301w18t09.orbid;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class BidListAdapter extends ArrayAdapter {
+public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
 
     private Context context;
+    private ItemClickListener clickListener;
     private ArrayList<Bid> bidList;
 
-    public BidListAdapter(Context context, ArrayList<Bid> bidList)
-    {
-        super(context, 0, bidList);
+    public BidListAdapter(final Context context, ArrayList<Bid> bidList) {
         this.context = context;
         this.bidList = bidList;
-
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        View bidItem = convertView;
-
-        // An short example of inflating a bid item in the list
-
-        if(bidItem == null) {
-            bidItem = LayoutInflater.from(context).inflate(R.layout.bid_listview_layout, parent, false);
-         }
-
-        Bid bid = bidList.get(position);
-        TextView bidPrice = (TextView) bidItem.findViewById(R.id.BidPrice);
-        TextView bidComment = (TextView) bidItem.findViewById(R.id.BidComment);
-
-        bidPrice.setText(Double.toString(bid.getPrice()));
-        bidComment.setText(bid.getDescription());
-        return bidItem;
+    public BidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(this.context);
+        View view = inflater.inflate(R.layout.layout_bid_card, parent, false);
+        return new BidViewHolder(view, this.context);
     }
+
+    public void setClickListener(ItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    @Override
+    public void onBindViewHolder(BidViewHolder holder, int position) {
+        Bid bid = bidList.get(position);
+        holder.setClickListener(clickListener);
+        // Todo fill out bid information here
+        holder.bid_description.setText(bid.getDescription());
+        holder.bid_price.setText(Double.toString(bid.getPrice()));
+
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return bidList.size();
+    }
+
 }
