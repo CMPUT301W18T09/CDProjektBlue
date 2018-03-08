@@ -39,7 +39,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks();
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -78,7 +78,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             Bid bid = new Bid(user, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks();
+            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
 
         } else {
