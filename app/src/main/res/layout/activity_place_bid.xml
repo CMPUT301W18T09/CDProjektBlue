@@ -7,7 +7,9 @@
     tools:context="cmput301w18t09.orbid.PlaceBidActivity"
     android:background="@color/colorTheme">
 
-    <include layout="@layout/activity_task_details"/>
+    <include
+        android:id="@+id/RelativeLayout"
+        layout="@layout/activity_task_details" />
     <EditText
         android:id="@+id/my_bid_amount"
         android:layout_width="105dp"

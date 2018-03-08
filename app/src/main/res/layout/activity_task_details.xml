@@ -2,21 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme">
+    android:background="@color/colorTheme"
+    tools:context="cmput301w18t09.orbid.AddEditTaskActivity">
 
     <TextView
         android:id="@+id/task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TASK TITLE"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/white_text_box"
+        android:text="TASK TITLE" />
 
     <StackView
         android:id="@+id/stackView"
@@ -24,8 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_title"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:background="@drawable/white_text_box">
 
     </StackView>
 
@@ -33,25 +36,25 @@
         android:id="@+id/task_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TASK DESCRIPTION"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/stackView"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/white_text_box"/>
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/white_text_box"
+        android:text="TASK DESCRIPTION" />
 
     <TextView
+        android:id="@+id/lowest_bid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lowest_bid"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/task_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/white_text_box"
         android:text="LOWEST BID" />
-
 
 
 </RelativeLayout>
