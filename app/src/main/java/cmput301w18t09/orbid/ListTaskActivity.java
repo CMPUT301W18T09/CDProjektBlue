@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private int currentPage=0;
     private User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
     private RecyclerView recyclerView;
+    private ImageView swipe;
     private int isMyBids;
 
     @Override
@@ -45,7 +47,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         } else {
             Button addButton = (Button) findViewById(R.id.AddTaskButton);
         }
-        //loadTasks();
     }
 
     /**
@@ -64,6 +65,21 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      */
     private void swipeInit() {
         recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
+            public void onSwipeRight() {
+                if(currentPage>0) {
+                    currentPage--;
+                    changeLayout();
+                }
+            }
+            public void onSwipeLeft() {
+                if(currentPage<3) {
+                    currentPage++;
+                    changeLayout();
+                }
+            }
+        });
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.requestedLayout);
+        layout.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
             public void onSwipeRight() {
                 if(currentPage>0) {
                     currentPage--;
