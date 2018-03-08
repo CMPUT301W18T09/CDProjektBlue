@@ -8,12 +8,16 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
 
 public class Task {
     private User requester;
     private String description;
     private String title;
+
+    @JestId
     private String ID;
+
     private double price;
     private TaskStatus status;
     private Bid acceptedBid;
