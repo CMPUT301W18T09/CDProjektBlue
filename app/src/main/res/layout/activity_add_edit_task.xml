@@ -5,145 +5,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme">
+    android:background="@color/colorTheme"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
-    <TextView
-        android:id="@+id/TaskTitle"
+    <EditText
+        android:id="@+id/EditTaskTitle"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|center"
-        android:text="Set Title By User"
         android:background="@drawable/back"
+        android:gravity="center_vertical|center"
+        android:hint="Title:"
+        android:text=""
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/TaskPrice"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/TaskTitle"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|center"
-        android:text="Set Price: $"
-        android:background="@drawable/back"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/TaskCommentTitle"
+    <EditText
+        android:id="@+id/EditTaskComment"
         android:layout_width="300dp"
-        android:layout_height="25dp"
-        android:layout_above="@+id/TaskComment"
-        android:layout_alignStart="@+id/TaskTitle"
-        android:background="@drawable/back"
-        android:gravity="center_vertical|center"
-        android:text="Task Description"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/TaskComment"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_alignStart="@+id/TaskCommentTitle"
-        android:layout_centerVertical="true"
+        android:layout_height="100dp"
+        android:layout_alignStart="@+id/EditTaskTitle"
+        android:layout_below="@+id/ImageStack"
         android:background="@drawable/back"
         android:ems="10"
         android:gravity="top|left"
-        android:hint="Enter your description:"
+        android:hint="Comment:"
         android:inputType="textPersonName"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="13sp" />
+        android:textSize="15sp" />
 
     <Button
-        android:id="@+id/FulfilledButton"
+        android:id="@+id/SavePostTaskButton"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
         android:background="@color/common_google_signin_btn_text_dark_default"
-        android:text="Fulfilled"
-        android:onClick="fulfillBid"/>
-    android:text="Fulfilled" />
+        android:onClick="postEditTask"
+        android:text="" />
 
-    <Button
-        android:id="@+id/RepostButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/common_google_signin_btn_text_dark_default"
-        android:text="Repost"
-        android:onClick="repostBid"/>
-    android:text="Repost" />
-
-    <Button
-        android:id="@+id/BidButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/common_google_signin_btn_text_dark_default"
-        android:text="Button" />
-
-    <TextView
-        android:id="@+id/BidType"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
-        android:layout_above="@+id/BidPrice"
-        android:layout_alignStart="@+id/TaskComment"
-        android:background="@drawable/back"
-        android:gravity="center_vertical|center"
-        android:text="Type of Bid(ex:Set Bid)"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="16sp"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/BidComment"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/BidPrice"
-        android:layout_marginBottom="54dp"
-        android:background="@drawable/back"
-        android:ems="10"
-        android:gravity="top|left"
-        android:hint="Enter your Comment"
-        android:inputType="textPersonName"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/BidPrice"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
-        android:layout_above="@+id/BidComment"
-        android:layout_alignStart="@+id/BidType"
-        android:background="@drawable/back"
-        android:ems="10"
-        android:gravity="center_vertical|center"
-        android:hint="Place Bid: $"
-        android:inputType="numberDecimal"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="15sp"
-        android:visibility="gone" />
-
-    <ListView
-        android:id="@+id/BidList"
+    <StackView
+        android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_alignStart="@+id/TaskComment"
-        android:layout_below="@+id/TaskComment"
-        android:layout_marginTop="29dp"
+        android:layout_below="@+id/AddEditPrice"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorTheme"
+        ></StackView>
+
+    <TextView
+        android:id="@+id/AddEditPrice"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/EditTaskTitle"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/back"
-        app:layout_constraintVertical_bias="0.816">
-    </ListView>
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Price: $0"
+        android:textColor="@color/cast_expanded_controller_background_color" />
+
+    <ImageButton
+        android:id="@+id/AddImageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/AddEditPrice"
+        android:layout_marginTop="34dp"
+        android:onClick="addImage"
+        app:srcCompat="@drawable/ic_menu_gallery" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/BidListEdit"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
+        android:layout_above="@+id/SavePostTaskButton"
+        android:layout_alignStart="@+id/EditTaskComment"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="18dp"
+        android:layout_toStartOf="@+id/AddEditPrice"
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:onClick="deleteButton"
+        android:text="Delete" />
+
+
 
 </RelativeLayout>
