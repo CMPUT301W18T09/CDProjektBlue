@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.location.places.Place;
@@ -72,7 +73,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             }
         });
         toolbar.addView(tbtnToggle);
-
+        Toast.makeText(this, thisUser, Toast.LENGTH_LONG).show();
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         getTasks.execute(new ArrayList<String>());
         try {

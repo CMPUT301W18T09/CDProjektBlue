@@ -39,7 +39,9 @@
         <activity android:name=".CreateAccountActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".RecentListingsActivity"/>
+            android:name=".RecentListingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
 
         <activity
             android:name=".ListTaskActivity"

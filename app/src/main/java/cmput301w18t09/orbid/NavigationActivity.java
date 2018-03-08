@@ -23,12 +23,18 @@ import android.widget.FrameLayout;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    public static String thisUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            String isLogin = getIntent().getStringExtra("isLogin");
+            if (isLogin.equals("true")) {
+                thisUser = getIntent().getStringExtra("username");
+            }
+        } catch(Exception e) {
 
-
+        }
         setContentView(R.layout.activity_navigation);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -27,7 +27,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private ListView listView;
     private TaskListAdapter taskListAdapter;
     private int currentPage=0;
-    private User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
+    private User user;
     private RecyclerView recyclerView;
     private ImageView swipe;
     private int isMyBids;
@@ -40,6 +40,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
+        /**/
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         if(isMyBids==1) {
@@ -137,6 +138,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
+        //taskAdapter.updateTaskList(taskList);
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -148,7 +150,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
         query.add("username");
-        query.add("NanTheMAN");
+        query.add(thisUser);
         query.add("status");
         // Select filter based on which page you're on
         switch(currentPage) {
