@@ -2,6 +2,7 @@ package cmput301w18t09.orbid;
 
 
 import android.graphics.Bitmap;
+
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
-
 
 // Todo: Repost
 
@@ -148,7 +148,6 @@ public class Task {
     public void repost() {
 
         // Todo: code to repost
-
         this.status = TaskStatus.REQUESTED;
 
     }
