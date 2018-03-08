@@ -44,17 +44,6 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Example of how to inflate your layout
-        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
-
-        // Uses actual ID of layout to inflate correct one
-        if (callerLayoutID != 0) {
-            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-            inflater.inflate(callerLayoutID, frameLayout);
-        }
-
-
 
     }
 
@@ -122,9 +111,15 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_edit_profile) {
+            Intent intent = new Intent(this, EditProfileActivity.class);
+            intent.putExtra("edit_profile_layout_id", R.layout.activity_edit_profile);
+            this.startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            this.startActivity(intent);
+            finish();
 
         }
 
