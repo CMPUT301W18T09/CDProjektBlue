@@ -48,8 +48,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     {
         User user;
 
-        DataManager.getUsers getUsers = new DataManager.getUsers();
-        DataManager.addUsers addUsers = new DataManager.addUsers();
+        DataManager.getUsers getUsers = new DataManager.getUsers(this);
+        DataManager.addUsers addUsers = new DataManager.addUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
 

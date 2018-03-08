@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity{
     private void openRecentListingsActivity()
     {
 
-        DataManager.getUsers getUsers = new DataManager.getUsers();
+        DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
 
@@ -83,7 +83,6 @@ public class LoginActivity extends AppCompatActivity{
     {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         this.startActivity(intent);
-        return;
     }
 
     public static String getCurrentUsername() {
@@ -93,6 +92,5 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
 
-        return;
     }
 }
