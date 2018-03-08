@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
     private Task task;
-    private View view;
+    public View view;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -62,10 +63,30 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
 
         // Find the text views in the layout
-        TextView task_title = findViewById(R.id.task_title);
-        TextView task_description = findViewById(R.id.task_description);
-        TextView text_lowest_bid = findViewById(R.id.lowest_bid);
-//        TextView task_lowest_bid = findViewById(R.id.lowest_bid);
+        included_view = (View) view.findViewById(R.id.RelativeLayout);
+        if (included_view == null) {
+            Log.e("UGH", "view not found");
+        } else {
+            Log.e("UGH", "found view");
+        }
+        task_title = included_view.findViewById(R.id.task_title);
+        if (task_title == null) {
+            Log.e("UGH", "title not found");
+        } else {
+            Log.e("UGH", "found title: " + task.getTitle());
+        }
+        task_description = included_view.findViewById(R.id.task_description);
+        if (task_description == null) {
+            Log.e("UGH", "desc not found");
+        } else {
+            Log.e("UGH", "found desc: " + task.getDescription());
+        }
+        text_lowest_bid = included_view.findViewById(R.id.lowest_bid);
+        if (text_lowest_bid == null) {
+            Log.e("UGH", "lowest not found");
+        } else {
+            Log.e("UGH", "found lowest");
+        }
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,14 +105,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 }
             }
         }
-        assert lowest_bid != null;
-        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
-
-        // Set the text for the text views
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
+        //assert lowest_bid != null;
 
 //             Setting up the stack view for the images when you add a Task
 //            StackView stackView = findViewById(R.id.stackView);

@@ -5,6 +5,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +35,11 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         super.onCreate(savedInstanceState);
         // View is inflated within TaskDetails
 
+        View included_view = (View) view.findViewById(R.id.RelativeLayout);
+        TextView tvTitle = included_view.findViewById(R.id.task_title);
+        String title = tvTitle.getText().toString();
+        Log.e("UGH", "Title after super call is done: " + title);
+
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
@@ -47,6 +55,14 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
+        // Set the text for the text views
+        Log.e("UGH", "About to set text for: " + text_lowest_bid.getId());
+        text_lowest_bid.setText(Double.toString(lowest_bid.getPrice()));
+        task_title.setText(task.getTitle() + "by: " + task.getRequester());
+        task_description.setText(task.getDescription());
+        Log.e("UGH", "Set text");
+
     }
 
     @Override
@@ -66,8 +82,9 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * @param view
      */
     public void makeBid(View view) {
-        etPrice = findViewById(R.id.my_bid_amount);
-        etDescription = findViewById(R.id.my_bid_description);
+        etPrice = view.findViewById(R.id.my_bid_amount);
+        etDescription = view.findViewById(R.id.my_bid_description);
+        Log.i("PRICE", etPrice.getText().toString());
 
         if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
             User user = new User("McChicken Man", "", "", "Nan", "Man");
