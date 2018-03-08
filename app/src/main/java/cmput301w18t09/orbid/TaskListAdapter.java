@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -43,8 +45,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         Task task = taskList.get(position);
         if (task.getPhotoList() != null) {
             if (!task.getPhotoList().isEmpty()) {
+//                File file = new File(task.getPhotoList().get(0));
                 Log.i("IMG", task.getPhotoList().get(0).toString());
-                holder.task_image.setImageBitmap();
+//                holder.task_image.setImageBitmap();
             }
         }
         holder.task_title.setText(task.getTitle());
