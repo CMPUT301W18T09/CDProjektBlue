@@ -136,7 +136,7 @@ public class EditProfileActivity extends NavigationActivity {
 
         // Add the new user to the server
         user = new User(username, email, phoneNumber, firstName, lastName);
-        Log.v("Current User ID:", currentUser.getID());
+        //Log.v("Current User ID:", currentUser.getID());
         user.setID(currentUser.getID());
 
 

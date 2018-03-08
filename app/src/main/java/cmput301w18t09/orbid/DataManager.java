@@ -62,26 +62,6 @@ public class DataManager {
                 }
             }
 
-            verifySettings();
-            for (Task task: tasks){
-                try {
-                    DocumentResult result = client.execute(new Index.Builder(task).index("cmput301w18t09").type("task").id(task.getID()).build());
-
-                    if (result.isSucceeded()){
-                        Log.v("Success", "Task has been updated");
-                    }
-                    else{
-                        Log.e("Error", "Update has failed");
-                        //TODO: Offline behaviour
-                    }
-
-                }
-                catch (Exception e){
-                    Log.e("Error", "Failed to connect to the elastic search server");
-                    //TODO: Offline behaviour
-                }
-            }
-
             return null;
         }
     }
@@ -115,26 +95,6 @@ public class DataManager {
                 }
                 catch (Exception e){
                     Log.e("Error", "The application has failed to build and send the task");
-                    //TODO: Offline behaviour
-                }
-            }
-
-            verifySettings();
-            for (User user: users){
-                try {
-                    DocumentResult result = client.execute(new Index.Builder(user).index("cmput301w18t09").type("user").id(user.getID()).build());
-
-                    if (result.isSucceeded()){
-                        Log.v("Success", "User has been updated");
-                    }
-                    else{
-                        Log.e("Error", "Update has failed");
-                        //TODO: Offline behavior
-                    }
-
-                }
-                catch (Exception e){
-                    Log.e("Error", "Failed to connect to the elastic search server");
                     //TODO: Offline behaviour
                 }
             }
