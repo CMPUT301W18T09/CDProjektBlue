@@ -85,6 +85,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else {
             // Show the price and bid list if you're only editing a task
             loadTask();
+            System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
             btnSavePost.setText("Save");
             // Initiate the recycler view for bids
             bidList = task.getBidList();
