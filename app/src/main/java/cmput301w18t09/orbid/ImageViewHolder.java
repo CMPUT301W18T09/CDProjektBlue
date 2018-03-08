@@ -21,38 +21,10 @@ import android.widget.TextView;
 
 
 // Todo we need to delete this as its no longer needed, just hanging on to it for a bit :)
-public class ImageViewHolder extends RecyclerView.ViewHolder {
+public class ImageViewHolder {
 
     public ImageView image;
-    private Boolean isImageFitToScreen = false;
+    public Boolean isImageFitToScreen = false;
 
-    /**
-     * Image view holder which sets the onClickListener
-     * @param view
-     * @param context
-     */
-    public ImageViewHolder(View view, final Context context) {
-        super(view);
-        image = view.findViewById(R.id.Images);
-
-
-        view.setOnClickListener(new View.OnClickListener() {
-            /**
-             * On click listener which handles events when user clicks an image
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-                // Build/retrieve the bitmap
-                image.buildDrawingCache();
-                Bitmap bitmap = image.getDrawingCache();
-
-                Intent intent = new Intent(context, FullScreenImage.class);
-                // Pass the bitmap as an exta to the fullscreen activity
-                intent.putExtra("BitmapImage", bitmap);
-                context.startActivity(intent);
-            }
-        });
-    }
 
 }

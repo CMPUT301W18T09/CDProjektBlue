@@ -1,7 +1,9 @@
 package cmput301w18t09.orbid;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         holder.setClickListener(clickListener);
         Task task = taskList.get(position);
-//        holder.task_image.setImage(task.getPhotoList());
+        if (task.getPhotoList() != null) {
+            if (!task.getPhotoList().isEmpty()) {
+                Log.i("IMG", task.getPhotoList().get(0).toString());
+                holder.task_image.setImageBitmap();
+            }
+        }
         holder.task_title.setText(task.getTitle());
         holder.task_description.setText(task.getDescription());
 

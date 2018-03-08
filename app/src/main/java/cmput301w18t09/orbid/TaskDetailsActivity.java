@@ -66,13 +66,13 @@ public class TaskDetailsActivity extends NavigationActivity{
             task_title.setText(task.getTitle());
             task_description.setText(task.getDescription());
 
-            // Setting up the stack view for the images when you add a Task
-//            StackView stackView = findViewById(R.id.stackView);
-//            stackView.setInAnimation(this, android.R.animator.fade_in);
-//            stackView.setOutAnimation(this, android.R.animator.fade_out);
-//
-//            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList(), R.layout.layout_stack_view_item);
-//            stackView.setAdapter(imageViewAdapter);
+//             Setting up the stack view for the images when you add a Task
+            StackView stackView = findViewById(R.id.stackView);
+            stackView.setInAnimation(this, android.R.animator.fade_in);
+            stackView.setOutAnimation(this, android.R.animator.fade_out);
+
+            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
+            stackView.setAdapter(imageViewAdapter);
 
 
         } catch (InterruptedException e) {
