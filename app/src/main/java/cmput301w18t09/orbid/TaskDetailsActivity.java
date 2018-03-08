@@ -54,7 +54,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         ArrayList<String> query = new ArrayList<>();
         query.add("_id");
         query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
@@ -67,12 +67,12 @@ public class TaskDetailsActivity extends NavigationActivity{
             task_description.setText(task.getDescription());
 
 //             Setting up the stack view for the images when you add a Task
-            StackView stackView = findViewById(R.id.stackView);
-            stackView.setInAnimation(this, android.R.animator.fade_in);
-            stackView.setOutAnimation(this, android.R.animator.fade_out);
-
-            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
-            stackView.setAdapter(imageViewAdapter);
+//            StackView stackView = findViewById(R.id.stackView);
+//            stackView.setInAnimation(this, android.R.animator.fade_in);
+//            stackView.setOutAnimation(this, android.R.animator.fade_out);
+//
+//            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
+//            stackView.setAdapter(imageViewAdapter);
 
 
         } catch (InterruptedException e) {

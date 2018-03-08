@@ -166,7 +166,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 break;
         }
 
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
