@@ -71,7 +71,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(change_view_switch);
 
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        DataManager.getTasks getTasks = new DataManager.getTasks();
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();
@@ -150,6 +150,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
     }
 
+    /**
+     * When a task is clicked the Task Details are opened in a new activity.
+     * @param view
+     * @param position
+     * @param type
+     */
     @Override
     public void onClick(View view, int position, int type) {
         Intent intent = new Intent(this, TaskDetailsActivity.class);
