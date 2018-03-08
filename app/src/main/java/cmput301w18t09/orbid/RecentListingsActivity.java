@@ -150,6 +150,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
     }
 
+    /**
+     * When a task is clicked the Task Details are opened in a new activity.
+     * @param view
+     * @param position
+     * @param type
+     */
     @Override
     public void onClick(View view, int position, int type) {
         Intent intent = new Intent(this, TaskDetailsActivity.class);
