@@ -6,6 +6,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+// AKA myRequests
 public class TaskBidListActivity extends TaskDetailsActivity {
 
     private ArrayList<Bid> bidList;
@@ -15,7 +16,7 @@ public class TaskBidListActivity extends TaskDetailsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_bid_list);
+
     }
 
     private void openAcceptBidDialog()

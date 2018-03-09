@@ -1,9 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.EditProfileActivity">
+    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    android:background="@color/colorTheme">
 
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/edit_profile_etFirstName"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_profile_tvUsername"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/back"
+        android:gravity="center"
+        android:hint="@string/first_name"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/edit_profile_etLastName"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_profile_etFirstName"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/back"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/edit_profile_etEmail"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_profile_etLastName"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/back"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/edit_profile_etPhoneNumber"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_profile_etEmail"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/back"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/phone_number"
+        android:inputType="textPersonName|phone"
+        android:textColor="@android:color/black" />
+
+
+    <Button
+        android:id="@+id/edit_profile_btnSave"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="Save" />
+
+    <TextView
+        android:id="@+id/edit_profile_tvUsername"
+        android:layout_width="275dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="82dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+
+</RelativeLayout>

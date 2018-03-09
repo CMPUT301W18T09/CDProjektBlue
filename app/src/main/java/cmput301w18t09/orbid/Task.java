@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,6 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
+
+// Todo: Repost
 
 public class Task {
     private String requester;
@@ -106,13 +109,6 @@ public class Task {
     public void setBidList(ArrayList<Bid> bidList) {
         this.bidList = bidList;
     }
-
-  /*  public ArrayList<Bitmap> getPhotoList() {
-        return photoList;
-    }
-    public void setPhotoList(ArrayList<Bitmap> b) {
-        this.photoList = b;
-    }*/
 
     public ArrayList<Bitmap> getPhotoList() {
         ArrayList<Bitmap> list = new ArrayList<>();
