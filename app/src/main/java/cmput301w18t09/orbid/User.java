@@ -26,6 +26,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        reviewList = new ArrayList<Review>();
     }
 
     public String getUsername() {
@@ -86,6 +87,6 @@ public class User {
 
     public void addReview(Review review)
     {
-
+        this.reviewList.add(review);
     }
 }
