@@ -4,10 +4,10 @@ package cmput301w18t09.orbid;
 public class Bid {
 
     private User provider;
-    private float price;
+    private double price;
     private String description;
 
-    public Bid(User provider, float price, String description)
+    public Bid(User provider, double price, String description)
     {
         this.provider = provider;
         this.price = price;
@@ -22,11 +22,11 @@ public class Bid {
         this.provider = provider;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
