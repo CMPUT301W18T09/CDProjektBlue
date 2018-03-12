@@ -43,20 +43,6 @@ public class Task {
 
     }
 
-    public Task(String requester, String description, String title, double price, TaskStatus status, LatLng location)
-    {
-        this.requester = requester;
-        this.description = description;
-        this.title = title;
-        this.price = price;
-        this.bidList = new ArrayList<Bid>();
-        //this.photoList = new ArrayList<Bitmap>();
-        this.photoList = new ArrayList<byte[]>();
-        this.status = status;
-        this.location = location;
-
-    }
-
     public String getRequester() {
         return requester;
     }
@@ -158,10 +144,6 @@ public class Task {
         image.compress(Bitmap.CompressFormat.PNG, 0, stream);
         this.photoList.add(stream.toByteArray());
     }
-/*
-    public void addPhoto(Bitmap image) {
-        this.photoList.add(image);
-    }*/
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);
