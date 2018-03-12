@@ -10,6 +10,8 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
@@ -65,7 +67,6 @@ public class DataManager {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         task.setID(result.getId());
-                        Log.v("id", task.getID());
                         pushCached();
                     }
                     else{
@@ -118,7 +119,6 @@ public class DataManager {
                     Log.e("Error", "The application has failed to build and send the task");
                 }
             }
-
             return null;
         }
     }
@@ -146,18 +146,24 @@ public class DataManager {
             ArrayList<Task> tasks = new ArrayList<>();
             ArrayList<String> search_Parameters = passed[0];
 
-            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            for (int x=0; x < search_Parameters.size(); x+=2){
-                searchSourceBuilder.query(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+            BoolQueryBuilder query = QueryBuilders.boolQuery();
+
+            for (int x=1; x < search_Parameters.size(); x+=2){
+                if (search_Parameters.get(0).equals("and")){
+                    query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                }
+                else {
+                    query.should(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                }
+
             }
 
-            Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("cmput301w18t09").addType("task").build();
+            Search search = new Search.Builder(new SearchSourceBuilder().query(query).toString()).addIndex("cmput301w18t09").addType("task").build();
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Task> foundTasks = result.getSourceAsObjectList(Task.class);
                     tasks.addAll(foundTasks);
-                    Log.v("return", result.getJsonString());
                     pushCached();
                 }
                 else {
@@ -173,7 +179,7 @@ public class DataManager {
     }
 
     /**
-     * gets a list of users based on the search parameters
+     * gets a list of tasks based on the search parameters
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
@@ -280,7 +286,7 @@ public class DataManager {
 
         /**
          * @see updateUsers
-         * @param passed An array list of users to update
+         * @param passed An array list of tasks to update
          * @return no return
          */
         @Override
@@ -478,4 +484,6 @@ public class DataManager {
         }
         Log.i("Offline", "cached tasks have been stored");
     }
+
+
 }

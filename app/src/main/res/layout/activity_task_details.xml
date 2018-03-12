@@ -8,7 +8,7 @@
     android:background="@color/colorTheme">
 
     <TextView
-        android:id="@+id/task_title"
+        android:id="@+id/details_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,7 +23,7 @@
         android:id="@+id/stackView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/task_title"
+        android:layout_below="@+id/details_task_title"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
     </StackView>
 
     <TextView
-        android:id="@+id/task_description"
+        android:id="@+id/details_task_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stackView"
@@ -44,10 +44,10 @@
         android:text="TASK DESCRIPTION" />
 
     <TextView
-        android:id="@+id/lowest_bid"
+        android:id="@+id/details_lowest_bid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/task_description"
+        android:layout_below="@+id/details_task_description"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"

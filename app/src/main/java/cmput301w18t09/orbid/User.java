@@ -14,7 +14,7 @@ public class User {
     private String lastName;
 
     @JestId
-    private String ID;
+    private String id;
 
     private ArrayList<Review> reviewList;
 
@@ -26,7 +26,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        reviewList = new ArrayList<Review>();
     }
 
     public String getUsername() {
@@ -70,11 +69,11 @@ public class User {
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
     public ArrayList<Review> getReviewList() {
@@ -87,6 +86,6 @@ public class User {
 
     public void addReview(Review review)
     {
-        this.reviewList.add(review);
+
     }
 }

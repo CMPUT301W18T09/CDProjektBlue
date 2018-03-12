@@ -149,6 +149,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void filterList() {
         // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
+        query.add("add");
         query.add("username");
         query.add(thisUser);
         query.add("status");

@@ -2,10 +2,7 @@ package cmput301w18t09.orbid;
 
 
 import android.graphics.Bitmap;
-
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -14,10 +11,8 @@ import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
 
-// Todo: Repost
-
 public class Task {
-    private User requester;
+    private String requester;
     private String description;
     private String title;
 
@@ -35,7 +30,7 @@ public class Task {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
     }
 
-    public Task(User requester, String description, String title, double price, TaskStatus status)
+    public Task(String requester, String description, String title, double price, TaskStatus status)
     {
         this.requester = requester;
         this.description = description;
@@ -48,11 +43,11 @@ public class Task {
 
     }
 
-    public User getRequester() {
+    public String getRequester() {
         return requester;
     }
 
-    public void setRequester(User requester) {
+    public void setRequester(String requester) {
         this.requester = requester;
     }
 
@@ -115,7 +110,6 @@ public class Task {
   /*  public ArrayList<Bitmap> getPhotoList() {
         return photoList;
     }
-
     public void setPhotoList(ArrayList<Bitmap> b) {
         this.photoList = b;
     }*/

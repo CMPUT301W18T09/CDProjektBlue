@@ -92,7 +92,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         if(isAdd == 1) {
             btnSavePost.setText("Post");
-            task = new Task(user, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(this.thisUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
@@ -153,6 +153,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void loadTask() {
         ArrayList<Task> taskList = new ArrayList<>();
         ArrayList<String> query = new ArrayList<>();
+        query.add("and");
         query.add("_id");
         query.add(id);
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
