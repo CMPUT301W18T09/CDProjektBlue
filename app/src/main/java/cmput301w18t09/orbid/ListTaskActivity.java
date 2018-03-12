@@ -61,9 +61,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         startActivity(addTask);
     }
 
+
     /**
      * Setup the swipe to switch between pages
      */
+    /*
     private void swipeInit() {
         recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
             public void onSwipeRight() {
@@ -95,7 +97,21 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             }
         });
     }
+*/
 
+    public void pageForward(View view) {
+        if(currentPage<3) {
+            currentPage++;
+            changeLayout();
+        }
+    }
+
+    public void pageBack(View view) {
+        if(currentPage>0) {
+            currentPage--;
+            changeLayout();
+        }
+    }
 
     /**
      * Handles setting up which
@@ -120,7 +136,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         // Re-initiate recycler view
         initRecyclerView();
         // Re-initiate swipe listener
-        swipeInit();
+        //swipeInit();
     }
 
     /**
