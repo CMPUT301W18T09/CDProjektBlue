@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -23,11 +24,14 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("MSG", "Before super call");
         super.onCreate(savedInstanceState);
+        Log.i("MSG", "super worked");
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
+        query.add("and");
         query.add("_id");
         query.add(id);
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
@@ -35,6 +39,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
+            Log.i("MSG", "Got tasks");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -65,8 +70,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      */
     public void makeBid(View view) {
         if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
-            User user = new User("McChicken Man", "", "", "Nan", "Man");
-            Bid bid = new Bid(user, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
+            Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);

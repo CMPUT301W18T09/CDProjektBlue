@@ -1,16 +1,12 @@
 package cmput301w18t09.orbid;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,13 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import com.google.android.gms.location.places.Place;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -164,6 +155,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         Intent intent = new Intent(this, PlaceBidActivity.class);
         intent.putExtra("layout_id", R.layout.activity_place_bid);
         intent.putExtra("_id", taskList.get(position).getID());
+        Log.i("MSG", "click done");
         this.startActivity(intent);
     }
 
