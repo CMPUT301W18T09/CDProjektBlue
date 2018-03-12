@@ -36,11 +36,10 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Layout the XML that goes to the corresponding child that is being inflated
         // Then setup the generic parts.
-        int layoutID = getIntent().getIntExtra("layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        inflater.inflate(layoutID, frameLayout);
-        //setContentView(R.layout.activity_place_bid);
+        inflater.inflate(R.layout.activity_task_details, frameLayout);
+
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
         ArrayList<String> query = new ArrayList<>();
@@ -52,12 +51,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-            Log.i("MSG", "got the task");
         } catch (InterruptedException e) {
-            Log.i("MSG", "interrupted execution");
+            Log.e("MSG", "interrupted execution");
             e.printStackTrace();
         } catch (ExecutionException e) {
-            Log.i("MSG", "execution");
+            Log.e("MSG", "execution");
             e.printStackTrace();
         }
         // Find the text views in the layout
@@ -104,6 +102,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 //
 //            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
 //            stackView.setAdapter(imageViewAdapter);
+
     }
 
     /**
