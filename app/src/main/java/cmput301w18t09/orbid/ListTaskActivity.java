@@ -62,42 +62,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
 
-    /**
-     * Setup the swipe to switch between pages
-     */
-    /*
-    private void swipeInit() {
-        recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
-            public void onSwipeRight() {
-                if(currentPage>0) {
-                    currentPage--;
-                    changeLayout();
-                }
-            }
-            public void onSwipeLeft() {
-                if(currentPage<3) {
-                    currentPage++;
-                    changeLayout();
-                }
-            }
-        });
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.requestedLayout);
-        layout.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
-            public void onSwipeRight() {
-                if(currentPage>0) {
-                    currentPage--;
-                    changeLayout();
-                }
-            }
-            public void onSwipeLeft() {
-                if(currentPage<3) {
-                    currentPage++;
-                    changeLayout();
-                }
-            }
-        });
-    }
-*/
 
     public void pageForward(View view) {
         if(currentPage<3) {
@@ -220,12 +184,26 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             intent.putExtra("isAdd", 0);
             this.startActivity(intent);
         }
+        //Don't think this is needed
+        /*
         if (currentPage == 1) {
             // is my bidded page so should open no editable, with bid list
             Intent intent = new Intent(this, AddEditTaskActivity.class);
             intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
             intent.putExtra("_id", taskList.get(position).getID());
             intent.putExtra("isAdd", 0);
+            this.startActivity(intent);
+        }*/
+        // opens my Assigned or my Completed task
+        if(currentPage == 2 || currentPage == 3) {
+            // Is my assigned so should open Task Details activity
+            Intent intent = new Intent(this, TaskDetailsActivity.class);
+            intent.putExtra("_id", taskList.get(position).getID());
+            if(currentPage == 2) {
+                intent.putExtra("isAssigned", 1);
+            } else {
+                intent.putExtra("isAssigned", 2);
+            }
             this.startActivity(intent);
         }
     }

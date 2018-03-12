@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private String id;
     public Task task;
     public Bid lowest_bid;
+    public int isAssigned = 0;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -42,6 +46,11 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
+        try {
+            isAssigned = getIntent().getIntExtra("isAssigned", 0);
+        } catch(Error e) {
+
+        }
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -67,6 +76,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         if (task == null) {
             Log.i("MSG", "task is null here");
         }
+
+        // Find the lowest bid to display
         for (Bid bid : task.getBidList()) {
             if (lowest_bid != null) {
                 if (bid.getPrice() < lowest_bid.getPrice()) {
@@ -80,7 +91,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
         }
 
-
+        // Show the users details when the name is clicked
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,10 +99,32 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         });
 
+        // Set the task title and description
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
         Log.i("MSG", task_title.getText().toString());
 
+
+        // Setting up the assigned bid layout
+        // 1 means assigned, 2 means completed, 0 is for recent listings
+        if(isAssigned == 1 || isAssigned == 2) {
+            TextView title = (TextView) findViewById(R.id.assignedBidTitle);
+            TextView description = (TextView) findViewById(R.id.assignedBidDescription);
+            // Show the buttons if the task is Assigned
+            if(isAssigned == 1) {
+                Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
+                Button repostBtn = (Button) findViewById(R.id.repostButton);
+                fulfilledBtn.setVisibility(View.VISIBLE);
+                repostBtn.setVisibility(View.VISIBLE);
+            }
+            // Set necessary elements to visible
+            title.setVisibility(View.VISIBLE);
+            description.setVisibility(View.VISIBLE);
+
+            // Set the text to the items
+            title.setText(lowest_bid.getProvider());
+            description.setText(lowest_bid.getDescription());
+        }
 
         //assert lowest_bid != null;
 
@@ -118,5 +151,41 @@ public class TaskDetailsActivity extends NavigationActivity{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * sets the task status to completed and kills the activity
+     * @param view
+     */
+    public void fulfilled(View view) {
+        task.setStatus(Task.TaskStatus.COMPLETED);
+        save();
+        finish();
+
+    }
+
+    // Sets the task status to requested/bidded and deletes the bid
+    public void repost(View view) {
+        ArrayList<Bid> temp = new ArrayList<>();
+        temp = task.getBidList();
+        temp.remove(lowest_bid);
+        task.setBidList(temp);
+        if(temp.size() > 0) {
+            task.setStatus(Task.TaskStatus.BIDDED);
+        } else {
+            task.setStatus(Task.TaskStatus.REQUESTED);
+        }
+        save();
+        finish();
+    }
+
+    /**
+     * Saves the current task in the database
+     */
+    private void save() {
+        ArrayList<Task> n = new ArrayList<>();
+        n.add(task);
+        DataManager.updateTasks object = new DataManager.updateTasks(this);
+        object.execute(n);
     }
 }
