@@ -2,12 +2,17 @@ package cmput301w18t09.orbid;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.content.Context;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +30,10 @@ import android.widget.RelativeLayout;
 import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,7 +74,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         position = getIntent().getIntExtra("position", 0);
         id = getIntent().getStringExtra("_id");
         // Inflate the layout ID that was received
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
 
@@ -73,9 +82,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
-        tPrice = (TextView)findViewById(R.id.AddEditPrice);
+        tPrice = (TextView) findViewById(R.id.AddEditPrice);
 
-        btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
+        btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         delete = (Button) findViewById(R.id.DeleteButton);
         DataManager.getUsers userDM = new DataManager.getUsers(this);
         ArrayList<String> n = new ArrayList<>();
@@ -83,21 +92,21 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         n.add("username");
         n.add(thisUser);
         userDM.execute(n);
-        try{
+        try {
             usersList = userDM.get();
             user = usersList.get(0);
-        } catch(Exception e) {
+        } catch (Exception e) {
 
         }
 
-        if(isAdd == 1) {
+        if (isAdd == 1) {
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
             loadTask();
-           // System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
+            // System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
             btnSavePost.setText("Save");
             // Initiate the recycler view for bids
             bidList = task.getBidList();
@@ -135,7 +144,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void save() {
         // Add the task to DB if it's new
-        if(isAdd ==1) {
+        if (isAdd == 1) {
             DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {

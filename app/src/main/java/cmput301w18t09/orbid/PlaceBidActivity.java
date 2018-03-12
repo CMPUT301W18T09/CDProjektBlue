@@ -1,12 +1,16 @@
 package cmput301w18t09.orbid;
 
+import android.content.Context;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -24,9 +28,11 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("MSG", "Before super call");
         super.onCreate(savedInstanceState);
-        Log.i("MSG", "super worked");
+
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        FrameLayout frameLayout = findViewById(R.id.details_frame_layout);
+        inflater.inflate(R.layout.activity_place_bid, frameLayout);
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
@@ -39,16 +45,14 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-            Log.i("MSG", "Got tasks");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        etPrice = findViewById(R.id.my_bid_amount);
-        etDescription = findViewById(R.id.my_bid_description);
-
+        etPrice = frameLayout.findViewById(R.id.my_bid_amount);
+        etDescription = frameLayout.findViewById(R.id.my_bid_description);
 
     }
 

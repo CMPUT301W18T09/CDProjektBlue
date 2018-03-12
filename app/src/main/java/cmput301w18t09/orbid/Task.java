@@ -3,10 +3,6 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-<<<<<<< HEAD
-=======
-import android.support.v7.widget.RecyclerView;
->>>>>>> 38dc6cd6aa3d69cecd13768791f2d894ab4d4fbd
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -44,6 +40,20 @@ public class Task {
         //this.photoList = new ArrayList<Bitmap>();
         this.photoList = new ArrayList<byte[]>();
         this.status = status;
+
+    }
+
+    public Task(String requester, String description, String title, double price, TaskStatus status, LatLng location)
+    {
+        this.requester = requester;
+        this.description = description;
+        this.title = title;
+        this.price = price;
+        this.bidList = new ArrayList<Bid>();
+        //this.photoList = new ArrayList<Bitmap>();
+        this.photoList = new ArrayList<byte[]>();
+        this.status = status;
+        this.location = location;
 
     }
 
@@ -111,16 +121,6 @@ public class Task {
         this.bidList = bidList;
     }
 
-<<<<<<< HEAD
-  /*  public ArrayList<Bitmap> getPhotoList() {
-        return photoList;
-    }
-    public void setPhotoList(ArrayList<Bitmap> b) {
-        this.photoList = b;
-    }*/
-
-=======
->>>>>>> 38dc6cd6aa3d69cecd13768791f2d894ab4d4fbd
     public ArrayList<Bitmap> getPhotoList() {
         ArrayList<Bitmap> list = new ArrayList<>();
         for(byte[] g : photoList) {
