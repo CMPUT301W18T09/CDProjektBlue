@@ -55,7 +55,9 @@ public class ImageViewAdapter extends BaseAdapter {
         } else {
             holder = (ImageViewHolder) view.getTag();
         }
-        holder.image.setImageBitmap(imageList.get(position));
+        if(imageList.size() > 0) {
+            holder.image.setImageBitmap(imageList.get(position));
+        }
 
 
         return view;

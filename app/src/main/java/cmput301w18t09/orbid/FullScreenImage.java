@@ -40,23 +40,6 @@ public class FullScreenImage  extends Activity {
 
         imgDisplay.setImageBitmap(bitmap);
 
-        // Load the task
-        ArrayList<Task> taskList = new ArrayList<>();
-        ArrayList<String> query = new ArrayList<>();
-        query.add("and");
-        query.add("_id");
-        query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(query);
-        try {
-            taskList = getTasks.get();
-            task = taskList.get(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**
