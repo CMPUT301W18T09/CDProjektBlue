@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
  * Created by Chady on 2018-02-15.
  */
 
+@SuppressWarnings("ALL")
 public class TaskTest extends ActivityInstrumentationTestCase2 {
 
     public TaskTest() {
