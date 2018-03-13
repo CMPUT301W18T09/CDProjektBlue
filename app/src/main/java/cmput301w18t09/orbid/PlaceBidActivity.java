@@ -54,6 +54,10 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         etPrice = frameLayout.findViewById(R.id.my_bid_amount);
         etDescription = frameLayout.findViewById(R.id.my_bid_description);
 
+        if (mine) {
+            frameLayout.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

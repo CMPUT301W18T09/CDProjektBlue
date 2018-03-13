@@ -37,8 +37,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
