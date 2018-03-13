@@ -119,7 +119,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("user", task.getRequester());
+                bundle.putString("username", task.getRequester());
                 UserProfileDialog dialog = new UserProfileDialog();
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "User Profile Dialog");
