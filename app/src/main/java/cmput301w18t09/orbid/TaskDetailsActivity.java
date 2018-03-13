@@ -114,6 +114,17 @@ public class TaskDetailsActivity extends NavigationActivity{
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
         usernameBtn.setText("Poster: " + task.getRequester());
 
+        usernameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("user", task.getRequester());
+                UserProfileDialog dialog = new UserProfileDialog();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "User Profile Dialog");
+            }
+        });
+
 
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
