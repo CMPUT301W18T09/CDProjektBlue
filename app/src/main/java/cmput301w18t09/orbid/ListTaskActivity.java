@@ -28,7 +28,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private ListView listView;
     private TaskListAdapter taskListAdapter;
     private int currentPage=0;
-    private User testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
+    private User user;
     private RecyclerView recyclerView;
     private ImageView swipe;
     private int isMyBids;
@@ -41,6 +41,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
+        /**/
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         if(isMyBids==1) {
@@ -61,41 +62,21 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         startActivity(addTask);
     }
 
-    /**
-     * Setup the swipe to switch between pages
-     */
-    private void swipeInit() {
-        recyclerView.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
-            public void onSwipeRight() {
-                if(currentPage>0) {
-                    currentPage--;
-                    changeLayout();
-                }
-            }
-            public void onSwipeLeft() {
-                if(currentPage<3) {
-                    currentPage++;
-                    changeLayout();
-                }
-            }
-        });
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.requestedLayout);
-        layout.setOnTouchListener(new OnSwipeTouchListener(ListTaskActivity.this) {
-            public void onSwipeRight() {
-                if(currentPage>0) {
-                    currentPage--;
-                    changeLayout();
-                }
-            }
-            public void onSwipeLeft() {
-                if(currentPage<3) {
-                    currentPage++;
-                    changeLayout();
-                }
-            }
-        });
+
+
+    public void pageForward(View view) {
+        if(currentPage<3) {
+            currentPage++;
+            changeLayout();
+        }
     }
 
+    public void pageBack(View view) {
+        if(currentPage>0) {
+            currentPage--;
+            changeLayout();
+        }
+    }
 
     /**
      * Handles setting up which
@@ -120,7 +101,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         // Re-initiate recycler view
         initRecyclerView();
         // Re-initiate swipe listener
-        swipeInit();
+        //swipeInit();
     }
 
     /**
@@ -146,10 +127,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * @return
      */
     private void filterList() {
-        // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
-        query.add("username");
-        query.add("NanTheMAN");
+        query.add("and");
+        query.add("requester");
+        query.add(thisUser);
         query.add("status");
         // Select filter based on which page you're on
         switch(currentPage) {
@@ -187,8 +168,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         changeLayout();
     }
 
-    private void openUserProfileDialog()
-    {
+    private void openUserProfileDialog() {
 
     }
 
@@ -202,12 +182,16 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             intent.putExtra("isAdd", 0);
             this.startActivity(intent);
         }
-        if (currentPage == 1) {
-            // is my bidded page so should open no editable, with bid list
-            Intent intent = new Intent(this, AddEditTaskActivity.class);
-            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+        // opens my Assigned or my Completed task
+        if(currentPage == 2 || currentPage == 3) {
+            // Is my assigned so should open Task Details activity
+            Intent intent = new Intent(this, TaskDetailsActivity.class);
             intent.putExtra("_id", taskList.get(position).getID());
-            intent.putExtra("isAdd", 0);
+            if(currentPage == 2) {
+                intent.putExtra("isAssigned", 1);
+            } else {
+                intent.putExtra("isAssigned", 2);
+            }
             this.startActivity(intent);
         }
     }

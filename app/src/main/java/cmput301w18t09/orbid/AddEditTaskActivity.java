@@ -2,12 +2,17 @@ package cmput301w18t09.orbid;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.content.Context;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -26,8 +32,13 @@ import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -45,6 +56,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Bitmap bitmap;
     private static Context mContext;
     private static final int SELECT_PICTURE = 1;
+    private static final int DELETE_PICTURE = 3;
+    private int imagePos;
     private int isAdd;
     private int position;
     private String id;
@@ -52,7 +65,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
-    private User testUser;
+    private User user;
     private DrawerLayout mDrawerLayout;
 
 
@@ -66,7 +79,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         position = getIntent().getIntExtra("position", 0);
         id = getIntent().getStringExtra("_id");
         // Inflate the layout ID that was received
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
 
@@ -74,21 +87,31 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
-        tPrice = (TextView)findViewById(R.id.AddEditPrice);
+        tPrice = (TextView) findViewById(R.id.AddEditPrice);
 
-        btnSavePost = (Button)findViewById(R.id.SavePostTaskButton);
+        btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         delete = (Button) findViewById(R.id.DeleteButton);
+        DataManager.getUsers userDM = new DataManager.getUsers(this);
+        ArrayList<String> n = new ArrayList<>();
+        ArrayList<User> usersList;
+        n.add("username");
+        n.add(thisUser);
+        userDM.execute(n);
+        try {
+            usersList = userDM.get();
+            user = usersList.get(0);
+        } catch (Exception e) {
 
+        }
 
-        if(isAdd == 1) {
+        if (isAdd == 1) {
             btnSavePost.setText("Post");
-            testUser = new User("NanTheMAN", "Nan@hotmail.com","1800NAN", "NAN", "THEMAN");
-            task = new Task(testUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(this.thisUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
             loadTask();
-           // System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
+            // System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
             btnSavePost.setText("Save");
             // Initiate the recycler view for bids
             bidList = task.getBidList();
@@ -109,6 +132,27 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         stackView.setOutAnimation(this, android.R.animator.fade_out);
         imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
         stackView.setAdapter(imageAdapter);
+        stackView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Bitmap> temp;
+                // Get the bitmap that was tapped from the photo list
+                temp = task.getPhotoList();
+                Bitmap image = temp.get(position);
+                // Create a new intent and send it the byte array for bitmap
+                Intent intent = new Intent(context, FullScreenImage.class);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] bytes = stream.toByteArray();
+                intent.putExtra("BitmapImage",bytes);
+                intent.putExtra("isMyTask", 1);
+                intent.putExtra("_id", task.getID());
+                intent.putExtra("position", position);
+                imagePos = position;
+                startActivityForResult(intent, DELETE_PICTURE);
+
+            }
+        });
     }
 
     @Override
@@ -126,16 +170,20 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void save() {
         // Add the task to DB if it's new
-        if(isAdd ==1) {
+        if (isAdd == 1) {
             DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {
-            // Update the task if it's being editted
-            ArrayList<Task> n = new ArrayList<>();
-            n.add(task);
-            DataManager.updateTasks object = new DataManager.updateTasks(context);
-            object.execute(n);
+            update();
         }
+    }
+
+    private void update() {
+        // Update the task if it's being editted
+        ArrayList<Task> n = new ArrayList<>();
+        n.add(task);
+        DataManager.updateTasks object = new DataManager.updateTasks(context);
+        object.execute(n);
     }
 
     /**
@@ -144,6 +192,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void loadTask() {
         ArrayList<Task> taskList = new ArrayList<>();
         ArrayList<String> query = new ArrayList<>();
+        query.add("and");
         query.add("_id");
         query.add(id);
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
@@ -226,16 +275,21 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Uri selectedimg = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                if(bitmap.getByteCount() > 65536) {
-                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
-                } else {
+                //if(bitmap.getByteCount() > 65536) {
+                //    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
+               // } else {
                     task.addPhoto(bitmap);
-                    imageAdapter.notifyDataSetChanged();
-                }
-                //img.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg));
+                    imageAdapter.updateList(task.getPhotoList());
+               // }
             } catch (IOException e) {
 
             }
+        } else if(resultCode == 188) {
+            ArrayList<Bitmap> temp;
+            temp = task.getPhotoList();
+            temp.remove(imagePos);
+            task.setPhotoList(temp);
+            imageAdapter.updateList(task.getPhotoList());
         }
     }
 

@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
 
-// Todo: Repost
-
 public class Task {
     private String requester;
     private String description;
