@@ -12,6 +12,7 @@ public class User {
     private String phoneNumber;
     private String firstName;
     private String lastName;
+    private ArrayList<Bid> bidList;
 
     @JestId
     private String id;
@@ -19,13 +20,14 @@ public class User {
     private ArrayList<Review> reviewList;
 
 
-    public User(String username, String email, String phoneNumber, String firstName, String lastName)
-    {
+    public User(String username, String email, String phoneNumber, String firstName, String lastName) {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.bidList = new ArrayList<Bid>();
+
     }
 
     public String getUsername() {
@@ -75,6 +77,15 @@ public class User {
     public void setID(String ID) {
         this.id = ID;
     }
+
+    public ArrayList<Bid> getBidList() {
+        return bidList;
+    }
+
+    public void addBid(Bid bid) {
+        this.bidList.add(bid);
+    }
+
 
     public ArrayList<Review> getReviewList() {
         return reviewList;

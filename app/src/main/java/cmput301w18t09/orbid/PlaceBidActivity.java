@@ -26,6 +26,8 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
+    private ArrayList<User> userList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,22 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
+
+        // Query for the user
+        ArrayList<String> queryUser = new ArrayList<>();
+        ArrayList<User> userList;
+        queryUser.add("username");
+        queryUser.add(thisUser);
+        DataManager.getUsers getUsers = new DataManager.getUsers(this);
+        getUsers.execute(queryUser);
+        try {
+            userList = getUsers.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        // Get the task that was clicked
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -79,12 +97,15 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      */
     public void makeBid(View view) {
         if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
-            Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
+            Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString(), task.getID());
+            if(bid == null) System.out.println("NULL");
+            userList.get(0).addBid(bid);
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
-
+            DataManager.updateUsers updateUsers = new DataManager.updateUsers(this);
+            updateUsers.execute(userList);
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
