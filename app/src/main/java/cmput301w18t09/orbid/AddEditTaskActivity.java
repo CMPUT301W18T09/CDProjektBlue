@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -37,6 +38,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -127,6 +129,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         stackView.setOutAnimation(this, android.R.animator.fade_out);
         imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
         stackView.setAdapter(imageAdapter);
+        stackView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Bitmap> temp;
+                // Get the bitmap that was tapped from the photo list
+                temp = task.getPhotoList();
+                Bitmap image = temp.get(position);
+                // Create a new intent and send it the byte array for bitmap
+                Intent intent = new Intent(context, FullScreenImage.class);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] bytes = stream.toByteArray();
+                intent.putExtra("BitmapImage",bytes);
+                //intent.putExtra("BitmapImage", image);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
