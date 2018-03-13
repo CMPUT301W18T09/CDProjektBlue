@@ -8,10 +8,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 /**
@@ -19,6 +22,8 @@ import android.widget.Toast;
  */
 
 public class UserProfileDialog extends DialogFragment {
+
+    private User user;
 
     public interface UserProfileListener{
 
@@ -45,82 +50,50 @@ public class UserProfileDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View content = layoutInflater.inflate(R.layout.dialog_user_profile, null);
-        final Bundle args = getArguments();
+        Bundle args = getArguments();
+        String username = args.getString("username");
 
         builder.setView(content)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        dialogInterface.cancel();
 
                     }
-                });/*.setNegativeButton(R.string.cancel_action, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });*/
+                });
 
 
-        TextView fullname = content.findViewById(R.id.fullnameview);
-        TextView useremail = content.findViewById(R.id.emailview);
-        TextView userphone = content.findViewById(R.id.phoneview);
-        TextView username = content.findViewById(R.id.username_title);
-
-        fullname.setText(args.getString(" fullname"));
-        useremail.setText(args.getString("email"));
-        userphone.setText(args.getString("phone"));
-        username.setText(args.getString("username"));
-
- /*       date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+        TextView tvfullname = content.findViewById(R.id.fullnameview);
+        TextView tvemail = content.findViewById(R.id.emailview);
+        TextView tvphone = content.findViewById(R.id.phoneview);
+        TextView tvusername = content.findViewById(R.id.username_title);
 
 
-           @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = .getText().toString();
-                int textlength = date.getText().length();
-                if (text.endsWith("-")){
-                    return;
-                }
 
-                if (textlength == 5 || textlength == 8){
-                    date.setText(new StringBuilder(text).insert(text.length()-1, "-").toString());
-                    date.setSelection(date.getText().length());
-                }
+        DataManager.getUsers getUsers = new DataManager.getUsers(getActivity());
+        ArrayList<String> queryParameters = new ArrayList<>();
+        ArrayList<User> returnUsers;
+        queryParameters.add("username");
+        queryParameters.add(username);
+        getUsers.execute(queryParameters);
+        try {
+            returnUsers = getUsers.get();
+            user = returnUsers.get(0);
+        }
+        catch (Exception e) {
+            Log.e("Error", "Failed to get ArrayList intended as return from getUsers");
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Error getting user information", Toast.LENGTH_SHORT).show();
 
-            }
+        }
+        tvusername.setText(user.getUsername());
+        tvemail.setText(user.getEmail());
+        tvphone.setText(user.getPhoneNumber());
+        tvfullname.setText(user.getLastName()+", "+ user.getFirstName());
 
-            @Override
-            public void afterTextChanged(Editable editable) {
 
-            }
-        });
-*/
 
         final AlertDialog dialog = builder.create();
         dialog.show();
         return dialog;}}
 
- /*      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-           @Override
-            public void onClick(View view) {
-
-                TextView username = content.findViewById(R.id.subPrice);
-                TextView name = content.findViewById(R.id.subName);
-                TextView date = content.findViewById(R.id.subDate);
-                //if (name.getText().length() >= 1 && date.getText().length() == 10 && price.getText().length() >= 1){
-                    listener.onEditPositive(UserProfileDialog.this, args.getInt("Position"));
-                    dialog.dismiss();
-                }
-                else {
-                    Toast.makeText(getActivity(), "Not all required fields are filled. Please try again", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        return dialog;
-        }
-    }*/
