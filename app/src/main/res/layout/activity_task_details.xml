@@ -5,11 +5,10 @@
     android:id="@+id/RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorTheme"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity">
+    android:background="@color/colorTheme">
 
     <TextView
-        android:id="@+id/task_title"
+        android:id="@+id/details_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -18,53 +17,113 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/white_text_box"
-        android:text="TASK TITLE" />
+        android:text="TASK TITLE"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <StackView
-        android:id="@+id/stackView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/task_title"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/white_text_box">
+        android:id="@+id/ImageStack"
+        android:layout_width="300dp"
+        android:layout_height="140dp"
+        android:layout_below="@+id/usernameButton"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_toEndOf="@+id/details_task_description"
+        android:layout_toRightOf="@+id/details_task_description"
+        android:background="@color/colorTheme" />
 
-    </StackView>
 
     <TextView
-        android:id="@+id/task_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stackView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:id="@+id/details_task_description"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_alignLeft="@+id/details_task_title"
+        android:layout_alignStart="@+id/details_task_title"
+        android:layout_below="@+id/usernameButton"
         android:background="@drawable/white_text_box"
-        android:text="TASK DESCRIPTION" />
+        android:text="TASK DESCRIPTION"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <TextView
-        android:id="@+id/lowest_bid"
+        android:id="@+id/details_lowest_bid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/task_description"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_alignEnd="@+id/details_task_title"
+        android:layout_alignRight="@+id/details_task_title"
+        android:layout_toRightOf="@+id/usernameButton"
+        android:layout_below="@+id/details_task_title"
+        android:gravity="end"
         android:text="Lowest bid: N/A"
         android:textColor="@android:color/holo_green_light"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/my_bid_amount"
-        android:layout_width="105dp"
-        android:layout_height="40dp"
+    <FrameLayout
+        android:id="@+id/details_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fulfilledButton"
+        android:layout_below="@+id/details_task_description">
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/assignedBidTitle"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/white_text_box"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="LOWEST BID" />
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/assignedBidDescription"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_alignEnd="@+id/assignedBidTitle"
+        android:layout_alignRight="@+id/assignedBidTitle"
+        android:layout_below="@+id/assignedBidTitle"
+        android:background="@drawable/white_text_box"
+        android:text="TextView"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/fulfilledButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/white_text_box"
+        android:onClick="fulfilled"
+        android:text="Fulfilled"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/repostButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/white_text_box"
+        android:onClick="repost"
+        android:text="Repost"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/usernameButton"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:textAllCaps="false"
+        android:layout_alignBottom="@+id/details_lowest_bid"
+        android:layout_alignLeft="@+id/details_task_description"
+        android:layout_alignStart="@+id/details_task_description"
+        android:background="@drawable/white_text_box"
+        android:text="Poster:"
+        android:textSize="12sp"
+        android:onClick="openUserInfo"/>
 
 
 </RelativeLayout>
