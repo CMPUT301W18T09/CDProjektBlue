@@ -182,6 +182,14 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             intent.putExtra("isAdd", 0);
             this.startActivity(intent);
         }
+        if (currentPage == 1) {
+            // is on my requested tasks so should open as edit
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
+            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+            intent.putExtra("_id", taskList.get(position).getID());
+            intent.putExtra("isAdd", 3);
+            this.startActivity(intent);
+        }
         // opens my Assigned or my Completed task
         if(currentPage == 2 || currentPage == 3) {
             // Is my assigned so should open Task Details activity

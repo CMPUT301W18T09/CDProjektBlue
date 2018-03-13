@@ -123,6 +123,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
         }
+        if(isAdd == 3) {
+            btnSavePost.setVisibility(View.GONE);
+        }
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
 
@@ -275,12 +278,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Uri selectedimg = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                //if(bitmap.getByteCount() > 65536) {
-                //    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
-               // } else {
+                if(bitmap.getByteCount() > 65536 && thisUser != "nantheman") {
+                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
+                } else {
                     task.addPhoto(bitmap);
                     imageAdapter.updateList(task.getPhotoList());
-               // }
+                }
             } catch (IOException e) {
 
             }
