@@ -6,9 +6,11 @@ public class Bid {
     private String provider;
     private double price;
     private String description;
+    private String holdingTask;
 
-    public Bid(String provider, double price, String description)
+    public Bid(String provider, double price, String description, String holdingTask)
     {
+        this.holdingTask = holdingTask;
         this.provider = provider;
         this.price = price;
         this.description = description;

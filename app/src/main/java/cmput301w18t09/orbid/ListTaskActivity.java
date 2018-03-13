@@ -31,6 +31,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private User user;
     private RecyclerView recyclerView;
     private ImageView swipe;
+    private int maxPage;
     private int isMyBids;
 
     @Override
@@ -41,13 +42,15 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
-        /**/
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
-        if(isMyBids==1) {
+        Button addButton = (Button) findViewById(R.id.AddTaskButton);
 
+        if(isMyBids==1) {
+            addButton.setVisibility(View.GONE);
+            maxPage = 1;
         } else {
-            Button addButton = (Button) findViewById(R.id.AddTaskButton);
+            maxPage = 3;
         }
     }
 
@@ -65,7 +68,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
 
     public void pageForward(View view) {
-        if(currentPage<3) {
+        if(currentPage<maxPage) {
             currentPage++;
             changeLayout();
         }
@@ -84,24 +87,33 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void changeLayout() {
 
         // Select which layout to inflate
-        switch(currentPage){
-            case 0:
-                getSupportActionBar().setTitle("My Requested Tasks");
-                break;
-            case 1:
-                getSupportActionBar().setTitle("My Bidded Tasks");
-                break;
-            case 2:
-                getSupportActionBar().setTitle("My Assigned Tasks");
-                break;
-            case 3:
-                getSupportActionBar().setTitle("My Completed Tasks");
-                break;
+        if(isMyBids==0) {
+            switch (currentPage) {
+                case 0:
+                    getSupportActionBar().setTitle("My Requested Tasks");
+                    break;
+                case 1:
+                    getSupportActionBar().setTitle("My Bidded Tasks");
+                    break;
+                case 2:
+                    getSupportActionBar().setTitle("My Assigned Tasks");
+                    break;
+                case 3:
+                    getSupportActionBar().setTitle("My Completed Tasks");
+                    break;
+            }
+        } else {
+            switch(currentPage) {
+                case 0:
+                    getSupportActionBar().setTitle("My Open Bids");
+                    break;
+                case 1:
+                    getSupportActionBar().setTitle("My Closed Bids");
+                    break;
+            }
         }
         // Re-initiate recycler view
         initRecyclerView();
-        // Re-initiate swipe listener
-        //swipeInit();
     }
 
     /**
