@@ -154,6 +154,9 @@ public class TaskDetailsActivity extends NavigationActivity{
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();
                 intent.putExtra("BitmapImage",bytes);
+                intent.putExtra("isMyTask", 0);
+                intent.putExtra("_id", task.getID());
+                intent.putExtra("position", position);
                 startActivity(intent);
 
             }

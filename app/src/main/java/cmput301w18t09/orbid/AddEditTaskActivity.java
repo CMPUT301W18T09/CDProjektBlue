@@ -64,6 +64,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
+    private int isResulted=0;
 
 
     @Override
@@ -142,6 +143,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();
                 intent.putExtra("BitmapImage",bytes);
+                intent.putExtra("isMyTask", 1);
+                intent.putExtra("_id", task.getID());
+                intent.putExtra("position", position);
                 startActivity(intent);
 
             }
@@ -167,12 +171,16 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {
-            // Update the task if it's being editted
-            ArrayList<Task> n = new ArrayList<>();
-            n.add(task);
-            DataManager.updateTasks object = new DataManager.updateTasks(context);
-            object.execute(n);
+            update();
         }
+    }
+
+    private void update() {
+        // Update the task if it's being editted
+        ArrayList<Task> n = new ArrayList<>();
+        n.add(task);
+        DataManager.updateTasks object = new DataManager.updateTasks(context);
+        object.execute(n);
     }
 
     /**
@@ -249,6 +257,20 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
+    /**
+     * Reloads the tasks when the activity is resumed
+     */
+    
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(isResulted == 0) {
+            loadTask();
+            imageAdapter.updateList(task.getPhotoList());
+        } else {
+            isResulted = 0;
+        }
+    }
 
     /**
      * Adds the bitmap to the image list after a user selects/takes a photo
@@ -264,12 +286,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Uri selectedimg = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                if(bitmap.getByteCount() > 65536) {
-                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
-                } else {
+                //if(bitmap.getByteCount() > 65536) {
+                //    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
+               // } else {
                     task.addPhoto(bitmap);
                     imageAdapter.updateList(task.getPhotoList());
-                }
+                    //Toast.makeText(this, "onActivity", Toast.LENGTH_SHORT).show();
+                    update();
+                    isResulted = 1;
+               // }
             } catch (IOException e) {
 
             }

@@ -9,8 +9,20 @@
     <ImageView
         android:id="@+id/BigImage"
         android:layout_width="350dp"
-        android:layout_height="500dp"
+        android:layout_height="480dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         app:srcCompat="@drawable/cast_ic_notification_0" />
+
+    <Button
+        android:id="@+id/deleteImageButton"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/white_text_box"
+        android:text="Delete Image"
+        android:onClick="deleteImage"
+        android:textAllCaps="false"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -127,8 +127,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      */
     private void filterList() {
         ArrayList<String> query = new ArrayList<>();
-        query.add("add");
-        query.add("username");
+        query.add("and");
+        query.add("requester");
         query.add(thisUser);
         query.add("status");
         // Select filter based on which page you're on
