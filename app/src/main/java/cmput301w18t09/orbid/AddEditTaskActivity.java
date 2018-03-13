@@ -142,7 +142,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();
                 intent.putExtra("BitmapImage",bytes);
-                //intent.putExtra("BitmapImage", image);
                 startActivity(intent);
 
             }

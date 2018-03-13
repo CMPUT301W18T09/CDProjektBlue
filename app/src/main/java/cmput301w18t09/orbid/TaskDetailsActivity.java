@@ -1,6 +1,8 @@
 package cmput301w18t09.orbid;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -8,14 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -28,6 +33,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public Task task;
     public Bid lowest_bid;
     public int isAssigned = 0;
+    public Context context = this;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -103,6 +109,9 @@ public class TaskDetailsActivity extends NavigationActivity{
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
         Log.i("MSG", task_title.getText().toString());
+        // Set the username button
+        Button usernameBtn = (Button) findViewById(R.id.usernameButton);
+        usernameBtn.setText("Poster: " + task.getRequester());
 
 
         // Setting up the assigned bid layout
@@ -126,16 +135,29 @@ public class TaskDetailsActivity extends NavigationActivity{
             description.setText(lowest_bid.getDescription());
         }
 
-        //assert lowest_bid != null;
+        // Setting up the stack view for the images when you add a Task
+        StackView stackView = findViewById(R.id.ImageStack);
+        stackView.setInAnimation(this, android.R.animator.fade_in);
+        stackView.setOutAnimation(this, android.R.animator.fade_out);
+        ImageViewAdapter imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
+        stackView.setAdapter(imageAdapter);
+        stackView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Bitmap> temp;
+                // Get the bitmap that was tapped from the photo list
+                temp = task.getPhotoList();
+                Bitmap image = temp.get(position);
+                // Create a new intent and send it the byte array for bitmap
+                Intent intent = new Intent(context, FullScreenImage.class);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] bytes = stream.toByteArray();
+                intent.putExtra("BitmapImage",bytes);
+                startActivity(intent);
 
-//             Setting up the stack view for the images when you add a Task
-//            StackView stackView = findViewById(R.id.stackView);
-//            stackView.setInAnimation(this, android.R.animator.fade_in);
-//            stackView.setOutAnimation(this, android.R.animator.fade_out);
-//
-//            ImageViewAdapter imageViewAdapter = new ImageViewAdapter(this, task.getPhotoList());
-//            stackView.setAdapter(imageViewAdapter);
-
+            }
+        });
     }
 
     /**
@@ -164,7 +186,10 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     }
 
-    // Sets the task status to requested/bidded and deletes the bid
+    /**
+     * Sets the task status to requested/bidded and deletes the bid
+     * @param view
+     */
     public void repost(View view) {
         ArrayList<Bid> temp = new ArrayList<>();
         temp = task.getBidList();
@@ -177,6 +202,14 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
         save();
         finish();
+    }
+
+    /**
+     * Opens the user info dialog when pressed
+     * @param view
+     */
+    public void openUserInfo(View view) {
+        Toast.makeText(this, "Open user info", Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -53,8 +53,7 @@
         android:layout_height="140dp"
         android:layout_below="@+id/AddEditPrice"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorTheme"
-        ></StackView>
+        android:background="@color/colorTheme" />
 
     <TextView
         android:id="@+id/AddEditPrice"
