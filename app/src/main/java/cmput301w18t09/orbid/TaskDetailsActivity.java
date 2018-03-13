@@ -25,6 +25,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class TaskDetailsActivity extends NavigationActivity{
 
     private DrawerLayout mDrawerLayout;

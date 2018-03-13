@@ -8,6 +8,7 @@ import static junit.framework.Assert.assertTrue;
  * Created by zachredfern on 2018-02-25.
  */
 
+@SuppressWarnings("ALL")
 public class UserTest extends ActivityInstrumentationTestCase2 {
 
     public UserTest() {
