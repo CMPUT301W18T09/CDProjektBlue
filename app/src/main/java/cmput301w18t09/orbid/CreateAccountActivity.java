@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("ALL")
 public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText etUsername;
