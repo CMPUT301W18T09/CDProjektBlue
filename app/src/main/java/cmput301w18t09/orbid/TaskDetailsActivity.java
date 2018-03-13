@@ -30,6 +30,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
+    protected boolean mine = false;
     public Task task;
     public Bid lowest_bid;
     public int isAssigned = 0;
@@ -161,6 +162,10 @@ public class TaskDetailsActivity extends NavigationActivity{
 
             }
         });
+        if (task.getRequester().equals(this.thisUser)) {
+            mine = true;
+        }
+
     }
 
     /**

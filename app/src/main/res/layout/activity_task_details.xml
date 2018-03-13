@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/details_task_title"
         android:layout_alignRight="@+id/details_task_title"
+        android:layout_toRightOf="@+id/usernameButton"
         android:layout_below="@+id/details_task_title"
         android:gravity="end"
         android:text="Lowest bid: N/A"
@@ -59,11 +60,8 @@
         android:id="@+id/details_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_below="@+id/details_lowest_bid"
-        android:visibility="gone">
-
-
+        android:layout_above="@+id/fulfilledButton"
+        android:layout_below="@+id/details_task_description">
     </FrameLayout>
 
     <TextView
@@ -98,9 +96,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@drawable/white_text_box"
-        android:text="Fulfilled"
         android:onClick="fulfilled"
-        android:visibility="gone"/>
+        android:text="Fulfilled"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/repostButton"
