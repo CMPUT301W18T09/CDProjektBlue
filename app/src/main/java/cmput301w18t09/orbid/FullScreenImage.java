@@ -64,18 +64,7 @@ public class FullScreenImage  extends Activity {
      * @param view
      */
     public void deleteImage(View view) {
-        ArrayList<Bitmap> temp;
-        temp = task.getPhotoList();
-        // Delete the bitmap from the photo list
-        int prevSize = temp.size();
-        temp.remove(pos);
-        // Set the new photo list
-        task.setPhotoList(temp);
-        // Update the task
-        ArrayList<Task> n = new ArrayList<>();
-        n.add(task);
-        DataManager.updateTasks object = new DataManager.updateTasks(this);
-        object.execute(n);
+        setResult(188);
         finish();
     }
 

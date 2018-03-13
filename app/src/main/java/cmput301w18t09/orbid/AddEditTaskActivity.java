@@ -55,6 +55,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Bitmap bitmap;
     private static Context mContext;
     private static final int SELECT_PICTURE = 1;
+    private static final int DELETE_PICTURE = 3;
+    private int imagePos;
     private int isAdd;
     private int position;
     private String id;
@@ -64,7 +66,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
-    private int isResulted=0;
 
 
     @Override
@@ -91,7 +92,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         delete = (Button) findViewById(R.id.DeleteButton);
         DataManager.getUsers userDM = new DataManager.getUsers(this);
         ArrayList<String> n = new ArrayList<>();
-        ArrayList<User> usersList = new ArrayList<>();
+        ArrayList<User> usersList;
         n.add("username");
         n.add(thisUser);
         userDM.execute(n);
@@ -146,7 +147,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 intent.putExtra("isMyTask", 1);
                 intent.putExtra("_id", task.getID());
                 intent.putExtra("position", position);
-                startActivity(intent);
+                imagePos = position;
+                startActivityForResult(intent, DELETE_PICTURE);
 
             }
         });
@@ -257,20 +259,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
-    /**
-     * Reloads the tasks when the activity is resumed
-     */
-    
-    @Override
-    public void onResume(){
-        super.onResume();
-        if(isResulted == 0) {
-            loadTask();
-            imageAdapter.updateList(task.getPhotoList());
-        } else {
-            isResulted = 0;
-        }
-    }
 
     /**
      * Adds the bitmap to the image list after a user selects/takes a photo
@@ -291,13 +279,16 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                // } else {
                     task.addPhoto(bitmap);
                     imageAdapter.updateList(task.getPhotoList());
-                    //Toast.makeText(this, "onActivity", Toast.LENGTH_SHORT).show();
-                    update();
-                    isResulted = 1;
                // }
             } catch (IOException e) {
 
             }
+        } else if(resultCode == 188) {
+            ArrayList<Bitmap> temp;
+            temp = task.getPhotoList();
+            temp.remove(imagePos);
+            task.setPhotoList(temp);
+            imageAdapter.updateList(task.getPhotoList());
         }
     }
 
