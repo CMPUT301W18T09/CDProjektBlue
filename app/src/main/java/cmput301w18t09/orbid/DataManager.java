@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -183,7 +184,7 @@ public class DataManager {
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
-        public getUsers(Context cont){
+        public getUsers(Activity cont){
             if (context == null){
                 context = cont;
             }

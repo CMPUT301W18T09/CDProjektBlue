@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Task> taskList = new ArrayList<>();
