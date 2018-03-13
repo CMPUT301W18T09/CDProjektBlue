@@ -118,7 +118,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
-        //taskAdapter.updateTaskList(taskList);
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -127,7 +126,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * @return
      */
     private void filterList() {
-        // Todo figure out how the status works in data manager (I think its fine as is)
         ArrayList<String> query = new ArrayList<>();
         query.add("add");
         query.add("username");
@@ -169,8 +167,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         changeLayout();
     }
 
-    private void openUserProfileDialog()
-    {
+    private void openUserProfileDialog() {
 
     }
 
@@ -184,16 +181,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             intent.putExtra("isAdd", 0);
             this.startActivity(intent);
         }
-        //Don't think this is needed
-        /*
-        if (currentPage == 1) {
-            // is my bidded page so should open no editable, with bid list
-            Intent intent = new Intent(this, AddEditTaskActivity.class);
-            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-            intent.putExtra("_id", taskList.get(position).getID());
-            intent.putExtra("isAdd", 0);
-            this.startActivity(intent);
-        }*/
         // opens my Assigned or my Completed task
         if(currentPage == 2 || currentPage == 3) {
             // Is my assigned so should open Task Details activity
