@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;

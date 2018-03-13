@@ -25,11 +25,13 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class TaskDetailsActivity extends NavigationActivity{
 
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
+    protected boolean mine = false;
     public Task task;
     public Bid lowest_bid;
     public int isAssigned = 0;
@@ -113,6 +115,17 @@ public class TaskDetailsActivity extends NavigationActivity{
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
         usernameBtn.setText("Poster: " + task.getRequester());
 
+        usernameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", task.getRequester());
+                UserProfileDialog dialog = new UserProfileDialog();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "User Profile Dialog");
+            }
+        });
+
 
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
@@ -161,6 +174,10 @@ public class TaskDetailsActivity extends NavigationActivity{
 
             }
         });
+        if (task.getRequester().equals(this.thisUser)) {
+            mine = true;
+        }
+
     }
 
     /**

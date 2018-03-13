@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -144,6 +145,10 @@ public class Task {
         image.compress(Bitmap.CompressFormat.PNG, 0, stream);
         this.photoList.add(stream.toByteArray());
     }
+/*
+    public void addPhoto(Bitmap image) {
+        this.photoList.add(image);
+    }*/
 
     public void acceptBid(int index) {
         acceptedBid = bidList.get(index);

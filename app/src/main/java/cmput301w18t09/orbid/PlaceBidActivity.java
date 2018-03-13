@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class PlaceBidActivity extends TaskDetailsActivity {
 
     // private Button btnBid; not needed
@@ -53,6 +54,10 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         etPrice = frameLayout.findViewById(R.id.my_bid_amount);
         etDescription = frameLayout.findViewById(R.id.my_bid_description);
+
+        if (mine) {
+            frameLayout.setVisibility(View.GONE);
+        }
 
     }
 
