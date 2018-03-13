@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("ALL")
 public class LoginActivity extends AppCompatActivity{
 
     private Button btnLogin;
