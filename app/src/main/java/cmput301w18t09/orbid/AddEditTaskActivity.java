@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private Button btnSavePost;
