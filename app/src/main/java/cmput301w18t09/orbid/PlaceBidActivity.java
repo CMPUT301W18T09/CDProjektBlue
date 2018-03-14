@@ -89,6 +89,14 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
         } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
+            ArrayList<Bid> temp = task.getBidList();
+            // Check if the user had a previous bid and delete it if so
+            for(Bid b: temp) {
+                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                    task.removeBid(b);
+                }
+            }
+            // Add the new bid to the bid list
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);

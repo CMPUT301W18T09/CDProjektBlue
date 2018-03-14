@@ -35,6 +35,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public Task task;
     public Bid bid;
     public int isAssigned = 0;
+    public int isBid = 0;
     public Context context = this;
 
     /**
@@ -57,7 +58,10 @@ public class TaskDetailsActivity extends NavigationActivity{
         try {
             isAssigned = getIntent().getIntExtra("isAssigned", 0);
         } catch(Error e) {
-
+        }
+        try {
+            isBid = getIntent().getIntExtra("isBid", 0);
+        } catch(Error e) {
         }
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
@@ -85,26 +89,38 @@ public class TaskDetailsActivity extends NavigationActivity{
             Log.i("MSG", "task is null here");
         }
 
-        // Check if the task is completed
-        if(task.getStatus() == Task.TaskStatus.COMPLETED) {
-            text_lowest_bid.setText("TASK FULFILLED");
-        } else {
-            // Find the lowest bid to display
-            for (Bid bid : task.getBidList()) {
-                if (lowest_bid != null) {
-                    if (bid.getPrice() < lowest_bid.getPrice()) {
-                        lowest_bid = bid;
-                    }
-                } else {
-                    lowest_bid = bid;
+        // Display your bid price
+        if(isBid == 1) {
+            ArrayList<Bid> temp;
+            temp = task.getBidList();
+            System.out.println("THisUSer:   " +thisUser);
+            for(Bid b: temp) {
+                System.out.println(b.getProvider());
+                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                    bid = b;
                 }
             }
-            if (lowest_bid != null) {
-                text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+            text_lowest_bid.setText("Your bid: $"+Double.toString(bid.getPrice()));
+        } else {
+            // Check if the task is completed
+            if (task.getStatus() == Task.TaskStatus.COMPLETED) {
+                text_lowest_bid.setText("TASK FULFILLED");
+            } else {
+                // Find the lowest bid to display
+                for (Bid bid : task.getBidList()) {
+                    if (lowest_bid != null) {
+                        if (bid.getPrice() < lowest_bid.getPrice()) {
+                            lowest_bid = bid;
+                        }
+                    } else {
+                        lowest_bid = bid;
+                    }
+                }
+                if (lowest_bid != null) {
+                    text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                }
             }
         }
-
-
         // Set the task title and description
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
@@ -124,13 +140,12 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         });
 
-
+        TextView title = (TextView) findViewById(R.id.assignedBidTitle);
+        TextView description = (TextView) findViewById(R.id.assignedBidDescription);
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
             bid = task.getAcceptedBid();
-            TextView title = (TextView) findViewById(R.id.assignedBidTitle);
-            TextView description = (TextView) findViewById(R.id.assignedBidDescription);
             // Show the buttons if the task is Assigned
             if(isAssigned == 1) {
                 Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
@@ -144,6 +159,14 @@ public class TaskDetailsActivity extends NavigationActivity{
 
             // Set the text to the items
             text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
+            title.setText(bid.getProvider());
+            description.setText(bid.getDescription());
+        } else if(isBid == 1) {
+            // Set necessary elements to visible
+            title.setVisibility(View.VISIBLE);
+            description.setVisibility(View.VISIBLE);
+
+            // Set the text to the items
             title.setText(bid.getProvider());
             description.setText(bid.getDescription());
         }
