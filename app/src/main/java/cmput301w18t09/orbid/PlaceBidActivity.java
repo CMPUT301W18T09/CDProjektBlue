@@ -81,17 +81,18 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * @param view
      */
     public void makeBid(View view) {
-        if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
+        if(task.getStatus() == Task.TaskStatus.COMPLETED){
+            Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
+        } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
-
+            finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
-        finish();
 
     }
 }
