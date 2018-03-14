@@ -175,25 +175,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     private void checkLocationPermission() {
         final Activity activity = this;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
-                }else if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                    permissionsGranted = true;
-                }
-                dialog.dismiss();
-            }
-        });
-        builder.setMessage("Posting requires location privelages that have not been granted. Pressing okay grants permissions.");
-        builder.setTitle("Location Request");
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+        } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            permissionsGranted = true;
+        }
     }
 
     @Override
@@ -220,9 +210,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
                                 // Logic to handle location object
-                                Log.i("MAP", "Set location");
-                                Log.i("MAP", "Lat is " + Double.toString(location.getLatitude()) + " long is " + Double.toString(location.getLongitude()));
-                                task.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                task.setLocation(latLng.toString());
+                                Log.i("MAP", "Location is" + task.getLocation());
                             } else {
                                 Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
                             }
