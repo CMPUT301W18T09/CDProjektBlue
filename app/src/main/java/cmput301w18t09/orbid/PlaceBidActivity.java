@@ -61,6 +61,11 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         if (mine) {
             frameLayout.setVisibility(View.GONE);
         }
+        if (task.getLocation() != null) {
+            Log.i("MAP", "location attached");
+        } else {
+            Log.i("MAP", "location is null");
+        }
 
     }
 

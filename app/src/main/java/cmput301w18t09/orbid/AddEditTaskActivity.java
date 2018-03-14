@@ -1,6 +1,8 @@
 package cmput301w18t09.orbid;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,10 +11,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.content.Context;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,9 +36,11 @@ import android.widget.RelativeLayout;
 import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
@@ -66,6 +73,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
+    private FusedLocationProviderClient fusedLocationClient;
+    private boolean permissionsGranted = true;
 
 
     @Override
@@ -83,6 +92,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         inflater.inflate(layoutID, frameLayout);
 
         frameLayout.requestFocus();
+
+        // Initiate Location Client
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
+            checkLocationPermission();
+        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
@@ -157,6 +173,29 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         });
     }
 
+    private void checkLocationPermission() {
+        final Activity activity = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+                }else if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    permissionsGranted = true;
+                }
+                dialog.dismiss();
+            }
+        });
+        builder.setMessage("Posting requires location privelages that have not been granted. Pressing okay grants permissions.");
+        builder.setTitle("Location Request");
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -173,6 +212,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
         // Add the task to DB if it's new
         if (isAdd == 1) {
+            // Add location to the task
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                Log.i("MAP", "Set location");
+                                Log.i("MAP", "Lat is " + Double.toString(location.getLatitude()) + " long is " + Double.toString(location.getLongitude()));
+                                task.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                            } else {
+                                Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
+                            }
+                        }
+                    });
             DataManager.addTasks object = new DataManager.addTasks(this);
             object.execute(task);
         } else {
