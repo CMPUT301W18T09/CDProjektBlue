@@ -249,16 +249,16 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         pickIntent.setType("image/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+        String pickTitle = "Select a new Picture"; // Or get from strings.xml
         Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
         chooserIntent.putExtra
                 (
                         Intent.EXTRA_INITIAL_INTENTS,
                         new Intent[] { takePhotoIntent }
-                );
-        startActivityForResult(chooserIntent, SELECT_PICTURE);
+                );*/
+        startActivityForResult(pickIntent, SELECT_PICTURE);
     }
 
 
@@ -273,18 +273,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         super.onActivityResult(requestCode, resultCode, data);
         //Updates the recycler image view to show the image selected
         if(resultCode==RESULT_OK) {
-            Uri selectedimg = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                if(bitmap.getByteCount() > 65536 && thisUser != "nantheman") {
-                    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
-                } else {
+                Uri selectedimg = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
+                    //if(bitmap.getByteCount() > 65536 && thisUser != "nantheman") {
+                    //    Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
+                    //} else {
+                    // }
                     task.addPhoto(bitmap);
                     imageAdapter.updateList(task.getPhotoList());
-                }
-            } catch (IOException e) {
+                } catch (IOException e) {
 
-            }
+                }
         } else if(resultCode == 188) {
             ArrayList<Bitmap> temp;
             temp = task.getPhotoList();

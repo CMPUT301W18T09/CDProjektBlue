@@ -52,12 +52,12 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
+        android:layout_alignEnd="@+id/DeleteButton"
+        android:layout_alignRight="@+id/DeleteButton"
         android:layout_below="@+id/EditTaskTitle"
-        android:layout_marginLeft="49dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="19dp"
-        android:layout_toEndOf="@+id/DeleteButton"
-        android:layout_toRightOf="@+id/DeleteButton"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
         android:background="@color/colorTheme" />
 
     <ImageButton
