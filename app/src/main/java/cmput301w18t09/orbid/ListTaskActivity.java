@@ -48,7 +48,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
         if(isMyBids==1) {
             addButton.setVisibility(View.GONE);
-            maxPage = 1;
+            maxPage = 2;
         } else {
             maxPage = 3;
         }
@@ -108,7 +108,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     getSupportActionBar().setTitle("My Open Bids");
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Closed Bids");
+                    getSupportActionBar().setTitle("My Pending Bids");
+                    break;
+                case 2:
+                    getSupportActionBar().setTitle("My Completed Bids");
                     break;
             }
         }
@@ -121,8 +124,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      */
     private void initRecyclerView() {
         // Setup the card view to show tasks
-
-        filterList();
+        if(isMyBids == 0) {
+            filterList();
+        } else {
+            filterBids();
+        }
         Log.i("LENGTH", Integer.toString(taskList.size()));
         Log.i("PAGE", Integer.toString(currentPage));
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
@@ -172,6 +178,28 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
     /**
+     * Filters the users bids
+     */
+    private void filterBids() {
+        Task.TaskStatus filter;
+        switch(currentPage) {
+            case 0:
+                filter = Task.TaskStatus.BIDDED;
+                break;
+            case 1:
+                filter = Task.TaskStatus.ASSIGNED;
+                break;
+            case 2:
+                filter = Task.TaskStatus.COMPLETED;
+                break;
+        }
+        // Query for list of tasks user bid on
+
+
+
+    }
+
+    /**
      * Reloads the tasks when the activity is resumed
      */
     @Override
@@ -186,32 +214,38 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     @Override
     public void onClick(View view, int position, int type) {
-        if (currentPage == 0) {
-            // is on my requested tasks so should open as edit
-            Intent intent = new Intent(this, AddEditTaskActivity.class);
-            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-            intent.putExtra("_id", taskList.get(position).getID());
-            intent.putExtra("isAdd", 0);
-            this.startActivity(intent);
-        }
-        if (currentPage == 1) {
-            // is on my requested tasks so should open as edit
-            Intent intent = new Intent(this, AddEditTaskActivity.class);
-            intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
-            intent.putExtra("_id", taskList.get(position).getID());
-            intent.putExtra("isAdd", 3);
-            this.startActivity(intent);
-        }
-        // opens my Assigned or my Completed task
-        if(currentPage == 2 || currentPage == 3) {
-            // Is my assigned so should open Task Details activity
+        if (isMyBids == 0) {
+            if (currentPage == 0) {
+                // is on my requested tasks so should open as edit
+                Intent intent = new Intent(this, AddEditTaskActivity.class);
+                intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+                intent.putExtra("_id", taskList.get(position).getID());
+                intent.putExtra("isAdd", 0);
+                this.startActivity(intent);
+            }
+            if (currentPage == 1) {
+                // is on my requested tasks so should open as edit
+                Intent intent = new Intent(this, AddEditTaskActivity.class);
+                intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+                intent.putExtra("_id", taskList.get(position).getID());
+                intent.putExtra("isAdd", 3);
+                this.startActivity(intent);
+            }
+            // opens my Assigned or my Completed task
+            if (currentPage == 2 || currentPage == 3) {
+                // Is my assigned so should open Task Details activity
+                Intent intent = new Intent(this, TaskDetailsActivity.class);
+                intent.putExtra("_id", taskList.get(position).getID());
+                if (currentPage == 2) {
+                    intent.putExtra("isAssigned", 1);
+                } else {
+                    intent.putExtra("isAssigned", 2);
+                }
+                this.startActivity(intent);
+            }
+        } else {
             Intent intent = new Intent(this, TaskDetailsActivity.class);
             intent.putExtra("_id", taskList.get(position).getID());
-            if(currentPage == 2) {
-                intent.putExtra("isAssigned", 1);
-            } else {
-                intent.putExtra("isAssigned", 2);
-            }
             this.startActivity(intent);
         }
     }
