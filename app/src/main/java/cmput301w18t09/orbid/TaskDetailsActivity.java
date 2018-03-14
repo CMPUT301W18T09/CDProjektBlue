@@ -101,14 +101,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
         }
 
-        // Show the users details when the name is clicked
-        task_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Todo set on click to show user details
-            }
-        });
-
         // Set the task title and description
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
@@ -131,7 +123,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Setting up the assigned bid layout
         // 0 is for recent listings, 1 means assigned, 2 means completed
-        if(isAssigned == 1 || isAssigned == 2) {
+        if(isAssigned != 0) {
             TextView title = (TextView) findViewById(R.id.assignedBidTitle);
             TextView description = (TextView) findViewById(R.id.assignedBidDescription);
             // Show the buttons if the task is Assigned
@@ -145,6 +137,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             title.setVisibility(View.VISIBLE);
             description.setVisibility(View.VISIBLE);
 
+            lowest_bid = task.getAcceptedBid();
             // Set the text to the items
             title.setText(lowest_bid.getProvider());
             description.setText(lowest_bid.getDescription());
