@@ -99,13 +99,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
         }
 
-        // Show the users details when the name is clicked
-        task_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Todo set on click to show user details
-            }
-        });
 
         // Set the task title and description
         task_title.setText(task.getTitle());
