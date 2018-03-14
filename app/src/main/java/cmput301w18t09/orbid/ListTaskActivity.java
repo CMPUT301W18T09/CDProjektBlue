@@ -45,7 +45,12 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         if(isMyBids==1) {
+<<<<<<< HEAD
 
+=======
+            addButton.setVisibility(View.GONE);
+            maxPage = 1;
+>>>>>>> parent of e3719a7... More work on My bids
         } else {
             Button addButton = (Button) findViewById(R.id.AddTaskButton);
         }
@@ -84,6 +89,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void changeLayout() {
 
         // Select which layout to inflate
+<<<<<<< HEAD
         switch(currentPage){
             case 0:
                 getSupportActionBar().setTitle("My Requested Tasks");
@@ -97,6 +103,32 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             case 3:
                 getSupportActionBar().setTitle("My Completed Tasks");
                 break;
+=======
+        if(isMyBids==0) {
+            switch (currentPage) {
+                case 0:
+                    getSupportActionBar().setTitle("My Requested Tasks");
+                    break;
+                case 1:
+                    getSupportActionBar().setTitle("My Bidded Tasks");
+                    break;
+                case 2:
+                    getSupportActionBar().setTitle("My Assigned Tasks");
+                    break;
+                case 3:
+                    getSupportActionBar().setTitle("My Completed Tasks");
+                    break;
+            }
+        } else {
+            switch(currentPage) {
+                case 0:
+                    getSupportActionBar().setTitle("My Open Bids");
+                    break;
+                case 1:
+                    getSupportActionBar().setTitle("My Closed Bids");
+                    break;
+            }
+>>>>>>> parent of e3719a7... More work on My bids
         }
         // Re-initiate recycler view
         initRecyclerView();
