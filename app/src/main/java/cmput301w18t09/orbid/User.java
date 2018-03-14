@@ -12,7 +12,6 @@ public class User {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    private ArrayList<Bid> bidList;
 
     @JestId
     private String id;
@@ -26,8 +25,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.bidList = new ArrayList<Bid>();
-
     }
 
     public String getUsername() {
@@ -76,14 +73,6 @@ public class User {
 
     public void setID(String ID) {
         this.id = ID;
-    }
-
-    public ArrayList<Bid> getBidList() {
-        return bidList;
-    }
-
-    public void addBid(Bid bid) {
-        this.bidList.add(bid);
     }
 
 
