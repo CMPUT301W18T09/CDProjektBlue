@@ -183,6 +183,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public void onResume(){
         super.onResume();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch(InterruptedException e) {
+
+        }
         changeLayout();
     }
 
