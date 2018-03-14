@@ -12,6 +12,7 @@ import android.widget.ToggleButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
@@ -103,7 +104,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         // Place all of the markers on the map and center on current location
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+
+                //mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
             }
         }
     }
@@ -133,7 +135,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         // Place all of the markers on the map and center on Task
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+                //mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
             }
         }
     }
