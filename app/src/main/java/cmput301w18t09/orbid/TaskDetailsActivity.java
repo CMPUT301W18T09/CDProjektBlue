@@ -59,7 +59,6 @@ public class TaskDetailsActivity extends NavigationActivity{
         } catch(Error e) {
 
         }
-        // Get the task from the database
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -76,7 +75,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             Log.e("MSG", "execution");
             e.printStackTrace();
         }
-
         // Find the text views in the layout
         TextView task_title = findViewById(R.id.details_task_title);
         TextView task_description = findViewById(R.id.details_task_description);
@@ -130,7 +128,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
 
         // Setting up the assigned bid layout
-        // 0 is for recent listings, 1 means assigned, 2 means completed
+        // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
             TextView title = (TextView) findViewById(R.id.assignedBidTitle);
             TextView description = (TextView) findViewById(R.id.assignedBidDescription);

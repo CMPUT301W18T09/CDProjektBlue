@@ -26,7 +26,6 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
-    private User user;
     private ArrayList<User> userList = new ArrayList<>();
 
 
@@ -40,7 +39,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
-        Toast.makeText(this, thisUser, Toast.LENGTH_LONG).show();
+
         // Query for the user
         ArrayList<String> queryUser = new ArrayList<>();
         ArrayList<User> userList;
@@ -50,7 +49,6 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         getUsers.execute(queryUser);
         try {
             userList = getUsers.get();
-            user = userList.get(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -100,8 +98,9 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     public void makeBid(View view) {
         if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString(), task.getID());
+            if(bid == null) System.out.println("NULL");
+            userList.get(0).addBid(bid);
             task.addBid(bid);
-            user.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
