@@ -124,10 +124,6 @@ public class NavigationActivity extends AppCompatActivity
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent( this, ListTaskActivity.class);
-            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-            intent.putExtra("isMyBids",1);
-            this.startActivity(intent);
 
 
         } else if (id == R.id.nav_edit_profile) {
