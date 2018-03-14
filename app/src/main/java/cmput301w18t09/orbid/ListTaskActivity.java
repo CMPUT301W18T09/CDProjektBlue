@@ -124,11 +124,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      */
     private void initRecyclerView() {
         // Setup the card view to show tasks
-       // if(isMyBids == 0) {
+        if(isMyBids == 0) {
             filterList();
-       // } else {
-       //     filterBids();
-       // }
+        } else {
+            filterBids();
+        }
         Log.i("LENGTH", Integer.toString(taskList.size()));
         Log.i("PAGE", Integer.toString(currentPage));
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
@@ -246,7 +246,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         } else {
             Intent intent = new Intent(this, TaskDetailsActivity.class);
             intent.putExtra("_id", taskList.get(position).getID());
-            intent.putExtra("isAssigned", 3);
             this.startActivity(intent);
         }
     }

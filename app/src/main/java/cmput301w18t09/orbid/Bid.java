@@ -6,9 +6,11 @@ public class Bid {
     private String provider;
     private double price;
     private String description;
+    private String holdingTaskID;
 
-    public Bid(String provider, double price, String description)
+    public Bid(String provider, double price, String description, String holdingTask)
     {
+        this.holdingTaskID = holdingTask;
         this.provider = provider;
         this.price = price;
         this.description = description;
@@ -38,4 +40,7 @@ public class Bid {
         this.description = description;
     }
 
+    public String getHoldingTaskID() {
+        return holdingTaskID;
+    }
 }

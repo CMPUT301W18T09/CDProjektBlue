@@ -81,10 +81,8 @@
         android:layout_width="300dp"
         android:layout_height="130dp"
         android:layout_above="@+id/SavePostTaskButton"
-        android:layout_alignLeft="@+id/EditTaskComment"
         android:layout_alignStart="@+id/EditTaskComment"
-        android:layout_marginBottom="27dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/DeleteButton"
