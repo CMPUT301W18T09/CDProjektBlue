@@ -32,6 +32,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private RecyclerView recyclerView;
     private ImageView swipe;
     private int isMyBids;
+    private int maxPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +45,13 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         /**/
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
-        if(isMyBids==1) {
-<<<<<<< HEAD
+        Button addButton = (Button) findViewById(R.id.AddTaskButton);
 
-=======
+        if(isMyBids==1) {
+            maxPages=2;
             addButton.setVisibility(View.GONE);
-            maxPage = 1;
->>>>>>> parent of e3719a7... More work on My bids
         } else {
-            Button addButton = (Button) findViewById(R.id.AddTaskButton);
+            maxPages=3;
         }
     }
 
@@ -70,7 +69,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
 
     public void pageForward(View view) {
-        if(currentPage<3) {
+        if(currentPage<maxPages) {
             currentPage++;
             changeLayout();
         }
@@ -89,21 +88,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private void changeLayout() {
 
         // Select which layout to inflate
-<<<<<<< HEAD
-        switch(currentPage){
-            case 0:
-                getSupportActionBar().setTitle("My Requested Tasks");
-                break;
-            case 1:
-                getSupportActionBar().setTitle("My Bidded Tasks");
-                break;
-            case 2:
-                getSupportActionBar().setTitle("My Assigned Tasks");
-                break;
-            case 3:
-                getSupportActionBar().setTitle("My Completed Tasks");
-                break;
-=======
         if(isMyBids==0) {
             switch (currentPage) {
                 case 0:
@@ -125,10 +109,12 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     getSupportActionBar().setTitle("My Open Bids");
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Closed Bids");
+                    getSupportActionBar().setTitle("My Assigned Bids");
+                    break;
+                case 2:
+                    getSupportActionBar().setTitle("My Completed Bids");
                     break;
             }
->>>>>>> parent of e3719a7... More work on My bids
         }
         // Re-initiate recycler view
         initRecyclerView();

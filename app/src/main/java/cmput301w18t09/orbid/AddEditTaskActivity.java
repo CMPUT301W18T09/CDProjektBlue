@@ -51,7 +51,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etLocation;
-    private TextView tPrice;
     private Context context = this;
     private Bitmap bitmap;
     private static Context mContext;
@@ -87,7 +86,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
-        tPrice = (TextView) findViewById(R.id.AddEditPrice);
 
         btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         delete = (Button) findViewById(R.id.DeleteButton);
@@ -126,6 +124,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         if(isAdd == 3) {
             btnSavePost.setVisibility(View.GONE);
         }
+
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
 
@@ -208,7 +207,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             } else {
                 etTitle.setText(task.getTitle());
                 etDescription.setText(task.getDescription());
-                tPrice.setText("$" + Double.toString(task.getPrice()));
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -316,15 +314,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                task.setStatus(Task.TaskStatus.ASSIGNED);
-                ArrayList<Bid> assignedBid = new ArrayList<>();
-                assignedBid.add(bid);
-                task.setBidList(assignedBid);
-                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
-                ArrayList<Task> tasks = new ArrayList<>();
-                tasks.add(task);
-                updateTasks.execute(tasks);
+                task.acceptBid(bid);
+                task.removeBid(bid);
+                update();
                 dialog.dismiss();
+                finish();
             }
         });
 
@@ -341,10 +335,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 bidList = task.getBidList();
                 bidList.remove(bid);
                 task.setBidList(bidList);
-                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
-                ArrayList<Task> tasks = new ArrayList<>();
-                tasks.add(task);
-                updateTasks.execute(tasks);
+                update();
                 dialog.dismiss();
             }
         });

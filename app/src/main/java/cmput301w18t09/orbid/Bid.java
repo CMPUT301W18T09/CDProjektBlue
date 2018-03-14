@@ -6,17 +6,9 @@ public class Bid {
     private String provider;
     private double price;
     private String description;
-<<<<<<< HEAD
-=======
-    private String holdingTask;
->>>>>>> parent of e3719a7... More work on My bids
 
     public Bid(String provider, double price, String description)
     {
-<<<<<<< HEAD
-=======
-        this.holdingTask = holdingTask;
->>>>>>> parent of e3719a7... More work on My bids
         this.provider = provider;
         this.price = price;
         this.description = description;

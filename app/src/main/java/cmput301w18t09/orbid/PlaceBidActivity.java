@@ -26,11 +26,8 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     private DrawerLayout mDrawerLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
-<<<<<<< HEAD
-=======
-    private ArrayList<User> userList = new ArrayList<>();
 
->>>>>>> parent of e3719a7... More work on My bids
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +39,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
-<<<<<<< HEAD
-=======
-
-        // Query for the user
-        ArrayList<String> queryUser = new ArrayList<>();
-        ArrayList<User> userList;
-        queryUser.add("username");
-        queryUser.add(thisUser);
-        DataManager.getUsers getUsers = new DataManager.getUsers(this);
-        getUsers.execute(queryUser);
-        try {
-            userList = getUsers.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
         // Get the task that was clicked
->>>>>>> parent of e3719a7... More work on My bids
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -103,13 +82,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      */
     public void makeBid(View view) {
         if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
-<<<<<<< HEAD
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
-=======
-            Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString(), task.getID());
-            if(bid == null) System.out.println("NULL");
-            userList.get(0).addBid(bid);
->>>>>>> parent of e3719a7... More work on My bids
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
