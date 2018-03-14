@@ -119,7 +119,6 @@ public class DataManager {
                     Log.e("Error", "The application has failed to build and send the task");
                 }
             }
-
             return null;
         }
     }
@@ -151,10 +150,20 @@ public class DataManager {
 
             for (int x=1; x < search_Parameters.size(); x+=2){
                 if (search_Parameters.get(0).equals("and")){
-                    query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    if (search_Parameters.get(x).contains("bidList")){
+                        query.must(QueryBuilders.termQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
+                    else{
+                        query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
                 }
                 else {
-                    query.should(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    if (search_Parameters.get(x).contains("bidList")){
+                        query.should(QueryBuilders.termQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
+                    else{
+                        query.should(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
                 }
 
             }
