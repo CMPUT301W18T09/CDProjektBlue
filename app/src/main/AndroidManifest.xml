@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cmput301w18t09.orbid">
+
     <uses-sdk
         android:maxSdkVersion="26"
         android:minSdkVersion="18" />
@@ -12,6 +13,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -20,11 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,19 +35,16 @@
         <activity
             android:name=".NavigationActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RecentListingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ListTaskActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -78,7 +76,8 @@
         <activity
             android:name=".TaskBidListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FullScreenImage"/>
+        <activity android:name=".FullScreenImage" />
+        <activity android:name=".MyBid"></activity>
     </application>
 
 </manifest>
