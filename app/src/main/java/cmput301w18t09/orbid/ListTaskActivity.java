@@ -33,6 +33,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private ImageView swipe;
     private int isMyBids;
     private int maxPages;
+    private Task.TaskStatus taskStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,34 +93,39 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             switch (currentPage) {
                 case 0:
                     getSupportActionBar().setTitle("My Requested Tasks");
+                    taskStatus = Task.TaskStatus.REQUESTED;
                     break;
                 case 1:
                     getSupportActionBar().setTitle("My Bidded Tasks");
+                    taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 2:
                     getSupportActionBar().setTitle("My Assigned Tasks");
+                    taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 3:
                     getSupportActionBar().setTitle("My Completed Tasks");
+                    taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
         } else {
             switch(currentPage) {
                 case 0:
                     getSupportActionBar().setTitle("My Open Bids");
+                    taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
                     getSupportActionBar().setTitle("My Assigned Bids");
+                    taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
                     getSupportActionBar().setTitle("My Completed Bids");
+                    taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
         }
         // Re-initiate recycler view
         initRecyclerView();
-        // Re-initiate swipe listener
-        //swipeInit();
     }
 
     /**
@@ -145,35 +151,36 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * @return
      */
     private void filterList() {
-        ArrayList<String> query = new ArrayList<>();
-        query.add("and");
-        query.add("requester");
-        query.add(thisUser);
-        query.add("status");
-        // Select filter based on which page you're on
-        switch(currentPage) {
-            case 0:
-                query.add(Task.TaskStatus.REQUESTED.toString());
-                break;
-            case 1:
-                query.add(Task.TaskStatus.BIDDED.toString());
-                break;
-            case 2:
-                query.add(Task.TaskStatus.ASSIGNED.toString());
-                break;
-            case 3:
-                query.add(Task.TaskStatus.COMPLETED.toString());
-                break;
-        }
-
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(query);
-        try {
-            taskList = getTasks.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        if(isMyBids == 0) {
+            ArrayList<String> query = new ArrayList<>();
+            query.add("and");
+            query.add("requester");
+            query.add(thisUser);
+            query.add("status");
+            query.add(taskStatus.toString());
+            DataManager.getTasks getTasks = new DataManager.getTasks(this);
+            getTasks.execute(query);
+            try {
+                taskList = getTasks.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            DataManager.getTasks getTasks = new DataManager.getTasks(this);
+            ArrayList<String> arguments = new ArrayList<>();
+            ArrayList<Task> result = new ArrayList<>();
+            arguments.add("and");
+            arguments.add("bidList.provider");
+            arguments.add(thisUser);
+            arguments.add("status");
+            arguments.add(taskStatus.toString());
+            try {
+                taskList = getTasks.execute(arguments).get();
+            }catch (Exception e){
+                Log.e("Error", "Could not return results from Asynctask");
+            }
         }
     }
 

@@ -294,16 +294,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         Intent pickIntent = new Intent();
         pickIntent.setType("image/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-        /*Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        String pickTitle = "Select a new Picture"; // Or get from strings.xml
-        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra
-                (
-                        Intent.EXTRA_INITIAL_INTENTS,
-                        new Intent[] { takePhotoIntent }
-                );*/
         startActivityForResult(pickIntent, SELECT_PICTURE);
     }
 
@@ -361,7 +351,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             @Override
             public void onClick(View v) {
                 task.acceptBid(bid);
-                task.removeBid(bid);
                 update();
                 dialog.dismiss();
                 finish();
