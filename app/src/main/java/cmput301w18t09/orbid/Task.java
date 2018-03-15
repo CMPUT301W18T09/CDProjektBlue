@@ -144,15 +144,5 @@ public class Task {
         status = TaskStatus.ASSIGNED;
     }
 
-    public Boolean containsBid(Bid bid) {
-        return bidList.contains(bid);
-    }
-
-    public Boolean containsPhoto(Bitmap image) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        return photoList.contains(stream.toByteArray());
-    }
-
 
 }

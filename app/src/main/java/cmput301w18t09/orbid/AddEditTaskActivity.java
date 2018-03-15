@@ -2,14 +2,10 @@ package cmput301w18t09.orbid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,9 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.StackView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
@@ -45,19 +38,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ALL")
+
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
-    private Button btnSavePost;
-    private Button btnAddImage;
-    private Button delete;
     private EditText etDescription;
     private EditText etTitle;
+    private EditText etPrice;
     private EditText etLocation;
     private Context context = this;
     private Bitmap bitmap;
@@ -67,6 +57,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private int imagePos;
     private int isAdd;
     private int position;
+    private BidListAdapter bidAdapter;
     private String id;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
@@ -81,76 +72,80 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Receive the layout ID from navigation activity
-        int layoutID = getIntent().getIntExtra("addedit_layout_id", 0);
         isAdd = getIntent().getIntExtra("isAdd", 0);
-        position = getIntent().getIntExtra("position", 0);
         id = getIntent().getStringExtra("_id");
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        inflater.inflate(layoutID, frameLayout);
-
+        inflater.inflate(R.layout.activity_add_edit_task, frameLayout);
         frameLayout.requestFocus();
 
+        // Load the Task and User if it's not adding a new task
+        if(isAdd != 1) {
+            load();
+        }
+        // Load the proper views
+        activityTypeInit();
+        // Initiate the stack view
+        stackViewInit();
         // Initiate Location Client
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
 
+    /**
+     * Displays the appropriate views for the type of task
+     */
+    private void activityTypeInit() {
         // Get the task title and comment Edit Texts
-        etTitle = findViewById(R.id.EditTaskTitle);
-        etDescription = findViewById(R.id.EditTaskComment);
-
-        btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
-        delete = (Button) findViewById(R.id.DeleteButton);
-        DataManager.getUsers userDM = new DataManager.getUsers(this);
-        ArrayList<String> n = new ArrayList<>();
-        ArrayList<User> usersList;
-        n.add("username");
-        n.add(thisUser);
-        userDM.execute(n);
-        try {
-            usersList = userDM.get();
-            user = usersList.get(0);
-        } catch (Exception e) {
-
-        }
+        EditText etTitle = findViewById(R.id.EditTaskTitle);
+        EditText etDescription = findViewById(R.id.EditTaskComment);
+        EditText etPrice = findViewById(R.id.EditPrice);
+        Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
+        Button delete = (Button) findViewById(R.id.DeleteButton);
 
         if (isAdd == 1) {
             btnSavePost.setText("Post");
-            task = new Task(this.thisUser, "", "", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
+        } else if(isAdd == 3) {
+            btnSavePost.setVisibility(View.GONE);
+            etTitle.setEnabled(false);
+            etDescription.setEnabled(false);
+            etPrice.setEnabled(false);
         } else {
             // Show the price and bid list if you're only editing a task
-            loadTask();
-            // System.out.println("COUNT" + Integer.toString(task.getPhotoList().get(0).getByteCount()));
             btnSavePost.setText("Save");
             // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
             recyclerView.setVisibility(View.VISIBLE);
-            BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
+            bidAdapter = new BidListAdapter(this, bidList);
             bidAdapter.setClickListener(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
         }
-        if(isAdd == 3) {
-            btnSavePost.setVisibility(View.GONE);
-        }
-
+        // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
+        etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
+    }
 
+    /**
+     * Initiates the stack view
+     */
+    private void stackViewInit() {
         // Setting up the stack view for the images when you add a Task
         StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
         stackView.setOutAnimation(this, android.R.animator.fade_out);
         imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
         stackView.setAdapter(imageAdapter);
+        // Set the click listener for the images
         stackView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -174,6 +169,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         });
     }
 
+    /**
+     * AIDAN FILL THIS IN
+     */
     private void checkLocationPermission() {
         final Activity activity = this;
 
@@ -201,50 +199,45 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Saves the current task in the database
      */
     private void save() {
-        // Add the task to DB if it's new
-        if (isAdd == 1) {
-            // Add location to the task
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Logic to handle location object
-                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                task.setLocation(latLng);
-                                Log.i("MAP", "Location is" + task.getLocation());
-                            } else {
-                                Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
-                            }
+        // Add location to the task
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            task.setLocation(latLng);
+                            Log.i("MAP", "Location is" + task.getLocation());
+                        } else {
+                            Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
                         }
-                    });
-
-            // Check max lengths
-            boolean title_passed = false;
-            if (task.getTitle().length() > 30) {
-                Toast.makeText(context, "Title cannot be longer than 30", Toast.LENGTH_LONG);
-            } else if (task.getTitle().length() < 1) {
-                Toast.makeText(context, "Title cannot be empty", Toast.LENGTH_LONG);
-            } else {
-                title_passed = true;
-            }
-
-            if (title_passed) {
-                if (task.getDescription().length() > 300) {
-                    Toast.makeText(context, "Description cannot be longer than 300", Toast.LENGTH_LONG);
-                } else if (task.getDescription().length() < 1) {
-                    Toast.makeText(context, "Description cannot be empty", Toast.LENGTH_LONG);
-                } else {
-                    DataManager.addTasks object = new DataManager.addTasks(this);
-                    object.execute(task);
-                    update();
-//                    Log.i("MAP", "After posting the location is " + task.getLocation().toString());
-                }
-            }
+                    }
+                });
+        // Check to make sure all the fields are filled in properly
+        if (task.getTitle().length() > 30) {
+            Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_LONG).show();
+        } else if (task.getTitle().length() < 1) {
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+        } else if (task.getDescription().length() > 300) {
+            Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_LONG).show();
+        } else if (task.getDescription().length() < 1) {
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+        } else if(task.getPrice() == 0) {
+            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
+        } else {
+            // Save the new task to the DM
+            DataManager.addTasks object = new DataManager.addTasks(this);
+            object.execute(task);
+            update();
+            finish();
         }
     }
 
+    /**
+     * Update the task in the database
+     */
     private void update() {
         // Update the task if it's being editted
         ArrayList<Task> n = new ArrayList<>();
@@ -256,7 +249,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     /**
      * loads the task that was opened
      */
-    private void loadTask() {
+    private void load() {
+        // Load the task from the Data manager
         ArrayList<Task> taskList = new ArrayList<>();
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
@@ -267,28 +261,38 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-            if (task == null) {
-                Toast.makeText(this, "NULL", Toast.LENGTH_SHORT).show();
-            } else {
-                etTitle.setText(task.getTitle());
-                etDescription.setText(task.getDescription());
-            }
+            etPrice.setText("$" + Double.toString(task.getPrice()));
+            etTitle.setText(task.getTitle());
+            etDescription.setText(task.getDescription());
         } catch (InterruptedException e) {
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        }
+
+        // Load the user from the Data manager
+        DataManager.getUsers userDM = new DataManager.getUsers(this);
+        ArrayList<String> n = new ArrayList<>();
+        ArrayList<User> usersList;
+        n.add("username");
+        n.add(thisUser);
+        userDM.execute(n);
+        try {
+            usersList = userDM.get();
+            user = usersList.get(0);
+        } catch (Exception e) {
+
         }
     }
 
     /**
-     * Post/Edit button is clicked, the task
-     * must be saved and posted to the
-     * top of recent listings if it is being added.
+     * Post/Edit button is pressed
      * @param view
      */
     public void postEditTask(View view) {
         save();
-        finish();
     }
 
     /**
@@ -394,6 +398,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 task.setBidList(bidList);
                 update();
                 dialog.dismiss();
+                bidAdapter.notifyDataSetChanged();
             }
         });
 
@@ -450,6 +455,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             if (view.getId() == R.id.EditTaskComment) {
                 String r = s.toString();
                 task.setDescription(r);
+            }
+            if(view.getId() == R.id.EditPrice) {
+                String r = s.toString();
+                if(!r.isEmpty()) {
+                    task.setPrice(Double.parseDouble(r));
+                }
             }
         }
     }
