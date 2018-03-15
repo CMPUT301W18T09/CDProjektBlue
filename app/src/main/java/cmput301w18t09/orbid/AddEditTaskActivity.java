@@ -221,22 +221,21 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                     });
 
             // Check max lengths
+            boolean title_passed = false;
             if (task.getTitle().length() > 30) {
                 Toast.makeText(context, "Title cannot be longer than 30", Toast.LENGTH_LONG);
             } else if (task.getTitle().length() < 1) {
                 Toast.makeText(context, "Title cannot be empty", Toast.LENGTH_LONG);
             } else {
+                title_passed = true;
+            }
 
+            if (title_passed) {
                 if (task.getDescription().length() > 300) {
                     Toast.makeText(context, "Description cannot be longer than 300", Toast.LENGTH_LONG);
                 } else if (task.getDescription().length() < 1) {
                     Toast.makeText(context, "Description cannot be empty", Toast.LENGTH_LONG);
                 } else {
-                    if (task.getLocation() != null) {
-                        Log.i("MAP", "Before posting task the location is" + task.getLocation().toString());
-                    } else {
-                        Log.i("MAP", "Location is null");
-                    }
                     DataManager.addTasks object = new DataManager.addTasks(this);
                     object.execute(task);
                     update();
