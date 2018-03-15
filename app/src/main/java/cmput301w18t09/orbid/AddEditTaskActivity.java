@@ -112,11 +112,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else if(isAdd == 3) {
+            etPrice.setText("$" + Double.toString(task.getPrice()));
             btnSavePost.setVisibility(View.GONE);
             etTitle.setEnabled(false);
             etDescription.setEnabled(false);
             etPrice.setEnabled(false);
         } else {
+            etPrice.setVisibility(View.GONE);
             // Show the price and bid list if you're only editing a task
             btnSavePost.setText("Save");
             // Initiate the recycler view for bids
@@ -261,9 +263,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-            etPrice.setText("$" + Double.toString(task.getPrice()));
-            etTitle.setText(task.getTitle());
-            etDescription.setText(task.getDescription());
+
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -271,6 +271,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+        etTitle.setText(task.getTitle());
+        etDescription.setText(task.getDescription());
 
         // Load the user from the Data manager
         DataManager.getUsers userDM = new DataManager.getUsers(this);
