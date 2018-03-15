@@ -212,7 +212,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                             if (location != null) {
                                 // Logic to handle location object
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                task.setLocation(latLng.toString());
+                                task.setLocation(latLng);
                                 Log.i("MAP", "Location is" + task.getLocation());
                             } else {
                                 Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
@@ -232,9 +232,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 } else if (task.getDescription().length() < 1) {
                     Toast.makeText(context, "Description cannot be empty", Toast.LENGTH_LONG);
                 } else {
+                    if (task.getLocation() != null) {
+                        Log.i("MAP", "Before posting task the location is" + task.getLocation().toString());
+                    } else {
+                        Log.i("MAP", "Location is null");
+                    }
                     DataManager.addTasks object = new DataManager.addTasks(this);
                     object.execute(task);
                     update();
+//                    Log.i("MAP", "After posting the location is " + task.getLocation().toString());
                 }
             }
         }
