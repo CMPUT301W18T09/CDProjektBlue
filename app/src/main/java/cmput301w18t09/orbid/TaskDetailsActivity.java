@@ -84,6 +84,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         TextView task_description = findViewById(R.id.details_task_description);
         TextView text_lowest_bid = findViewById(R.id.details_lowest_bid);
         TextView text_task_status = findViewById(R.id.details_task_status);
+        Log.i("MAP", "Location is " + task.getLocation().toString());
         // find lowest bid
         Bid lowest_bid = null;
         if (task == null) {
