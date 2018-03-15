@@ -16,7 +16,8 @@ public class User {
     private String firstName;
     private String lastName;
     @JestId
-    private String ID;
+
+    private String id;
     private ArrayList<Review> reviewList;
 
 
@@ -35,7 +36,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        reviewList = new ArrayList<Review>();
     }
 
     /**
@@ -123,7 +123,7 @@ public class User {
      * @return
      */
     public String getID() {
-        return ID;
+        return id;
     }
 
     /**
@@ -131,7 +131,7 @@ public class User {
      * @param ID
      */
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
     /**
@@ -156,6 +156,6 @@ public class User {
      */
     public void addReview(Review review)
     {
-        this.reviewList.add(review);
+
     }
 }

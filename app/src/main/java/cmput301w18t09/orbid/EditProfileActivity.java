@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("ALL")
 public class EditProfileActivity extends NavigationActivity {
 
     private Button btnSave;

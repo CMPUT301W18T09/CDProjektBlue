@@ -2,9 +2,7 @@ package cmput301w18t09.orbid;
 
 
 import android.graphics.Bitmap;
-
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,7 +16,7 @@ import io.searchbox.annotations.JestId;
  *
  */
 public class Task {
-    private User requester;
+    private String requester;
     private String description;
     private String title;
 
@@ -26,7 +24,7 @@ public class Task {
     private String ID;
     private double price;
     private TaskStatus status;
-    private Bid acceptedBid;
+    private int acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
     private ArrayList<byte[]> photoList;
@@ -36,16 +34,8 @@ public class Task {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
     }
 
-    /**
-     *
-     * @param requester
-     * @param description
-     * @param title
-     * @param price
-     * @param status
-     */
-    public Task(User requester, String description, String title, double price, TaskStatus status)
-    {
+
+    public Task(String requester, String description, String title, double price, TaskStatus status) {
         this.requester = requester;
         this.description = description;
         this.title = title;
@@ -57,19 +47,12 @@ public class Task {
 
     }
 
-    /**
-     *
-     * @return
-     */
-    public User getRequester() {
+
+    public String getRequester() {
         return requester;
     }
 
-    /**
-     *
-     * @param requester
-     */
-    public void setRequester(User requester) {
+    public void setRequester(String requester) {
         this.requester = requester;
     }
 
@@ -186,11 +169,26 @@ public class Task {
     }
 
 
-    /**
-     *
-     * @return
-     */
-    public Bid getAcceptedBid() { return this.acceptedBid; }
+    public ArrayList<Bitmap> getPhotoList() {
+        ArrayList<Bitmap> list = new ArrayList<>();
+        for(byte[] g : photoList) {
+            list.add(BitmapFactory.decodeByteArray(g, 0, g.length));
+        }
+        return list;
+    }
+
+    public void setPhotoList(ArrayList<Bitmap> photoList) {
+        ArrayList<byte[]> tempList = new ArrayList<>();
+        for(Bitmap g:photoList) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            g.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            tempList.add(stream.toByteArray());
+        }
+        this.photoList = tempList;
+    }
+
+    public int getAcceptedBid() { return this.acceptedBid; }
+
 
     /**
      *
@@ -200,6 +198,7 @@ public class Task {
         this.bidList.add(bid);
     }
 
+    public void removeBid(Bid bid){ this.bidList.remove(bid);}
 
     /**
      *
@@ -211,34 +210,9 @@ public class Task {
         this.photoList.add(stream.toByteArray());
     }
 
-
-    /**
-     *
-     * @param index
-     */
-    public void acceptBid(int index) {
-        acceptedBid = bidList.get(index);
+    public void acceptBid(int b) {
+        acceptedBid = b;
         status = TaskStatus.ASSIGNED;
     }
-
-    /**
-     *
-     * @param index
-     */
-    public void declineBid(int index) {
-        bidList.remove(index);
-    }
-
-    /**
-     *
-     * @param bid
-     * @return
-     */
-    public Boolean containsBid(Bid bid) {
-        return bidList.contains(bid);
-    }
-
-
-
 
 }
