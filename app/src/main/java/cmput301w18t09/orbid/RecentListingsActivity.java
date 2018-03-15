@@ -63,9 +63,14 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             }
         });
         toolbar.addView(tbtnToggle);
-        Toast.makeText(this, thisUser, Toast.LENGTH_LONG).show();
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(new ArrayList<String>());
+        ArrayList<String> query = new ArrayList<String>();
+        query.add("or");
+        query.add("status");
+        query.add(Task.TaskStatus.REQUESTED.toString());
+        query.add("status");
+        query.add(Task.TaskStatus.BIDDED.toString());
+        getTasks.execute(query);
         try {
             taskList = getTasks.get();
         } catch (InterruptedException e) {
