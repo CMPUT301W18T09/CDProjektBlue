@@ -14,11 +14,11 @@
             android:title="Map" />
         <item
             android:id="@+id/nav_my_tasks"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="My Tasks" />
+            android:icon="@drawable/ic_menu_send"
+            android:title="My Requests" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_send"
             android:title="My Bids" />
     </group>
 
