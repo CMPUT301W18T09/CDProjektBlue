@@ -237,13 +237,10 @@ public class TaskDetailsActivity extends NavigationActivity{
      */
     public void repost(View view) {
         // Remove the previously accepted bid
-        task.removeBid(task.getBidList().get(task.getAcceptedBid()));
+        ArrayList<Bid> temp = new ArrayList<>();
+        task.setBidList(temp);
         task.acceptBid(-1);
-        if(task.getBidList().size() > 0) {
-            task.setStatus(Task.TaskStatus.BIDDED);
-        } else {
-            task.setStatus(Task.TaskStatus.REQUESTED);
-        }
+        task.setStatus(Task.TaskStatus.REQUESTED);
         save();
         finish();
     }
