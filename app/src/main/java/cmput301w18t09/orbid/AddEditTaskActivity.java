@@ -364,7 +364,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<Bid> temp = new ArrayList<>();
+                temp.add(bid);
                 task.acceptBid(task.getBidList().indexOf(bid));
+                task.setBidList(temp);
                 update();
                 dialog.dismiss();
                 finish();
