@@ -58,6 +58,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Button delete;
     private EditText etDescription;
     private EditText etTitle;
+    private EditText etPrice;
     private EditText etLocation;
     private Context context = this;
     private Bitmap bitmap;
@@ -103,6 +104,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Get the task title and comment Edit Texts
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
+        etPrice = findViewById(R.id.EditPrice);
 
         btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         delete = (Button) findViewById(R.id.DeleteButton);
@@ -121,7 +123,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         if (isAdd == 1) {
             btnSavePost.setText("Post");
-            task = new Task(this.thisUser, "", "", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
@@ -138,12 +140,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
         }
+
+        // Set the generic text watcher if it's a requested task
         if(isAdd == 3) {
             btnSavePost.setVisibility(View.GONE);
+            etTitle.setEnabled(false);
+            etDescription.setEnabled(false);
+            etPrice.setEnabled(false);
+        } else {
+            etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
+            etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
+            etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
         }
-
-        etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
-        etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
 
         // Setting up the stack view for the images when you add a Task
         StackView stackView = findViewById(R.id.ImageStack);
@@ -450,6 +458,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             if (view.getId() == R.id.EditTaskComment) {
                 String r = s.toString();
                 task.setDescription(r);
+            }
+            if(view.getId() == R.id.EditPrice) {
+                String r = s.toString();
+                task.setPrice(Double.parseDouble(r));
             }
         }
     }
