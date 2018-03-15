@@ -47,9 +47,10 @@
         android:id="@+id/details_task_description"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_alignLeft="@+id/details_task_title"
-        android:layout_alignStart="@+id/details_task_title"
-        android:layout_below="@+id/usernameButton"
+        android:layout_alignLeft="@+id/details_task_status"
+        android:layout_alignStart="@+id/details_task_status"
+        android:layout_below="@+id/details_task_status"
+        android:layout_marginTop="22dp"
         android:background="@drawable/white_text_box"
         android:text="TASK DESCRIPTION"
         android:textColor="@color/cast_expanded_controller_background_color" />
@@ -60,8 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/details_task_title"
         android:layout_alignRight="@+id/details_task_title"
-        android:layout_toRightOf="@+id/usernameButton"
-        android:layout_below="@+id/details_task_status"
+        android:layout_below="@+id/details_task_title"
         android:gravity="end"
         android:text="Lowest bid: N/A"
         android:textColor="@android:color/holo_green_light"
@@ -75,7 +75,7 @@
         android:layout_below="@+id/details_task_description">
     </FrameLayout>
 
-    <TextView
+    <Button
         android:id="@+id/assignedBidTitle"
         android:layout_width="350dp"
         android:layout_height="30dp"
@@ -90,7 +90,7 @@
     <TextView
         android:id="@+id/assignedBidDescription"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="130dp"
         android:layout_alignEnd="@+id/assignedBidTitle"
         android:layout_alignRight="@+id/assignedBidTitle"
         android:layout_below="@+id/assignedBidTitle"
@@ -127,14 +127,14 @@
         android:id="@+id/usernameButton"
         android:layout_width="200dp"
         android:layout_height="25dp"
-        android:textAllCaps="false"
-        android:layout_alignBottom="@+id/details_lowest_bid"
-        android:layout_alignLeft="@+id/details_task_description"
-        android:layout_alignStart="@+id/details_task_description"
+        android:layout_alignLeft="@+id/details_task_status"
+        android:layout_alignStart="@+id/details_task_status"
+        android:layout_below="@+id/details_task_status"
         android:background="@drawable/white_text_box"
+        android:onClick="openUserInfo"
         android:text="Poster:"
-        android:textSize="12sp"
-        android:onClick="openUserInfo"/>
+        android:textAllCaps="false"
+        android:textSize="12sp" />
 
 
 </RelativeLayout>
