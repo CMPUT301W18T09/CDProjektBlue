@@ -229,26 +229,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                     });
 
             // Check max lengths
-            boolean title_passed = false;
             if (task.getTitle().length() > 30) {
-                Toast.makeText(context, "Title cannot be longer than 30", Toast.LENGTH_LONG);
+                Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_LONG).show();
             } else if (task.getTitle().length() < 1) {
-                Toast.makeText(context, "Title cannot be empty", Toast.LENGTH_LONG);
+                Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            } else if (task.getDescription().length() > 300) {
+                Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_LONG).show();
+            } else if (task.getDescription().length() < 1) {
+                Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            } else if(task.getPrice() == 0) {
+                Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
             } else {
-                title_passed = true;
-            }
-
-            if (title_passed) {
-                if (task.getDescription().length() > 300) {
-                    Toast.makeText(context, "Description cannot be longer than 300", Toast.LENGTH_LONG);
-                } else if (task.getDescription().length() < 1) {
-                    Toast.makeText(context, "Description cannot be empty", Toast.LENGTH_LONG);
-                } else {
-                    DataManager.addTasks object = new DataManager.addTasks(this);
-                    object.execute(task);
-                    update();
+                DataManager.addTasks object = new DataManager.addTasks(this);
+                object.execute(task);
+                update();
+                finish();
 //                    Log.i("MAP", "After posting the location is " + task.getLocation().toString());
-                }
             }
         }
     }
@@ -297,7 +293,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     public void postEditTask(View view) {
         save();
-        finish();
     }
 
     /**
@@ -462,7 +457,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
             if(view.getId() == R.id.EditPrice) {
                 String r = s.toString();
-                task.setPrice(Double.parseDouble(r));
+                if(!r.isEmpty()) {
+                    task.setPrice(Double.parseDouble(r));
+                }
             }
         }
     }
