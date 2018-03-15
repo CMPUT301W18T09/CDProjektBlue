@@ -93,9 +93,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         if(isBid == 1) {
             ArrayList<Bid> temp;
             temp = task.getBidList();
-            System.out.println("THisUSer:   " +thisUser);
             for(Bid b: temp) {
-                System.out.println(b.getProvider());
                 if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
                     bid = b;
                 }
@@ -103,7 +101,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             text_lowest_bid.setText("Your bid: $"+Double.toString(bid.getPrice()));
         } else {
             // Check if the task is completed
-            if (task.getStatus() == Task.TaskStatus.COMPLETED) {
+            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
                 text_lowest_bid.setText("TASK FULFILLED");
             } else {
                 // Find the lowest bid to display
@@ -145,7 +143,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
-            bid = task.getAcceptedBid();
+            int b = task.getAcceptedBid();
+            bid = task.getBidList().get(b);
             // Show the buttons if the task is Assigned
             if(isAssigned == 1) {
                 Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
@@ -234,8 +233,9 @@ public class TaskDetailsActivity extends NavigationActivity{
      * @param view
      */
     public void repost(View view) {
-        task.acceptBid(null);
-        Toast.makeText(this, Integer.toString(task.getBidList().size()), Toast.LENGTH_LONG).show();
+        // Remove the previously accepted bid
+        task.removeBid(task.getBidList().get(task.getAcceptedBid()));
+        task.acceptBid(-1);
         if(task.getBidList().size() > 0) {
             task.setStatus(Task.TaskStatus.BIDDED);
         } else {
