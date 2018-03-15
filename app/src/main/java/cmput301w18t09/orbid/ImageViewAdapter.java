@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -54,7 +55,9 @@ public class ImageViewAdapter extends BaseAdapter {
         } else {
             holder = (ImageViewHolder) view.getTag();
         }
-        holder.image.setImageBitmap(imageList.get(position));
+        if(imageList.size() > 0) {
+            holder.image.setImageBitmap(imageList.get(position));
+        }
 
 
         return view;
@@ -77,6 +80,12 @@ public class ImageViewAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return imageList.size();
+    }
+
+    public void updateList(ArrayList<Bitmap> b) {
+        imageList.clear();
+        imageList.addAll(b);
+        this.notifyDataSetChanged();
     }
 
 }
