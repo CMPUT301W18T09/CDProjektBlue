@@ -81,6 +81,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         inflater.inflate(R.layout.activity_add_edit_task, frameLayout);
         frameLayout.requestFocus();
 
+        etTitle = findViewById(R.id.EditTaskTitle);
+        etDescription = findViewById(R.id.EditTaskComment);
+        etPrice = findViewById(R.id.EditPrice);
         // Load the Task and User if it's not adding a new task
         if(isAdd != 1) {
             load();
@@ -101,9 +104,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void activityTypeInit() {
         // Get the task title and comment Edit Texts
-        EditText etTitle = findViewById(R.id.EditTaskTitle);
-        EditText etDescription = findViewById(R.id.EditTaskComment);
-        EditText etPrice = findViewById(R.id.EditPrice);
         Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         Button delete = (Button) findViewById(R.id.DeleteButton);
 
@@ -112,15 +112,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else if(isAdd == 3) {
-            etPrice.setText("$" + Double.toString(task.getPrice()));
-            btnSavePost.setVisibility(View.GONE);
-            etTitle.setEnabled(false);
-            etDescription.setEnabled(false);
-            etPrice.setEnabled(false);
-        } else {
             etPrice.setVisibility(View.GONE);
-            // Show the price and bid list if you're only editing a task
-            btnSavePost.setText("Save");
+            btnSavePost.setVisibility(View.GONE);
             // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
@@ -130,6 +123,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
+            etTitle.setEnabled(false);
+            etDescription.setEnabled(false);
+            etPrice.setEnabled(false);
+        } else {
+            // Show the price and bid list if you're only editing a task
+            btnSavePost.setText("Save");
         }
         // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
@@ -263,7 +262,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-
+            etPrice.setText(Double.toString(task.getPrice()));
+            etTitle.setText(task.getTitle());
+            etDescription.setText(task.getDescription());
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -271,8 +272,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-        etTitle.setText(task.getTitle());
-        etDescription.setText(task.getDescription());
+
 
         // Load the user from the Data manager
         DataManager.getUsers userDM = new DataManager.getUsers(this);
@@ -398,6 +398,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 bidList = task.getBidList();
                 bidList.remove(bid);
                 task.setBidList(bidList);
+                if(bidList.size() == 0) {
+                    task.setStatus(Task.TaskStatus.REQUESTED);
+                }
                 update();
                 dialog.dismiss();
                 bidAdapter.notifyDataSetChanged();
