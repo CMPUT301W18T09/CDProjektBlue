@@ -68,6 +68,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private int imagePos;
     private int isAdd;
     private int position;
+    private BidListAdapter bidAdapter;
     private String id;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
@@ -134,7 +135,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
             recyclerView.setVisibility(View.VISIBLE);
-            BidListAdapter bidAdapter = new BidListAdapter(this, bidList);
+            bidAdapter = new BidListAdapter(this, bidList);
             bidAdapter.setClickListener(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
@@ -398,6 +399,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 task.setBidList(bidList);
                 update();
                 dialog.dismiss();
+                bidAdapter.notifyDataSetChanged();
             }
         });
 
