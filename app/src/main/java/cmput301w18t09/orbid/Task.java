@@ -21,7 +21,7 @@ public class Task {
     private String ID;
     private double price;
     private TaskStatus status;
-    private Bid acceptedBid;
+    private int acceptedBid;
     private String location;
     private ArrayList<Bid> bidList;
     //private ArrayList<Bitmap> photoList;
@@ -125,7 +125,7 @@ public class Task {
         this.photoList = tempList;
     }
 
-    public Bid getAcceptedBid() { return this.acceptedBid; }
+    public int getAcceptedBid() { return this.acceptedBid; }
 
     public void addBid(Bid bid) {
         this.bidList.add(bid);
@@ -139,8 +139,8 @@ public class Task {
         this.photoList.add(stream.toByteArray());
     }
 
-    public void acceptBid(Bid bid) {
-        acceptedBid = bid;
+    public void acceptBid(int b) {
+        acceptedBid = b;
         status = TaskStatus.ASSIGNED;
     }
 
