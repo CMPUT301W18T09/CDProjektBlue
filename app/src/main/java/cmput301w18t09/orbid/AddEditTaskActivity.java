@@ -278,6 +278,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             if (task == null) {
                 Toast.makeText(this, "NULL", Toast.LENGTH_SHORT).show();
             } else {
+                etPrice.setText("$" + Double.toString(task.getPrice()));
                 etTitle.setText(task.getTitle());
                 etDescription.setText(task.getDescription());
             }
