@@ -16,10 +16,18 @@ public class Review {
         this.description = description;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getRating() {
         return rating;
     }
 
+    /**
+     *
+     * @param rating
+     */
     public void setRating(float rating) {
         this.rating = rating;
     }
