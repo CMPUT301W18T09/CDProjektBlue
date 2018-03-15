@@ -121,7 +121,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         if (isAdd == 1) {
             btnSavePost.setText("Post");
-            task = new Task(this.thisUser, "NAN's right hand", "THE MAN sells", 10, Task.TaskStatus.REQUESTED);
+            task = new Task(this.thisUser, "", "", 10, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else {
             // Show the price and bid list if you're only editing a task
