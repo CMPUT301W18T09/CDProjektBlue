@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("ALL")
 public class LoginActivity extends AppCompatActivity{
 
     private Button btnLogin;
@@ -73,8 +74,11 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         Intent intent = new Intent(this, RecentListingsActivity.class);
-        intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
         currentUsername = etUsername.getText().toString();
+        intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+        intent.putExtra("isLogin", "true");
+        intent.putExtra("username", currentUsername);
+        System.out.println("DASDSAD" + currentUsername);
         this.startActivity(intent);
 
     }
