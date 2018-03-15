@@ -27,6 +27,8 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
+        // Get the task that was clicked
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -58,6 +61,11 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         if (mine) {
             frameLayout.setVisibility(View.GONE);
         }
+        if (task.getLocation() != null) {
+            Log.i("MAP", "location attached");
+        } else {
+            Log.i("MAP", "location is null");
+        }
 
     }
 
@@ -78,17 +86,26 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * @param view
      */
     public void makeBid(View view) {
-        if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
+        if(task.getStatus() == Task.TaskStatus.COMPLETED){
+            Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
+        } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
+            ArrayList<Bid> temp = task.getBidList();
+            // Check if the user had a previous bid and delete it if so
+            for(Bid b: temp) {
+                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                    task.removeBid(b);
+                }
+            }
+            // Add the new bid to the bid list
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
-
+            finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
-        finish();
 
     }
 }
