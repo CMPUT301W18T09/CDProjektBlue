@@ -22,7 +22,7 @@ public class Task {
     private double price;
     private TaskStatus status;
     private int acceptedBid;
-    private String location;
+    private LatLng location;
     private ArrayList<Bid> bidList;
     //private ArrayList<Bitmap> photoList;
     private ArrayList<byte[]> photoList;
@@ -91,11 +91,11 @@ public class Task {
         this.status = status;
     }
 
-    public String getLocation() {
+    public LatLng getLocation() {
         return this.location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 
