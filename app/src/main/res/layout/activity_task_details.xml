@@ -75,7 +75,7 @@
         android:layout_below="@+id/details_task_description">
     </FrameLayout>
 
-    <TextView
+    <Button
         android:id="@+id/assignedBidTitle"
         android:layout_width="350dp"
         android:layout_height="30dp"

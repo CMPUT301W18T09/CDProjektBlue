@@ -41,7 +41,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private TextView task_description;
     private TextView text_lowest_bid;
     private TextView text_task_status;
-    private TextView title;
+    private Button title;
     private TextView description;
 
     /**
@@ -152,6 +152,16 @@ public class TaskDetailsActivity extends NavigationActivity{
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", task.getRequester());
+                UserProfileDialog dialog = new UserProfileDialog();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "User Profile Dialog");
+            }
+        });
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", bid.getProvider());
                 UserProfileDialog dialog = new UserProfileDialog();
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "User Profile Dialog");
