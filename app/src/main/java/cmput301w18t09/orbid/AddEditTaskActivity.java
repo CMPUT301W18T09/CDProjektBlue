@@ -219,10 +219,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                             }
                         }
                     });
-            DataManager.addTasks object = new DataManager.addTasks(this);
-            object.execute(task);
-        } else {
-            update();
+
+            // Check max lengths
+            if (task.getTitle().length() > 30) {
+                Toast.makeText(context, "Title cannot be longer than 30", Toast.LENGTH_LONG);
+            } else if (task.getTitle().length() < 1) {
+                Toast.makeText(context, "Title cannot be empty", Toast.LENGTH_LONG);
+            } else {
+
+                if (task.getDescription().length() > 300) {
+                    Toast.makeText(context, "Description cannot be longer than 300", Toast.LENGTH_LONG);
+                } else if (task.getDescription().length() < 1) {
+                    Toast.makeText(context, "Description cannot be empty", Toast.LENGTH_LONG);
+                } else {
+                    DataManager.addTasks object = new DataManager.addTasks(this);
+                    object.execute(task);
+                    update();
+                }
+            }
         }
     }
 

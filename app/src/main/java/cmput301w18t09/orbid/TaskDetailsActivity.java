@@ -83,6 +83,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         TextView task_title = findViewById(R.id.details_task_title);
         TextView task_description = findViewById(R.id.details_task_description);
         TextView text_lowest_bid = findViewById(R.id.details_lowest_bid);
+        TextView text_task_status = findViewById(R.id.details_task_status);
         // find lowest bid
         Bid lowest_bid = null;
         if (task == null) {
@@ -122,6 +123,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Set the task title and description
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
+        text_task_status.setText(task.getStatus().toString());
         Log.i("MSG", task_title.getText().toString());
         // Set the username button
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
