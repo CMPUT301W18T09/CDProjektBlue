@@ -20,15 +20,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    public static String thisUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            String isLogin = getIntent().getStringExtra("isLogin");
+            if (isLogin.equals("true")) {
+                thisUser = getIntent().getStringExtra("username");
+            }
+        } catch(Exception e) {
 
-
+        }
         setContentView(R.layout.activity_navigation);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -44,6 +51,15 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Example of how to inflate your layout
+        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
+
+        // Uses actual ID of layout to inflate correct one
+        if (callerLayoutID != 0) {
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+            inflater.inflate(callerLayoutID, frameLayout);
+        }
 
     }
 
@@ -109,7 +125,10 @@ public class NavigationActivity extends AppCompatActivity
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
-
+            Intent intent = new Intent( this, ListTaskActivity.class);
+            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+            intent.putExtra("isMyBids",1);
+            this.startActivity(intent);
 
         } else if (id == R.id.nav_edit_profile) {
             Intent intent = new Intent(this, EditProfileActivity.class);

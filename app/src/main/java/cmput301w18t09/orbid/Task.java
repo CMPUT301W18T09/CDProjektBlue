@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
 
-// Todo: Repost
-
 public class Task {
     private String requester;
     private String description;
@@ -23,7 +21,7 @@ public class Task {
     private String ID;
     private double price;
     private TaskStatus status;
-    private Bid acceptedBid;
+    private int acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
     //private ArrayList<Bitmap> photoList;
@@ -33,8 +31,7 @@ public class Task {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
     }
 
-    public Task(String requester, String description, String title, double price, TaskStatus status)
-    {
+    public Task(String requester, String description, String title, double price, TaskStatus status) {
         this.requester = requester;
         this.description = description;
         this.title = title;
@@ -128,47 +125,23 @@ public class Task {
         this.photoList = tempList;
     }
 
-
-    public Bid getAcceptedBid() { return this.acceptedBid; }
+    public int getAcceptedBid() { return this.acceptedBid; }
 
     public void addBid(Bid bid) {
         this.bidList.add(bid);
     }
 
-    public void repost() {
-
-        // Todo: code to repost
-        this.status = TaskStatus.REQUESTED;
-
-    }
+    public void removeBid(Bid bid){ this.bidList.remove(bid);}
 
     public void addPhoto(Bitmap image) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 0, stream);
         this.photoList.add(stream.toByteArray());
     }
-/*
-    public void addPhoto(Bitmap image) {
-        this.photoList.add(image);
-    }*/
 
-    public void acceptBid(int index) {
-        acceptedBid = bidList.get(index);
+    public void acceptBid(int b) {
+        acceptedBid = b;
         status = TaskStatus.ASSIGNED;
-    }
-
-    public void declineBid(int index) {
-        bidList.remove(index);
-    }
-
-    public Boolean containsBid(Bid bid) {
-        return bidList.contains(bid);
-    }
-
-    public Boolean containsPhoto(Bitmap image) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        return photoList.contains(stream.toByteArray());
     }
 
 

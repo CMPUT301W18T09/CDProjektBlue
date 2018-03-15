@@ -33,16 +33,16 @@ public class UserProfileDialog extends DialogFragment {
     UserProfileListener listener;
 
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        try {
-            listener = (UserProfileListener) activity;
-        }
-        catch (ClassCastException e){
-            throw new ClassCastException(activity.toString() + " must implement");
-        }
-    }
+//    @Override
+//    public void onAttach(Activity activity){
+//        super.onAttach(activity);
+//        try {
+//            listener = (UserProfileListener) activity;
+//        }
+//        catch (ClassCastException e){
+//            throw new ClassCastException(activity.toString() + " must implement");
+//        }
+//    }
 
 
     @Override

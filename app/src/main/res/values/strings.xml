@@ -33,5 +33,6 @@
 
     <string name="cancel_action">Exit</string>
     <string name="ok">ok</string>
+    <string name="taskstatus">TaskStatus</string>
 
 </resources>
