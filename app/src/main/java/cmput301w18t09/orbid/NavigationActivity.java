@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -124,7 +125,10 @@ public class NavigationActivity extends AppCompatActivity
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
-
+            Intent intent = new Intent( this, ListTaskActivity.class);
+            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+            intent.putExtra("isMyBids",1);
+            this.startActivity(intent);
 
         } else if (id == R.id.nav_edit_profile) {
             Intent intent = new Intent(this, EditProfileActivity.class);

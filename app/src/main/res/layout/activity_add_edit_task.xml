@@ -26,6 +26,7 @@
         android:id="@+id/EditTaskComment"
         android:layout_width="300dp"
         android:layout_height="100dp"
+        android:layout_alignLeft="@+id/EditTaskTitle"
         android:layout_alignStart="@+id/EditTaskTitle"
         android:layout_below="@+id/ImageStack"
         android:background="@drawable/back"
@@ -42,7 +43,7 @@
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
+        android:layout_alignParentRight="true"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:onClick="postEditTask"
         android:text="" />
@@ -51,38 +52,31 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_below="@+id/AddEditPrice"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorTheme" />
-
-    <TextView
-        android:id="@+id/AddEditPrice"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
         android:layout_below="@+id/EditTaskTitle"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/back"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="Price: $0"
-        android:textColor="@color/cast_expanded_controller_background_color" />
+        android:layout_marginTop="16dp"
+        android:background="@color/colorTheme" />
 
     <ImageButton
         android:id="@+id/AddImageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/AddEditPrice"
-        android:layout_marginTop="34dp"
+        android:layout_alignTop="@+id/ImageStack"
+        android:layout_marginTop="36dp"
         android:onClick="addImage"
         app:srcCompat="@drawable/ic_menu_gallery" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/BidListEdit"
         android:layout_width="300dp"
-        android:layout_height="130dp"
-        android:layout_above="@+id/SavePostTaskButton"
+        android:layout_height="180dp"
+        android:layout_alignLeft="@+id/EditTaskComment"
         android:layout_alignStart="@+id/EditTaskComment"
-        android:visibility="gone" />
+        android:layout_below="@+id/EditTaskComment"
+        android:layout_marginTop="21dp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/DeleteButton"

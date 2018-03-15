@@ -33,8 +33,9 @@ public class TaskDetailsActivity extends NavigationActivity{
     private String id;
     protected boolean mine = false;
     public Task task;
-    public Bid lowest_bid;
+    public Bid bid;
     public int isAssigned = 0;
+    public int isBid = 0;
     public Context context = this;
 
     /**
@@ -57,7 +58,10 @@ public class TaskDetailsActivity extends NavigationActivity{
         try {
             isAssigned = getIntent().getIntExtra("isAssigned", 0);
         } catch(Error e) {
-
+        }
+        try {
+            isBid = getIntent().getIntExtra("isBid", 0);
+        } catch(Error e) {
         }
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
@@ -80,33 +84,41 @@ public class TaskDetailsActivity extends NavigationActivity{
         TextView task_description = findViewById(R.id.details_task_description);
         TextView text_lowest_bid = findViewById(R.id.details_lowest_bid);
         // find lowest bid
-        lowest_bid = null;
+        Bid lowest_bid = null;
         if (task == null) {
             Log.i("MSG", "task is null here");
         }
 
-        // Find the lowest bid to display
-        for (Bid bid : task.getBidList()) {
-            if (lowest_bid != null) {
-                if (bid.getPrice() < lowest_bid.getPrice()) {
-                    lowest_bid = bid;
+        // Display your bid price
+        if(isBid == 1) {
+            ArrayList<Bid> temp;
+            temp = task.getBidList();
+            for(Bid b: temp) {
+                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                    bid = b;
                 }
+            }
+            text_lowest_bid.setText("Your bid: $"+Double.toString(bid.getPrice()));
+        } else {
+            // Check if the task is completed
+            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
+                text_lowest_bid.setText("TASK FULFILLED");
             } else {
-                lowest_bid = bid;
+                // Find the lowest bid to display
+                for (Bid bid : task.getBidList()) {
+                    if (lowest_bid != null) {
+                        if (bid.getPrice() < lowest_bid.getPrice()) {
+                            lowest_bid = bid;
+                        }
+                    } else {
+                        lowest_bid = bid;
+                    }
+                }
+                if (lowest_bid != null) {
+                    text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                }
             }
         }
-        if(lowest_bid != null) {
-            text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
-        }
-
-        // Show the users details when the name is clicked
-        task_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Todo set on click to show user details
-            }
-        });
-
         // Set the task title and description
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
@@ -126,12 +138,13 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         });
 
-
+        TextView title = (TextView) findViewById(R.id.assignedBidTitle);
+        TextView description = (TextView) findViewById(R.id.assignedBidDescription);
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
-            TextView title = (TextView) findViewById(R.id.assignedBidTitle);
-            TextView description = (TextView) findViewById(R.id.assignedBidDescription);
+            int b = task.getAcceptedBid();
+            bid = task.getBidList().get(b);
             // Show the buttons if the task is Assigned
             if(isAssigned == 1) {
                 Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
@@ -144,8 +157,17 @@ public class TaskDetailsActivity extends NavigationActivity{
             description.setVisibility(View.VISIBLE);
 
             // Set the text to the items
-            title.setText(lowest_bid.getProvider());
-            description.setText(lowest_bid.getDescription());
+            text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
+            title.setText(bid.getProvider());
+            description.setText(bid.getDescription());
+        } else if(isBid == 1) {
+            // Set necessary elements to visible
+            title.setVisibility(View.VISIBLE);
+            description.setVisibility(View.VISIBLE);
+
+            // Set the text to the items
+            title.setText(bid.getProvider());
+            description.setText(bid.getDescription());
         }
 
         // Setting up the stack view for the images when you add a Task
@@ -211,11 +233,10 @@ public class TaskDetailsActivity extends NavigationActivity{
      * @param view
      */
     public void repost(View view) {
-        ArrayList<Bid> temp = new ArrayList<>();
-        temp = task.getBidList();
-        temp.remove(lowest_bid);
-        task.setBidList(temp);
-        if(temp.size() > 0) {
+        // Remove the previously accepted bid
+        task.removeBid(task.getBidList().get(task.getAcceptedBid()));
+        task.acceptBid(-1);
+        if(task.getBidList().size() > 0) {
             task.setStatus(Task.TaskStatus.BIDDED);
         } else {
             task.setStatus(Task.TaskStatus.REQUESTED);
