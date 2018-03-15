@@ -89,6 +89,17 @@
         android:onClick="deleteButton"
         android:text="Delete" />
 
+    <EditText
+        android:id="@+id/EditPrice"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/EditTaskTitle"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/back"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:gravity="center"
+        android:hint="Price: $"/>
 
 
 </RelativeLayout>
