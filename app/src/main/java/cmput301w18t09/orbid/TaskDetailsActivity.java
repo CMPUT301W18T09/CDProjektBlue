@@ -219,7 +219,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     /**
      * sets the task status to completed and kills the activity
-     * @param view
+     * @param view The Activity view
      */
     public void fulfilled(View view) {
         task.setStatus(Task.TaskStatus.COMPLETED);
@@ -230,7 +230,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     /**
      * Sets the task status to requested/bidded and deletes the bid
-     * @param view
+     * @param view The activity view
      */
     public void repost(View view) {
         // Remove the previously accepted bid
@@ -267,7 +267,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     /**
      * Find the lowest bid on the displayed task and then display its amount
      * in the text view.
-     * @param text_lowest_bid
+     * @param text_lowest_bid The textview for the lowest bid
      */
     public void setLowestBid(TextView text_lowest_bid) {
         Bid lowest_bid = null;
