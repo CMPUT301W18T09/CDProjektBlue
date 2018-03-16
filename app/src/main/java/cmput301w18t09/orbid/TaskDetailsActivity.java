@@ -286,18 +286,22 @@ public class TaskDetailsActivity extends NavigationActivity{
             if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
                 text_lowest_bid.setText("TASK FULFILLED");
             } else {
-                // Find the lowest bid to display
-                for (Bid bid : task.getBidList()) {
-                    if (lowest_bid != null) {
-                        if (bid.getPrice() < lowest_bid.getPrice()) {
+                if (task.getBidList().size() == 0) {
+                    text_lowest_bid.setText("Price: $" + Double.toString(task.getPrice()));
+                } else {
+                    // Find the lowest bid to display
+                    for (Bid bid : task.getBidList()) {
+                        if (lowest_bid != null) {
+                            if (bid.getPrice() < lowest_bid.getPrice()) {
+                                lowest_bid = bid;
+                            }
+                        } else {
                             lowest_bid = bid;
                         }
-                    } else {
-                        lowest_bid = bid;
                     }
-                }
-                if (lowest_bid != null) {
-                    text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                    if (lowest_bid != null) {
+                        text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                    }
                 }
             }
         }
