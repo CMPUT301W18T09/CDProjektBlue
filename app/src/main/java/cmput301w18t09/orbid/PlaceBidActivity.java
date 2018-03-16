@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+
 @SuppressWarnings("ALL")
 public class PlaceBidActivity extends TaskDetailsActivity {
 
