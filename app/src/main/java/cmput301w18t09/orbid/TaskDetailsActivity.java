@@ -63,11 +63,10 @@ public class TaskDetailsActivity extends NavigationActivity{
         setIntentArgs();
 
         // Find the recent listing tasks from DM
-        getRecentListings();
+        getTaskDetails();
 
         // Set the tasks values
         setTaskValues();
-
 
         // Set the username button
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
@@ -76,47 +75,32 @@ public class TaskDetailsActivity extends NavigationActivity{
         usernameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", task.getRequester());
-                UserProfileDialog dialog = new UserProfileDialog();
-                dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), "User Profile Dialog");
+                openUserInfo(task.getRequester());
             }
         });
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", bid.getProvider());
-                UserProfileDialog dialog = new UserProfileDialog();
-                dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), "User Profile Dialog");
-            }
-        });
+
 
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
-            int b = task.getAcceptedBid();
-            bid = task.getBidList().get(b);
-            // Show the buttons if the task is Assigned
-            if(isAssigned == 1) {
-                Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
-                Button repostBtn = (Button) findViewById(R.id.repostButton);
-                fulfilledBtn.setVisibility(View.VISIBLE);
-                repostBtn.setVisibility(View.VISIBLE);
-            }
-            // Set necessary elements to visible
-            title.setVisibility(View.VISIBLE);
-            description.setVisibility(View.VISIBLE);
-
-            // Set the text to the items
-            text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
-            title.setText(bid.getProvider());
-            description.setText(bid.getDescription());
+            isAssignedTask();
         }
 
         // Setting up the stack view for the images when you add a Task
+        initStackView();
+
+        // Check to see if this task is owned by the user opening it
+        if (task.getRequester().equals(this.thisUser)) {
+            mine = true;
+        }
+
+    }
+
+    /**
+     * Initializes the stack view and sets its on click listener to open
+     * the image full screen when pressed.
+     */
+    private void initStackView() {
         StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
         stackView.setOutAnimation(this, android.R.animator.fade_out);
@@ -142,12 +126,43 @@ public class TaskDetailsActivity extends NavigationActivity{
 
             }
         });
-        if (task.getRequester().equals(this.thisUser)) {
-            mine = true;
-        }
-
     }
 
+    /**
+     * If the task that is being viewed is completed or is assigned
+     * it needs to make these changes.
+     */
+    private void isAssignedTask() {
+        title = findViewById(R.id.assignedBidTitle);
+        description = findViewById(R.id.assignedBidDescription);
+        int b = task.getAcceptedBid();
+        bid = task.getBidList().get(b);
+        // Show the buttons if the task is Assigned
+        if(isAssigned == 1) {
+            Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
+            Button repostBtn = (Button) findViewById(R.id.repostButton);
+            fulfilledBtn.setVisibility(View.VISIBLE);
+            repostBtn.setVisibility(View.VISIBLE);
+        }
+        // Set necessary elements to visible
+        title.setVisibility(View.VISIBLE);
+        description.setVisibility(View.VISIBLE);
+
+        // Set the text to the items
+        text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
+        title.setText(bid.getProvider());
+        description.setText(bid.getDescription());
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserInfo(bid.getProvider());
+            }
+        });
+    }
+
+    /**
+     * Get the arguments that were passed with the intent.
+     */
     private void setIntentArgs() {
         // Use the id of the task to get it from the Data Manager
         try {
@@ -165,6 +180,9 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
     }
 
+    /**
+     * Find and then set the text for each of the text views.
+     */
     private void setTaskValues() {
         // Find the text views in the layout
         TextView task_title = findViewById(R.id.details_task_title);
@@ -177,6 +195,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         text_task_status.setText(task.getStatus().toString());
         // Set the lowest bid
         setLowestBid((TextView)findViewById(R.id.details_lowest_bid));
+
     }
 
     /**
@@ -221,10 +240,14 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     /**
      * Opens the user info dialog when pressed
-     * @param view
      */
-    public void openUserInfo(View view) {
-        Toast.makeText(this, "Open user info", Toast.LENGTH_SHORT).show();
+    public void openUserInfo(String username) {
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        UserProfileDialog dialog = new UserProfileDialog();
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), "User Profile Dialog");
+
     }
 
     /**
@@ -237,6 +260,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         object.execute(n);
     }
 
+    /**
+     * Find the lowest bid on the displayed task and then display its amount
+     * in the text view.
+     * @param text_lowest_bid
+     */
     public void setLowestBid(TextView text_lowest_bid) {
         Bid lowest_bid = null;
         if (task == null) {
@@ -275,7 +303,14 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
     }
 
-    public void getRecentListings() {
+    /**
+     * Gets the details of the task being loaded from the DM and then
+     * stores them in taskList.
+     */
+    protected void getTaskDetails() {
+        // Use the id of the task to get it from the Data Manager
+        id = getIntent().getStringExtra("_id");
+        // Get the task that was clicked
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
         query.add("_id");
@@ -286,10 +321,8 @@ public class TaskDetailsActivity extends NavigationActivity{
             taskList = getTasks.get();
             task = taskList.get(0);
         } catch (InterruptedException e) {
-            Log.e("MSG", "interrupted execution");
             e.printStackTrace();
         } catch (ExecutionException e) {
-            Log.e("MSG", "execution");
             e.printStackTrace();
         }
     }

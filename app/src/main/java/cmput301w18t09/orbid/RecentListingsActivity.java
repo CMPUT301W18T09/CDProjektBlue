@@ -63,6 +63,25 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             }
         });
         toolbar.addView(tbtnToggle);
+
+        // Fill taskList with all tasks
+        getListings();
+
+        taskListAdapter = new TaskListAdapter(this, taskList, 0);
+        taskListAdapter.setClickListener(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(taskListAdapter);
+        recyclerView.setHasFixedSize(true);
+
+    }
+
+    /**
+     * Gets all of the tasks that are requested or bidded and stores
+     * them in the taskList ArrayList.
+     */
+    private void getListings() {
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         ArrayList<String> query = new ArrayList<String>();
         query.add("or");
@@ -78,15 +97,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        taskListAdapter = new TaskListAdapter(this, taskList, 0);
-        taskListAdapter.setClickListener(this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(taskListAdapter);
-        recyclerView.setHasFixedSize(true);
-
     }
 
 
@@ -134,9 +144,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Opens the place bid activity when the user chooses to place
      * a bid on a task.
      */
-    public void openPlaceBidActivity()
+    public void openPlaceBidActivity(int position)
     {
-
+        Intent intent = new Intent(this, PlaceBidActivity.class);
+        intent.putExtra("layout_id", R.layout.activity_place_bid);
+        intent.putExtra("_id", taskList.get(position).getID());
+        this.startActivity(intent);
     }
 
     /**
@@ -156,10 +169,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     public void onClick(View view, int position, int type) {
-        Intent intent = new Intent(this, PlaceBidActivity.class);
-        intent.putExtra("layout_id", R.layout.activity_place_bid);
-        intent.putExtra("_id", taskList.get(position).getID());
-        this.startActivity(intent);
+        openPlaceBidActivity(position);
     }
 
 

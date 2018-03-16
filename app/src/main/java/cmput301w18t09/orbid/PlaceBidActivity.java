@@ -37,38 +37,21 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         FrameLayout frameLayout = findViewById(R.id.details_frame_layout);
         inflater.inflate(R.layout.activity_place_bid, frameLayout);
 
-        // Use the id of the task to get it from the Data Manager
-        id = getIntent().getStringExtra("_id");
-        // Get the task that was clicked
-        ArrayList<String> query = new ArrayList<>();
-        query.add("and");
-        query.add("_id");
-        query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(query);
-        try {
-            taskList = getTasks.get();
-            task = taskList.get(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
         etPrice = frameLayout.findViewById(R.id.my_bid_amount);
         etDescription = frameLayout.findViewById(R.id.my_bid_description);
 
+        // If this task is owned by the user, hide the frame layout that shows
+        // the bidding section.
         if (mine) {
             frameLayout.setVisibility(View.GONE);
         }
-        if (task.getLocation() != null) {
-            Log.i("MAP", "location attached: " + task.getLocation());
-        } else {
-            Log.i("MAP", "location is null");
-        }
-
     }
 
+    /**
+     * Opens drawer when option menu is selected.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -86,6 +69,9 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * @param view
      */
     public void makeBid(View view) {
+        Log.i("BID", "title is empty: " + etPrice.getText().toString());
+        Log.i("BID", "description is empty: " + etDescription.getText().toString());
+        // Let the user know this task has been completed and bidding is closed.
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
         } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
@@ -100,11 +86,12 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
+            Log.i("TASKDATE", "updating task with new bid");
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
             finish();
         } else {
-            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
         }
 
     }
