@@ -11,7 +11,6 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -69,6 +68,7 @@ public class DataManager {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         task.setID(result.getId());
+                        Log.v("id", task.getID());
                         pushCached();
                     }
                     else{
@@ -152,10 +152,20 @@ public class DataManager {
 
             for (int x=1; x < search_Parameters.size(); x+=2){
                 if (search_Parameters.get(0).equals("and")){
-                    query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    if (search_Parameters.get(x).contains("bidList")){
+                        query.must(QueryBuilders.termQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
+                    else{
+                        query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
                 }
                 else {
-                    query.should(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    if (search_Parameters.get(x).contains("bidList")){
+                        query.should(QueryBuilders.termQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
+                    else{
+                        query.should(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                    }
                 }
 
             }
@@ -416,7 +426,7 @@ public class DataManager {
             cachedTasks = new ArrayList<>();
         }
 
-        if (!cachedTasks.isEmpty()){
+        if (cachedTasks.isEmpty()){
             loadFromFile();
         }
     }
@@ -442,30 +452,33 @@ public class DataManager {
      * Pushes all cached tasks to server once a successful server call has been made
      */
     private static void pushCached(){
+        ArrayList<Task> pushed = new ArrayList<>();
         for (Task task: cachedTasks){
+            Log.i("push", task.getTitle());
             Index index;
-            if (task.getID().length() == 0){
+            if (task.getID() == null){
                 index = new Index.Builder(task).index("cmput301w18t09").type("task").build();
             }
             else{
-                index = new Index.Builder(task).index("cmput301w18t09").type("user").id(task.getID()).build();
+                index = new Index.Builder(task).index("cmput301w18t09").type("task").id(task.getID()).build();
             }
-
 
             try{
                 DocumentResult result = client.execute(index);
                 if (result.isSucceeded()){
-                    if (task.getID().length() == 0) {
+                    if (task.getID() == null) {
                         task.setID(result.getId());
                         Log.v("id", task.getID());
                     }
-                    cachedTasks.remove(task);
+                    pushed.add(task);
                 }
+
             }
             catch (Exception e){
                 Log.e("Error", "The application has failed to communicate with the server");
             }
         }
+        cachedTasks.removeAll(pushed);
         saveInFile();
         Log.i("Offline", "cached tasks have been pushed to server");
     }
@@ -486,6 +499,4 @@ public class DataManager {
         }
         Log.i("Offline", "cached tasks have been stored");
     }
-
-
 }
