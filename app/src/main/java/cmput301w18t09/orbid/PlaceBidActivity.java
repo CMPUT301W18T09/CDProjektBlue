@@ -25,7 +25,6 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     private EditText etPrice;
     private EditText etDescription;
     private DrawerLayout mDrawerLayout;
-    private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
 
 
@@ -87,9 +86,9 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
-            Log.i("TASKDATE", "updating task with new bid");
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
+
 
             // Notify the Task that the requester needs to receive a notification
             if(!task.getShouldNotify()) {
