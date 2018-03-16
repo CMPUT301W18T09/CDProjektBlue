@@ -1,16 +1,12 @@
 package cmput301w18t09.orbid;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,15 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.ToggleButton;
-
-import com.google.android.gms.location.places.Place;
-
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Task> taskList = new ArrayList<>();
@@ -45,8 +38,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,9 +63,14 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             }
         });
         toolbar.addView(tbtnToggle);
-
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(new ArrayList<String>());
+        ArrayList<String> query = new ArrayList<String>();
+        query.add("or");
+        query.add("status");
+        query.add(Task.TaskStatus.REQUESTED.toString());
+        query.add("status");
+        query.add(Task.TaskStatus.BIDDED.toString());
+        getTasks.execute(query);
         try {
             taskList = getTasks.get();
         } catch (InterruptedException e) {

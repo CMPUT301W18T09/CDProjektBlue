@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class DataManager {
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
+
     /**
      * Inserts new tasks into the database
      */
@@ -189,11 +191,11 @@ public class DataManager {
     }
 
     /**
-     * gets a list of users based on the search parameters
+     * gets a list of tasks based on the search parameters
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
-        public getUsers(Context cont){
+        public getUsers(Activity cont){
             if (context == null){
                 context = cont;
             }
@@ -296,7 +298,7 @@ public class DataManager {
 
         /**
          * @see updateUsers
-         * @param passed An array list of users to update
+         * @param passed An array list of tasks to update
          * @return no return
          */
         @Override
