@@ -113,6 +113,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
 
 
+            // Set notification flag to false
+            task.setShouldNotify(False);
+            // Update the task in DM
+            ArrayList<Task> taskList = new ArrayList<>();
+            taskList.add(task);
+            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
+            updateTasks.execute(taskList);
              */
             finish();
         } else {
