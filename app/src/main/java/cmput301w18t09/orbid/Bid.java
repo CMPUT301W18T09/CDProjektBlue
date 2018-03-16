@@ -3,7 +3,7 @@ package cmput301w18t09.orbid;
 /**
  * A model representation of a bid made on a given task.
  *
- * @author CDProjektBlue
+ * @author Zach Redfern
  * @see Task
  */
 public class Bid {
