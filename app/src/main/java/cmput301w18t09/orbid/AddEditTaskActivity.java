@@ -171,7 +171,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
-     * AIDAN FILL THIS IN
+     * Checks if the user has given the app permissions to access location services.
+     * If not, it prompts the user to allow them.
      */
     private void checkLocationPermission() {
         final Activity activity = this;
