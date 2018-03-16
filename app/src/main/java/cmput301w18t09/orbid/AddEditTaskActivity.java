@@ -43,6 +43,10 @@ import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
 
+/**
+ * An activity class used to display the Requesting users
+ * Add task interface, edit task interface, and bidded task interface
+ */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private EditText etDescription;

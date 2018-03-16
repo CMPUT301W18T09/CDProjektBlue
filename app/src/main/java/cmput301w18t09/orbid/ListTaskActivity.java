@@ -1,10 +1,9 @@
 package cmput301w18t09.orbid;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,14 +13,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ALL")
+/**
+ * An activity class used to list the requestor/bidders tasks;
+ * It will list tasks for requestors, sorted by Requested, Bidded,
+ * Assigned and Completed. It will also list the tasks a bidder bidded on
+ * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
+ */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();

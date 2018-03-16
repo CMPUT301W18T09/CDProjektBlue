@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
+/**
+ * Activity Class that lists the details of all the recent listings
+ * Tasks, as well as Assigned and Completed tasks in My Requests.
+ */
 public class TaskDetailsActivity extends NavigationActivity{
 
     private DrawerLayout mDrawerLayout;
