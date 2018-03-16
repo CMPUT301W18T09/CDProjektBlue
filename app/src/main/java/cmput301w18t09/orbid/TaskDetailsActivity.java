@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 public class TaskDetailsActivity extends NavigationActivity{
 
     private DrawerLayout mDrawerLayout;
-    private ArrayList<Task> taskList = new ArrayList<>();
+    protected ArrayList<Task> taskList = new ArrayList<>();
     private String id;
     protected boolean mine = false;
     public Task task;
