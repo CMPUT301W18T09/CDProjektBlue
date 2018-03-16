@@ -11,6 +11,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -39,7 +40,9 @@
         <activity android:name=".CreateAccountActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".RecentListingsActivity"/>
+            android:name=".RecentListingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
 
         <activity
             android:name=".ListTaskActivity"
