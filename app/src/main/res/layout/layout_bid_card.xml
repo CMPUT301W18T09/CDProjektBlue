@@ -20,16 +20,24 @@
         android:visibility="visible"
         app:cardElevation="8dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="78dp">
+        tools:layout_editor_absoluteY="78dp"
+        android:layout_alignParentLeft="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="52dp">
 
             <TextView
-                android:id="@+id/bid_price"
+                android:id="@+id/bid_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:text="BID PROVIDER" />
+
+            <TextView
+                android:id="@+id/bid_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bid_username"
                 android:text="BID PRICE" />
 
             <TextView
@@ -37,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bid_price"
+                android:layout_marginBottom="8dp"
                 android:text="BID DESCRIPTION"/>
         </RelativeLayout>
 

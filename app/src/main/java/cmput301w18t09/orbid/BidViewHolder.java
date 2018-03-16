@@ -14,12 +14,14 @@ public class BidViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     public TextView bid_price;
     public TextView bid_description;
+    public TextView bid_username;
     private ItemClickListener clickListener;
 
     public BidViewHolder(View view, final Context context) {
         super(view);
         bid_price = view.findViewById(R.id.bid_price);
         bid_description = view.findViewById(R.id.bid_description);
+        bid_username = view.findViewById(R.id.bid_username);
         view.setOnClickListener(this);
     }
 
