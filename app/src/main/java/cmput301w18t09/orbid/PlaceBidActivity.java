@@ -96,6 +96,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             }
 
             // I'm temporarily going to hide the code for the notification here
+            // How dare you
             /*
 
 
