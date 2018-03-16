@@ -15,12 +15,13 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         super(User.class);
     }
 
-//    public void testAddReview() {
-//
-//        User user = new User("CoolGuy123", "coolguy@hotmail.com","123-123-5678", "Cool", "Guy");
-//        Task task = new Task(user, "Mow my lawn.", "Mow Lawn", 30.00, Task.TaskStatus.REQUESTED);
-//        Review review = new Review(3.5, "Paid on time.");
-//        user.addReview(review);
+    public void testAddReview() {
+        assertTrue(true);
+
+        User user = new User("CoolGuy123", "coolguy@hotmail.com","123-123-5678", "Cool", "Guy");
+        Task task = new Task("user", "Mow my lawn.", "Mow Lawn", 30.00, Task.TaskStatus.REQUESTED);
+        Review review = new Review(3.5, "Paid on time.");
+        user.addReview(review);
 //        assertTrue(user.getReviewList().contains(review));
-//    }
+    }
 }
