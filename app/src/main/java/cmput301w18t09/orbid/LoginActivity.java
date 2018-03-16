@@ -1,7 +1,6 @@
 package cmput301w18t09.orbid;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 @SuppressWarnings("ALL")
+/**
+ * The first screen when the application opens. Prompts user to login or make an account.
+ *
+ * @author Zach Redfern, Chady Haidar
+ */
 public class LoginActivity extends AppCompatActivity{
 
     private Button btnLogin;
@@ -20,11 +23,15 @@ public class LoginActivity extends AppCompatActivity{
     private EditText etUsername;
     private static String currentUsername;
 
+    /**
+     * Instantiates the login activity.
+     *
+     * @param savedInstanceState Any information that needs to be passed to this activity instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         etUsername = findViewById(R.id.login_etUsername);
 
         // Assign on click listener to the sign in button
@@ -42,18 +49,23 @@ public class LoginActivity extends AppCompatActivity{
                 openCreateAccountActivity();
             }
         });
-
-
     }
 
+    /**
+     * Opens the recent listings activity on a successful login attempt.
+     *
+     * @see RecentListingsActivity
+     * @see Task
+     */
     private void openRecentListingsActivity()
     {
 
+        // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
 
-        // Ensure username exists
+        // Query server to ensure username exists
         queryParameters.add("username");
         queryParameters.add(etUsername.getText().toString());
         getUsers.execute(queryParameters);
@@ -73,26 +85,40 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
 
+        // Prepare the recent listings activity and launch it
         Intent intent = new Intent(this, RecentListingsActivity.class);
         currentUsername = etUsername.getText().toString();
         intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
         intent.putExtra("isLogin", "true");
         intent.putExtra("username", currentUsername);
-        System.out.println("DASDSAD" + currentUsername);
         this.startActivity(intent);
 
     }
 
+    /**
+     * Opens the create account activity to create a new user account
+     *
+     * @see User
+     */
     private void openCreateAccountActivity()
     {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         this.startActivity(intent);
     }
 
+    /**
+     *  Gets the name of the currently logged in user
+     *
+     * @return The name of the currently logged in user
+     */
     public static String getCurrentUsername() {
         return currentUsername;
     }
 
+    /**
+     * Overrides the android back button so that a user may not enter back into the
+     * application after they (or someone else) has just recently logged out.
+     */
     @Override
     public void onBackPressed() {
 

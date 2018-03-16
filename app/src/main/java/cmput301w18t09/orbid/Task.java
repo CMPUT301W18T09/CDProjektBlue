@@ -3,7 +3,6 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,7 +14,7 @@ import io.searchbox.annotations.JestId;
 /**
  * A model representation of a task made by a task provider and to be completed by a task provider.
  *
- * @author CDProjektBlue
+ * @author Zach Redfern, Ceegan Hale, Chady Haidar
  * @see Bid
  */
 public class Task {
@@ -53,7 +52,6 @@ public class Task {
         this.bidList = new ArrayList<Bid>();
         this.photoList = new ArrayList<byte[]>();
         this.status = status;
-
     }
 
     /**

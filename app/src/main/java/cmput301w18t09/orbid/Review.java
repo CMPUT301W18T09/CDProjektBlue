@@ -1,10 +1,5 @@
 package cmput301w18t09.orbid;
 
-
-import android.util.Log;
-
-import java.util.ArrayList;
-
 /**
  * A model representation of a review made for a user.
  *
@@ -22,8 +17,7 @@ public class Review {
      * @param rating The user rating associated with the review
      * @param description The textual description of the review
      */
-    public Review(double rating, String description)
-    {
+    public Review(double rating, String description) {
         this.rating = rating;
         this.description = description;
     }
