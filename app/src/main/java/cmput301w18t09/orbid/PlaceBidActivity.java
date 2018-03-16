@@ -102,6 +102,18 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
+
+            // Notify the Task that the requester needs to receive a notification
+            if(!task.getShouldNotify()) {
+                task.setShouldNotify(true);
+            }
+
+            // I'm temporarily going to hide the code for the notification here
+            /*
+
+
+
+             */
             finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
