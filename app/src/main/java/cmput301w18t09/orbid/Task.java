@@ -22,7 +22,7 @@ public class Task {
     private double price;
     private TaskStatus status;
     private int acceptedBid;
-    private String location;
+    private LatLng location;
     private ArrayList<Bid> bidList;
     //private ArrayList<Bitmap> photoList;
     private ArrayList<byte[]> photoList;
@@ -91,11 +91,11 @@ public class Task {
         this.status = status;
     }
 
-    public String getLocation() {
+    public LatLng getLocation() {
         return this.location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 
@@ -142,16 +142,6 @@ public class Task {
     public void acceptBid(int b) {
         acceptedBid = b;
         status = TaskStatus.ASSIGNED;
-    }
-
-    public Boolean containsBid(Bid bid) {
-        return bidList.contains(bid);
-    }
-
-    public Boolean containsPhoto(Bitmap image) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        return photoList.contains(stream.toByteArray());
     }
 
 
