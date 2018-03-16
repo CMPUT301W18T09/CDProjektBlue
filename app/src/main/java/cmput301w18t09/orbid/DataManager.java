@@ -42,6 +42,7 @@ public class DataManager {
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
+
     /**
      * Inserts new tasks into the database
      */
