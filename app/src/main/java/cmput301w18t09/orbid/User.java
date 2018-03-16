@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import io.searchbox.annotations.JestId;
 
 /**
+ * A model representation of a user of the application (requester or provider).
  *
+ * @author CDProjektBlue
+ * @see Review
  */
 public class User {
 
@@ -22,12 +25,13 @@ public class User {
 
 
     /**
+     * User class constructor
      *
-     * @param username
-     * @param email
-     * @param phoneNumber
-     * @param firstName
-     * @param lastName
+     * @param username The username belonging to the user
+     * @param email The e-mail belonging to the user
+     * @param phoneNumber The phone number belonging to the user
+     * @param firstName The first name of the user
+     * @param lastName The last name of the user
      */
     public User(String username, String email, String phoneNumber, String firstName, String lastName)
     {
@@ -39,119 +43,139 @@ public class User {
     }
 
     /**
+     * Gets the username belonging to the user
      *
-     * @return
+     * @return The username belonging to the user
      */
     public String getUsername() {
         return username;
     }
 
     /**
+     * Sets the username belonging to the user
      *
-     * @param username
+     * @param username The username belonging to the user
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
+     * Gets the e-mail belonging to the user
      *
-     * @return
+     * @return The e-mail belonging to the user
      */
     public String getEmail() {
         return email;
     }
 
     /**
+     * Sets the e-mail belonging to the user
      *
-     * @param email
+     * @param email The e-mail belonging to the user
      */
     public void setEmail(String email) {
         this.email = email;
     }
 
     /**
+     * Gets the phone number belonging to the user
      *
-     * @return
+     * @return The phone number belonging to the user
      */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     /**
+     * Sets the phone number belonging to the user
      *
-     * @param phoneNumber
+     * @param phoneNumber The phone number belonging to the user
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     /**
+     * Gets the first name of the user
      *
-     * @return
+     * @return The first name of the user
      */
     public String getFirstName() {
         return firstName;
     }
 
     /**
+     * Sets the first name of the user
      *
-     * @param firstName
+     * @param firstName The first name of the user
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     /**
+     * Gets the last name of the user
      *
-     * @return
+     * @return The last name of the user
      */
     public String getLastName() {
         return lastName;
     }
 
     /**
+     * Sets the last name of the user
      *
-     * @param lastName
+     * @param lastName The last name of the user
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
     /**
+     * Gets the unique Elasticsearch ID
      *
-     * @return
+     * @see DataManager
+     * @return The unique Elasticsearch ID
      */
     public String getID() {
         return id;
     }
 
     /**
+     * Sets the unique Elasticsearch ID
      *
-     * @param ID
+     * @see DataManager
+     * @param ID The unique Elasticsearch ID
      */
     public void setID(String ID) {
         this.id = ID;
     }
 
     /**
+     * Gets the list of reviews associated with the user
      *
-     * @return
+     * @see Review
+     * @return The list of reviews associated with the user
      */
     public ArrayList<Review> getReviewList() {
         return reviewList;
     }
 
     /**
+     * Sets the list of reviews associated with the user
      *
-     * @param reviewList
+     * @see Review
+     * @param reviewList The list of reviews associated with the user
      */
     public void setReviewList(ArrayList<Review> reviewList) {
         this.reviewList = reviewList;
     }
 
     /**
-     * 
+     * Adds a review pertaining to the user (made by other users)
+     *
+     * @see Review
      * @param review
      */
     public void addReview(Review review)
