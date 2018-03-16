@@ -37,6 +37,12 @@ public class TaskDetailsActivity extends NavigationActivity{
     public int isAssigned = 0;
     public int isBid = 0;
     public Context context = this;
+    private TextView task_title;
+    private TextView task_description;
+    private TextView text_lowest_bid;
+    private TextView text_task_status;
+    private Button title;
+    private TextView description;
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -77,9 +83,17 @@ public class TaskDetailsActivity extends NavigationActivity{
                 dialog.show(getFragmentManager(), "User Profile Dialog");
             }
         });
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", bid.getProvider());
+                UserProfileDialog dialog = new UserProfileDialog();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "User Profile Dialog");
+            }
+        });
 
-        TextView title = (TextView) findViewById(R.id.assignedBidTitle);
-        TextView description = (TextView) findViewById(R.id.assignedBidDescription);
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
@@ -98,14 +112,6 @@ public class TaskDetailsActivity extends NavigationActivity{
 
             // Set the text to the items
             text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
-            title.setText(bid.getProvider());
-            description.setText(bid.getDescription());
-        } else if(isBid == 1) {
-            // Set necessary elements to visible
-            title.setVisibility(View.VISIBLE);
-            description.setVisibility(View.VISIBLE);
-
-            // Set the text to the items
             title.setText(bid.getProvider());
             description.setText(bid.getDescription());
         }
