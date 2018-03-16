@@ -53,79 +53,16 @@ public class TaskDetailsActivity extends NavigationActivity{
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_task_details, frameLayout);
 
-        // Use the id of the task to get it from the Data Manager
-        id = getIntent().getStringExtra("_id");
-        try {
-            isAssigned = getIntent().getIntExtra("isAssigned", 0);
-        } catch(Error e) {
-        }
-        try {
-            isBid = getIntent().getIntExtra("isBid", 0);
-        } catch(Error e) {
-        }
-        ArrayList<String> query = new ArrayList<>();
-        query.add("and");
-        query.add("_id");
-        query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(query);
-        try {
-            taskList = getTasks.get();
-            task = taskList.get(0);
-        } catch (InterruptedException e) {
-            Log.e("MSG", "interrupted execution");
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            Log.e("MSG", "execution");
-            e.printStackTrace();
-        }
-        // Find the text views in the layout
-        TextView task_title = findViewById(R.id.details_task_title);
-        TextView task_description = findViewById(R.id.details_task_description);
-        TextView text_lowest_bid = findViewById(R.id.details_lowest_bid);
-        TextView text_task_status = findViewById(R.id.details_task_status);
-        Log.i("MAP", "Location is " + task.getLocation().toString());
-        // find lowest bid
-        Bid lowest_bid = null;
-        if (task == null) {
-            Log.i("MSG", "task is null here");
-        }
+        // Set the attributes that are passed through with the intent
+        setIntentArgs();
 
-        // Display your bid price
-        if(isBid == 1) {
-            ArrayList<Bid> temp;
-            temp = task.getBidList();
-            for(Bid b: temp) {
-                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
-                    bid = b;
-                }
-            }
-            text_lowest_bid.setText("Your bid: $"+Double.toString(bid.getPrice()));
-        } else {
-            // Check if the task is completed
-            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
-                text_lowest_bid.setText("TASK FULFILLED");
-            } else {
-                // Find the lowest bid to display
-                for (Bid bid : task.getBidList()) {
-                    if (lowest_bid != null) {
-                        if (bid.getPrice() < lowest_bid.getPrice()) {
-                            lowest_bid = bid;
-                        }
-                    } else {
-                        lowest_bid = bid;
-                    }
-                }
-                if (lowest_bid != null) {
-                    text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
-                }
-            }
-        }
-        // Set the task title and description
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
-        text_task_status.setText(task.getStatus().toString());
-        Log.i("MSG", task_title.getText().toString());
+        // Find the recent listing tasks from DM
+        getRecentListings();
+
+        // Set the tasks values
+        setTaskValues();
+
+
         // Set the username button
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
         usernameBtn.setText("Poster: " + task.getRequester());
@@ -205,6 +142,37 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     }
 
+    private void setIntentArgs() {
+        // Use the id of the task to get it from the Data Manager
+        try {
+            id = getIntent().getStringExtra("_id");
+        } catch (Error e) {
+
+        }
+        try {
+            isAssigned = getIntent().getIntExtra("isAssigned", 0);
+        } catch(Error e) {
+        }
+        try {
+            isBid = getIntent().getIntExtra("isBid", 0);
+        } catch(Error e) {
+        }
+    }
+
+    private void setTaskValues() {
+        // Find the text views in the layout
+        TextView task_title = findViewById(R.id.details_task_title);
+        TextView task_description = findViewById(R.id.details_task_description);
+        TextView text_task_status = findViewById(R.id.details_task_status);
+
+        // Set the task title and description
+        task_title.setText(task.getTitle());
+        task_description.setText(task.getDescription());
+        text_task_status.setText(task.getStatus().toString());
+        // Set the lowest bid
+        setLowestBid((TextView)findViewById(R.id.details_lowest_bid));
+    }
+
     /**
      * Function for when an options menu item is selected.
      * @param item
@@ -261,5 +229,62 @@ public class TaskDetailsActivity extends NavigationActivity{
         n.add(task);
         DataManager.updateTasks object = new DataManager.updateTasks(this);
         object.execute(n);
+    }
+
+    public void setLowestBid(TextView text_lowest_bid) {
+        Bid lowest_bid = null;
+        if (task == null) {
+            Log.i("MSG", "task is null here");
+        }
+
+        // Display your bid price
+        if (isBid == 1) {
+            ArrayList<Bid> temp;
+            temp = task.getBidList();
+            for (Bid b : temp) {
+                if (b.getProvider().toLowerCase().equals(thisUser.toLowerCase())) {
+                    bid = b;
+                }
+            }
+            text_lowest_bid.setText("Your bid: $" + Double.toString(bid.getPrice()));
+        } else {
+            // Check if the task is completed
+            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
+                text_lowest_bid.setText("TASK FULFILLED");
+            } else {
+                // Find the lowest bid to display
+                for (Bid bid : task.getBidList()) {
+                    if (lowest_bid != null) {
+                        if (bid.getPrice() < lowest_bid.getPrice()) {
+                            lowest_bid = bid;
+                        }
+                    } else {
+                        lowest_bid = bid;
+                    }
+                }
+                if (lowest_bid != null) {
+                    text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                }
+            }
+        }
+    }
+
+    public void getRecentListings() {
+        ArrayList<String> query = new ArrayList<>();
+        query.add("and");
+        query.add("_id");
+        query.add(id);
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        getTasks.execute(query);
+        try {
+            taskList = getTasks.get();
+            task = taskList.get(0);
+        } catch (InterruptedException e) {
+            Log.e("MSG", "interrupted execution");
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            Log.e("MSG", "execution");
+            e.printStackTrace();
+        }
     }
 }
