@@ -24,6 +24,7 @@ public class Task {
     private int acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
+    private Boolean shouldNotify = false;
     //private ArrayList<Bitmap> photoList;
     private ArrayList<byte[]> photoList;
 
@@ -144,5 +145,11 @@ public class Task {
         status = TaskStatus.ASSIGNED;
     }
 
+    public void setShouldNotify(Boolean b) {
+        this.shouldNotify = b;
+    }
 
+    public Boolean getShouldNotify() {
+        return shouldNotify;
+    }
 }
