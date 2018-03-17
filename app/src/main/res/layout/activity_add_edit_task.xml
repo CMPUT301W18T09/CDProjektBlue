@@ -91,6 +91,7 @@
 
     <EditText
         android:id="@+id/EditPrice"
+        android:focusable="true"
         android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_below="@+id/EditTaskTitle"

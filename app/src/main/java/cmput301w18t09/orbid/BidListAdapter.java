@@ -38,6 +38,7 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
         // Todo fill out bid information here
         holder.bid_description.setText(bid.getDescription());
         holder.bid_price.setText(Double.toString(bid.getPrice()));
+        holder.bid_username.setText(bid.getProvider());
 
     }
 
