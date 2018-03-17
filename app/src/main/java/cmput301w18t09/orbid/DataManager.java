@@ -442,8 +442,8 @@ public class DataManager {
             cachedTasks = gson.fromJson(in, new TypeToken<ArrayList<Task>>(){}.getType());
             Log.i("Offline", "Cached tasks have been loaded");
         }catch (FileNotFoundException e){
-            Log.e("Error", "Cached tasks could not be loaded");
-            throw new RuntimeException();
+            Log.e("Error", "Cached tasks file failed to open");
+            e.printStackTrace();
         }
 
     }
