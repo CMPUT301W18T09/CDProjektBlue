@@ -43,6 +43,10 @@ import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
 
+/**
+ * An activity class used to display the Requesting users
+ * Add task interface, edit task interface, and bidded task interface
+ */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private EditText etDescription;
@@ -81,6 +85,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         inflater.inflate(R.layout.activity_add_edit_task, frameLayout);
         frameLayout.requestFocus();
 
+        etTitle = findViewById(R.id.EditTaskTitle);
+        etDescription = findViewById(R.id.EditTaskComment);
+        etPrice = findViewById(R.id.EditPrice);
         // Load the Task and User if it's not adding a new task
         if(isAdd != 1) {
             load();
@@ -101,9 +108,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void activityTypeInit() {
         // Get the task title and comment Edit Texts
-        EditText etTitle = findViewById(R.id.EditTaskTitle);
-        EditText etDescription = findViewById(R.id.EditTaskComment);
-        EditText etPrice = findViewById(R.id.EditPrice);
         Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         Button delete = (Button) findViewById(R.id.DeleteButton);
 
@@ -112,15 +116,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
         } else if(isAdd == 3) {
-            etPrice.setText("$" + Double.toString(task.getPrice()));
-            btnSavePost.setVisibility(View.GONE);
-            etTitle.setEnabled(false);
-            etDescription.setEnabled(false);
-            etPrice.setEnabled(false);
-        } else {
             etPrice.setVisibility(View.GONE);
-            // Show the price and bid list if you're only editing a task
-            btnSavePost.setText("Save");
+            btnSavePost.setVisibility(View.GONE);
             // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
@@ -130,6 +127,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
+            etTitle.setEnabled(false);
+            etDescription.setEnabled(false);
+            etPrice.setEnabled(false);
+        } else {
+            // Show the price and bid list if you're only editing a task
+            btnSavePost.setText("Save");
         }
         // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
@@ -172,7 +175,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
-     * AIDAN FILL THIS IN
+     * Checks if the user has given the app permissions to access location services.
+     * If not, it prompts the user to allow them.
      */
     private void checkLocationPermission() {
         final Activity activity = this;
@@ -263,7 +267,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         try {
             taskList = getTasks.get();
             task = taskList.get(0);
-
+            etPrice.setText(Double.toString(task.getPrice()));
+            etTitle.setText(task.getTitle());
+            etDescription.setText(task.getDescription());
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -271,8 +277,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-        etTitle.setText(task.getTitle());
-        etDescription.setText(task.getDescription());
+
 
         // Load the user from the Data manager
         DataManager.getUsers userDM = new DataManager.getUsers(this);
@@ -291,7 +296,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Post/Edit button is pressed
-     * @param view
+     * @param view The current activity view
      */
     public void postEditTask(View view) {
         save();
@@ -299,7 +304,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Deletes the current task that is being worked on
-     * @param view
+     * @param view The current activity view
      */
     public void deleteButton(View view) {
         ArrayList<String> n = new ArrayList<>();
@@ -325,9 +330,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Adds the bitmap to the image list after a user selects/takes a photo
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode The code passed to the intent before it is started
+     * @param resultCode The code returned when intent finishes
+     * @param data The data added to the intent that was started
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -355,10 +360,17 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
     }
 
+    /**
+     * Handles when a task in My Bidded Tasks is tapped
+     * @param view The current activity view
+     * @param position The index of the bid tapped
+     * @param type
+     */
     @Override
     public void onClick(View view, int position, int type) {
-        // Todo do what you want to do when a bid is clicked, here you can access the Array of bids
+        // Get the bid that was tapped
         final Bid bid = bidList.get(position);
+        //Inflate the dialog
         LayoutInflater layoutInflater = this.getLayoutInflater();
         final View dialog_view = layoutInflater.inflate(R.layout.dialog_accept_bid, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(AddEditTaskActivity.this)
@@ -372,19 +384,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         Button btnDecline = dialog_view.findViewById(R.id.btnDecline);
         Button btnCancel = dialog_view.findViewById(R.id.btnCancel);
 
+        // Handles the scenario if accept bid is tapped
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<Bid> temp = new ArrayList<>();
                 temp.add(bid);
+                // Accept the bid in the task class
                 task.acceptBid(task.getBidList().indexOf(bid));
+                // Set the tasks bidList to only the accepted bid
                 task.setBidList(temp);
+                // Update the Task in data manager
                 update();
                 dialog.dismiss();
                 finish();
             }
         });
 
+        // Close the dialog if cancel is tapped
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -392,12 +409,19 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         });
 
+        // Handles the scenario if Decline Bid is tapped
         btnDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bidList = task.getBidList();
+                // Removes the declined bid from the bidList
                 bidList.remove(bid);
+                // Sets the new bidList and updates the Task in DM
                 task.setBidList(bidList);
+                // If there are no more bids on the Task, set it back to Requested
+                if(bidList.size() == 0) {
+                    task.setStatus(Task.TaskStatus.REQUESTED);
+                }
                 update();
                 dialog.dismiss();
                 bidAdapter.notifyDataSetChanged();

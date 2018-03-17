@@ -1,10 +1,9 @@
 package cmput301w18t09.orbid;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,14 +13,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ALL")
+/**
+ * An activity class used to list the requestor/bidders tasks;
+ * It will list tasks for requestors, sorted by Requested, Bidded,
+ * Assigned and Completed. It will also list the tasks a bidder bidded on
+ * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
+ */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
@@ -58,7 +61,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     /**
      * Opens the Add/Edit task activity when the button is pressed
-     * @param view
+     * @param view The current activity view
      */
     public void addTask(View view) {
         Intent addTask = new Intent(ListTaskActivity.this, AddEditTaskActivity.class);
@@ -68,7 +71,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
 
-
+    /**
+     * Changes the page forward when the forward button is tapped
+     * @param view The current activity view
+     */
     public void pageForward(View view) {
         if(currentPage<maxPages) {
             currentPage++;
@@ -76,6 +82,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         }
     }
 
+    /**
+     * Changes the page backward when the back button tapped
+     * @param view The current activity view
+     */
     public void pageBack(View view) {
         if(currentPage>0) {
             currentPage--;
@@ -84,7 +94,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
     /**
-     * Handles setting up which
+     * Changes the layout depending on the current page
+     * That the user wishes to see
      */
     private void changeLayout() {
 
@@ -147,8 +158,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
     /**
-     * Returns an arrayList of tasks to be displayed
-     * @return
+     * Gets the task list for the users requested tasks,
+     * Or gets the task list of the Users bidded tasks
      */
     private void filterList() {
         if(isMyBids == 0) {
@@ -186,6 +197,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     /**
      * Reloads the tasks when the activity is resumed
+     * with a short delay for the DataManager to load
      */
     @Override
     public void onResume(){
@@ -202,9 +214,19 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     }
 
+    /**
+     * Handles the scenarios when a task is tapped, and opens the proper activity
+     * @param view The current activity view
+     * @param position The index of the task tapped in the list
+     * @param type
+     */
     @Override
     public void onClick(View view, int position, int type) {
+        /**
+         * selection if the task tapped is in My Bids or My Requests
+         */
         if(isMyBids == 0) {
+            // Opens a task to be editted
             if (currentPage == 0) {
                 // is on my requested tasks so should open as edit
                 Intent intent = new Intent(this, AddEditTaskActivity.class);
@@ -213,6 +235,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 intent.putExtra("isAdd", 0);
                 this.startActivity(intent);
             }
+            // Opens a task that is bidded
             if (currentPage == 1) {
                 // is on my bidded tasks so should open as edit
                 Intent intent = new Intent(this, AddEditTaskActivity.class);
@@ -234,6 +257,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 this.startActivity(intent);
             }
         } else {
+            // Opens a Task the user bidded on
             Intent intent = new Intent(this, TaskDetailsActivity.class);
             intent.putExtra("_id", taskList.get(position).getID());
             intent.putExtra("isBid", 1);
