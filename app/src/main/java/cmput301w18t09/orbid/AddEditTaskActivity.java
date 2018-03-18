@@ -17,17 +17,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.StackView;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.Manifest;
 
@@ -46,6 +51,9 @@ import java.util.concurrent.ExecutionException;
 /**
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
+ *
+ * @author Chady Haidar
+ * @see Task
  */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
@@ -53,6 +61,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etTitle;
     private EditText etPrice;
     private EditText etLocation;
+    private Button tbtnToggle;
     private Context context = this;
     private Bitmap bitmap;
     private static Context mContext;
@@ -76,9 +85,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Receive the layout ID from navigation activity
         isAdd = getIntent().getIntExtra("isAdd", 0);
         id = getIntent().getStringExtra("_id");
+
+
+
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -88,6 +101,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
+
+        //toolbarInit();
         // Load the Task and User if it's not adding a new task
         if(isAdd != 1) {
             load();
@@ -104,9 +119,26 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
+     * Adds the add button to the toolbar
+     */
+    private void toolbarInit() {
+        Toolbar t=(Toolbar)findViewById(R.id.toolbar);
+        //setSupportActionBar(t);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Button b1=new Button(this);
+        b1.setText("Add");
+        Toolbar.LayoutParams l3=new Toolbar.LayoutParams(30, 30);
+        l3.gravity=Gravity.END;
+        b1.setLayoutParams(l3);
+        t.addView(b1);
+    }
+
+    /**
      * Displays the appropriate views for the type of task
      */
     private void activityTypeInit() {
+
         // Get the task title and comment Edit Texts
         Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         Button delete = (Button) findViewById(R.id.DeleteButton);
@@ -134,6 +166,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             // Show the price and bid list if you're only editing a task
             btnSavePost.setText("Save");
         }
+
         // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
@@ -144,20 +177,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Initiates the stack view
      */
     private void stackViewInit() {
+
         // Setting up the stack view for the images when you add a Task
         StackView stackView = findViewById(R.id.ImageStack);
         stackView.setInAnimation(this, android.R.animator.fade_in);
         stackView.setOutAnimation(this, android.R.animator.fade_out);
         imageAdapter = new ImageViewAdapter(this, task.getPhotoList());
         stackView.setAdapter(imageAdapter);
+
         // Set the click listener for the images
         stackView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ArrayList<Bitmap> temp;
+
                 // Get the bitmap that was tapped from the photo list
                 temp = task.getPhotoList();
                 Bitmap image = temp.get(position);
+
                 // Create a new intent and send it the byte array for bitmap
                 Intent intent = new Intent(context, FullScreenImage.class);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -169,7 +206,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 intent.putExtra("position", position);
                 imagePos = position;
                 startActivityForResult(intent, DELETE_PICTURE);
-
             }
         });
     }
@@ -203,8 +239,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Saves the current task in the database
+     *
+     * @see DataManager
      */
     private void save() {
+
         // Add location to the task
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -221,6 +260,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                         }
                     }
                 });
+
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
             Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_LONG).show();
@@ -243,8 +283,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Update the task in the database
+     *
+     * @see DataManager
      */
     private void update() {
+
         // Update the task if it's being editted
         ArrayList<Task> n = new ArrayList<>();
         n.add(task);
@@ -253,9 +296,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
-     * loads the task that was opened
+     * Loads the task that was opened
+     *
+     * @see DataManager
      */
     private void load() {
+
         // Load the task from the Data manager
         ArrayList<Task> taskList = new ArrayList<>();
         ArrayList<String> query = new ArrayList<>();
@@ -278,7 +324,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             e.printStackTrace();
         }
 
-
         // Load the user from the Data manager
         DataManager.getUsers userDM = new DataManager.getUsers(this);
         ArrayList<String> n = new ArrayList<>();
@@ -290,12 +335,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             usersList = userDM.get();
             user = usersList.get(0);
         } catch (Exception e) {
-
+            // TODO: Handle the exception
         }
     }
 
     /**
      * Post/Edit button is pressed
+     *
      * @param view The current activity view
      */
     public void postEditTask(View view) {
@@ -304,6 +350,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Deletes the current task that is being worked on
+     *
      * @param view The current activity view
      */
     public void deleteButton(View view) {
@@ -317,10 +364,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     /**
      * When the button is tapped, it will prompt the user to take/select an image
      * Code taken from https://stackoverflow.com/questions/2708128/single-intent-to-let-user-take-picture-or-pick-image-from-gallery-in-android
-     * @param view
+     *
+     *  @param view
      */
     public void addImage(View view) {
-
         Intent pickIntent = new Intent();
         pickIntent.setType("image/*");
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -330,6 +377,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Adds the bitmap to the image list after a user selects/takes a photo
+     *
      * @param requestCode The code passed to the intent before it is started
      * @param resultCode The code returned when intent finishes
      * @param data The data added to the intent that was started
@@ -337,6 +385,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //Updates the recycler image view to show the image selected
         if(resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
@@ -362,14 +411,17 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     /**
      * Handles when a task in My Bidded Tasks is tapped
+     *
      * @param view The current activity view
      * @param position The index of the bid tapped
      * @param type
      */
     @Override
     public void onClick(View view, int position, int type) {
+
         // Get the bid that was tapped
         final Bid bid = bidList.get(position);
+
         //Inflate the dialog
         LayoutInflater layoutInflater = this.getLayoutInflater();
         final View dialog_view = layoutInflater.inflate(R.layout.dialog_accept_bid, null);
@@ -434,6 +486,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     /**
      * Textwatcher code taken from https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android
      * Textwatcher inner class to watch over text boxes
+     *
      * @see TextWatcher
      */
     private class GenericTextWatcher implements TextWatcher {
@@ -442,6 +495,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         /**
          * Constructor for the text watcher
+         *
          * @param view
          */
         private GenericTextWatcher(View view) {
@@ -450,6 +504,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         /**
          * Called after the text has been changed
+         *
          * @param s
          */
         public void afterTextChanged(Editable s) {
@@ -457,6 +512,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         /**
          * Called Before the text is changed
+         *
          * @param s
          * @param start
          * @param count
@@ -468,6 +524,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         /**
          * Called when the text is being changed, makes sure all values being
          * changed are legal, then saves them
+         *
          * @param s
          * @param start
          * @param before

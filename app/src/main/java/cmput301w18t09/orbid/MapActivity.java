@@ -19,12 +19,16 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
+/**
+ * Uses a google maps API to view some area/location of the planet
+ *
+ * @author Aidan Kosik, Zach Redfern, Google
+ */
 public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ArrayList<Task> taskList = new ArrayList<>();
     private ToggleButton tbtnToggle;
-
 
     @Nullable
     @Override
@@ -38,9 +42,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
-
-
 
     /**
      * Manipulates the map once available.
@@ -112,6 +113,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     /**
      * Displays the map with just one task. Centers the camera on that task.
+     *
      * @param id
      */
     private void displaySingleListing(String id)

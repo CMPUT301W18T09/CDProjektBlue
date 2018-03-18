@@ -34,9 +34,14 @@ import io.searchbox.core.SearchResult;
 
 /**
  * Handles all communication between the application and the server
+ *
+ * @author Ceegan Hale
+ * @see User
+ * @see Task
  */
 
 public class DataManager {
+
     private static JestDroidClient client;
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
@@ -54,6 +59,8 @@ public class DataManager {
         }
 
         /**
+         * Inserts new tasks into the database
+         *
          * @see addTasks
          * @param tasks A list of tasks to add to the date base
          * @return no return
@@ -99,6 +106,8 @@ public class DataManager {
         }
 
         /**
+         * Inserts new Users into the database
+         *
          * @see addUsers
          * @param users A list of new users to be added
          * @return no return
@@ -126,7 +135,7 @@ public class DataManager {
     }
 
     /**
-     * gets a list of tasks based on the search parameters
+     * Gets a list of tasks based on the search parameters
      */
     public static class getTasks extends AsyncTask<ArrayList<String>, Void, ArrayList<Task>>{
 
@@ -137,6 +146,8 @@ public class DataManager {
         }
 
         /**
+         * Gets a list of tasks based on the search parameters
+         *
          * @see getTasks
          * @param passed An array list of query parameters in key, value sequence i.e
          *               {key, value, key, value, ...}
@@ -191,7 +202,7 @@ public class DataManager {
     }
 
     /**
-     * gets a list of tasks based on the search parameters
+     * Gets a list of users based on the search parameters
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
@@ -202,6 +213,8 @@ public class DataManager {
         }
 
         /**
+         * Gets a list of users based on the search parameters
+         *
          * @see getUsers
          * @param passed An array list of query parameters in key, value sequence i.e
          *               {key, value, key, value, ...}
@@ -380,7 +393,10 @@ public class DataManager {
                 context = cont;
             }
         }
+
         /**
+         * Deletes users from the database
+         *
          * @see deleteUsers
          * @param passed An array list of user IDs
          * @return no return
@@ -442,10 +458,9 @@ public class DataManager {
             cachedTasks = gson.fromJson(in, new TypeToken<ArrayList<Task>>(){}.getType());
             Log.i("Offline", "Cached tasks have been loaded");
         }catch (FileNotFoundException e){
-            Log.e("Error", "Cached tasks could not be loaded");
-            throw new RuntimeException();
+            Log.e("Error", "Cached tasks file failed to open");
+            e.printStackTrace();
         }
-
     }
 
     /**
