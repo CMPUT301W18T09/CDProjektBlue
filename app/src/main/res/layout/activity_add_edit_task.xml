@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme"
+    android:background="#0099ff"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
@@ -15,11 +15,11 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/back"
+        android:background="@drawable/new_button_background"
         android:gravity="center_vertical|center"
         android:hint="Title:"
         android:text=""
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textColor="#000000"
         android:textSize="22sp" />
 
     <EditText
@@ -28,24 +28,26 @@
         android:layout_height="100dp"
         android:layout_alignLeft="@+id/EditTaskTitle"
         android:layout_alignStart="@+id/EditTaskTitle"
+        android:padding="10dp"
         android:layout_below="@+id/ImageStack"
-        android:background="@drawable/back"
+        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="top|left"
         android:hint="Comment:"
         android:inputType="textPersonName"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textColor="#000000"
         android:textSize="15sp" />
 
     <Button
         android:id="@+id/SavePostTaskButton"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:background="@drawable/new_button_background"
         android:onClick="postEditTask"
+        android:textColor="#000000"
         android:text="" />
 
     <StackView
@@ -81,11 +83,12 @@
     <Button
         android:id="@+id/DeleteButton"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="18dp"
         android:layout_toStartOf="@+id/AddEditPrice"
-        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:background="@drawable/new_button_background"
+        android:textColor="#000000"
         android:onClick="deleteButton"
         android:text="Delete" />
 
@@ -96,12 +99,12 @@
         android:layout_height="30dp"
         android:layout_below="@+id/EditTaskTitle"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/back"
+        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
         android:hint="Price: $"
         android:inputType="numberDecimal"
-        android:textColor="@color/cast_expanded_controller_background_color" />
+        android:textColor="#000000"/>
 
 
 </RelativeLayout>
