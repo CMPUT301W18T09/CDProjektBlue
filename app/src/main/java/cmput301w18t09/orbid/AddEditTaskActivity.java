@@ -17,17 +17,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.StackView;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.Manifest;
 
@@ -41,8 +46,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-@SuppressWarnings("ALL")
-
 /**
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
@@ -55,20 +58,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etPrice;
-    private EditText etLocation;
     private Context context = this;
-    private Bitmap bitmap;
-    private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
     private int imagePos;
     private int isAdd;
-    private int position;
     private BidListAdapter bidAdapter;
     private String id;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
-    private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
@@ -84,6 +82,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         isAdd = getIntent().getIntExtra("isAdd", 0);
         id = getIntent().getStringExtra("_id");
 
+
+
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -94,22 +94,36 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
 
+        //toolbarInit();
         // Load the Task and User if it's not adding a new task
         if(isAdd != 1) {
             load();
         }
-
         // Load the proper views
         activityTypeInit();
-
         // Initiate the stack view
         stackViewInit();
-
         // Initiate Location Client
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    /**
+     * Adds the add button to the toolbar
+     */
+    private void toolbarInit() {
+        Toolbar t=(Toolbar)findViewById(R.id.toolbar);
+        //setSupportActionBar(t);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Button b1=new Button(this);
+        b1.setText("Add");
+        Toolbar.LayoutParams l3=new Toolbar.LayoutParams(30, 30);
+        l3.gravity=Gravity.END;
+        b1.setLayoutParams(l3);
+        t.addView(b1);
     }
 
     /**
@@ -174,7 +188,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 Bitmap image = temp.get(position);
 
                 // Create a new intent and send it the byte array for bitmap
-                Intent intent = new Intent(context, FullScreenImage.class);
+                Intent intent = new Intent(context, FullScreenImageActivity.class);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();

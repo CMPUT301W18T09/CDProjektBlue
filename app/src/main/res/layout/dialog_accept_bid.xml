@@ -12,6 +12,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:text="@string/accept" />
 
     <Button
@@ -22,6 +24,8 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:text="@string/decline" />
 
     <Button
@@ -32,5 +36,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:text="@string/cancel" />
 </RelativeLayout>

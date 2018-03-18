@@ -27,27 +27,49 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2 {
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+//    public ArrayList<String> findUserID(String username) {
+//        DataManager.getUsers getUser = new DataManager.getUsers(getActivity());
+//        ArrayList<String> queryList = new ArrayList<>();
+//        ArrayList<User> usersList = new ArrayList<>();
+//
+//        queryList.add("username");
+//        queryList.add(username);
+//        getUser.execute(queryList);
+//
+//        try {
+//            usersList = getUser.get();
+//        } catch (Exception e) {}
+//
+//        if (!usersList.isEmpty()) {
+//            String stringQuery = usersList.get(0).getID();
+//            queryList.clear();
+//            queryList.add(stringQuery);
+//        }
+//
+//        return queryList;
+//    }
+
     public void testLogin() {
         Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
         DataManager.deleteUsers delUser = new DataManager.deleteUsers(context);
         DataManager.getUsers getUser = new DataManager.getUsers(getActivity());
-
         ArrayList<String> queryList = new ArrayList<>();
         ArrayList<User> usersList = new ArrayList<>();
+
+        //Get the ID of testUser and delete it if it exists
+        //TODO create findUserID(String username)
         queryList.add("username");
         queryList.add("testUser");
         getUser.execute(queryList);
+
         try {
             usersList = getUser.get();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
 
         if (!usersList.isEmpty()) {
             String stringQuery = usersList.get(0).getID();
             queryList.clear();
             queryList.add(stringQuery);
-
-            //Delete the testUser if it exists
             delUser.execute(queryList);
         }
 
@@ -79,6 +101,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2 {
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
 
+        //Edit First name, go back to recent listings, return to edit profile to ensure change was saved
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
         solo.clearEditText(0);
         solo.enterText(0, "James");
@@ -91,8 +114,11 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2 {
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
         solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        String testString = solo.getEditText(0).getEditableText().toString();
-        assertTrue(testString == "James");
+        solo.searchText("James");
+
+        //Create a second user on server and add a task from them
+
+        //Go to second users task and view their profile
     }
 
 }
