@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity{
         intent.putExtra("isLogin", "true");
         intent.putExtra("username", currentUsername);
         this.startActivity(intent);
-
     }
 
     /**
