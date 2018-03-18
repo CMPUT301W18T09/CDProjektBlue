@@ -74,8 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/fulfilledButton"
-        android:layout_below="@+id/details_task_description"
-        android:visibility="gone">
+        android:layout_below="@+id/details_task_description">
     </FrameLayout>
 
     <Button
@@ -98,6 +97,7 @@
         android:layout_alignRight="@+id/assignedBidTitle"
         android:layout_below="@+id/assignedBidTitle"
         android:background="@drawable/new_button_background"
+        android:padding="5dp"
         android:text="TextView"
         android:textColor="@color/cast_expanded_controller_background_color"
         android:visibility="gone"/>
