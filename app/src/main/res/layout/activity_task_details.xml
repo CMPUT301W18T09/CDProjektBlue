@@ -9,19 +9,19 @@
 
     <TextView
         android:id="@+id/details_task_status"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/details_task_title"
+        android:layout_alignLeft="@+id/details_task_title"
         android:layout_alignStart="@+id/details_task_title"
+        android:layout_below="@+id/details_task_title"
         android:background="@drawable/new_button_background"
-        android:text="@string/taskstatus"
         android:padding="3dp"
-        android:textColor="@color/cast_expanded_controller_background_color"
-        android:layout_alignLeft="@+id/details_task_title" />
+        android:text="@string/taskstatus"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <TextView
         android:id="@+id/details_task_title"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
@@ -37,17 +37,16 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_below="@+id/usernameButton"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
-        android:layout_toEndOf="@+id/details_task_description"
-        android:layout_toRightOf="@+id/details_task_description"
+        android:layout_alignEnd="@+id/details_task_status"
+        android:layout_alignRight="@+id/details_task_status"
+        android:layout_below="@+id/details_task_description"
+        android:layout_marginTop="13dp"
         android:background="@color/colorTheme" />
 
 
     <TextView
         android:id="@+id/details_task_description"
-        android:layout_width="200dp"
+        android:layout_width="320dp"
         android:layout_height="150dp"
         android:layout_alignLeft="@+id/details_task_status"
         android:layout_alignStart="@+id/details_task_status"
@@ -60,11 +59,11 @@
 
     <TextView
         android:id="@+id/details_lowest_bid"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/details_task_title"
-        android:layout_alignRight="@+id/details_task_title"
-        android:layout_below="@+id/details_task_title"
+        android:layout_alignLeft="@+id/details_task_status"
+        android:layout_alignStart="@+id/details_task_status"
+        android:layout_alignTop="@+id/usernameButton"
         android:gravity="end"
         android:text="Lowest bid: N/A"
         android:textColor="@android:color/holo_green_light"
@@ -75,7 +74,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/fulfilledButton"
-        android:layout_below="@+id/details_task_description">
+        android:layout_below="@+id/details_task_description"
+        android:visibility="gone">
     </FrameLayout>
 
     <Button
@@ -130,7 +130,7 @@
 
     <Button
         android:id="@+id/usernameButton"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="25dp"
         android:background="@drawable/new_button_background"
         android:layout_alignLeft="@+id/details_task_status"

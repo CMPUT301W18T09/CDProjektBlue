@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
@@ -72,11 +73,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
         // Fill taskList with all tasks
         getListings();
-
+        Collections.reverse(taskList);
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
+        recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
