@@ -180,8 +180,9 @@ public class DataManager {
                 }
 
             }
-
-            Search search = new Search.Builder(new SearchSourceBuilder().query(query).toString()).addIndex("cmput301w18t09").addType("task").build();
+            
+            //David modified the next line to change the returned query size, hopefully this doesn't break anything else
+            Search search = new Search.Builder(new SearchSourceBuilder().size(1000).query(query).toString()).addIndex("cmput301w18t09").addType("task").build();
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
