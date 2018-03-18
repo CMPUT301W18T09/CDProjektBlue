@@ -71,9 +71,6 @@
             android:name=".TaskDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DisplayAssignedTaskActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".PlaceBidActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -168,6 +168,7 @@ public class EditProfileActivity extends NavigationActivity {
      * @return True if input string contained only numbers, false otherwise
      */
     public boolean containsOnlyNumbers(String str) {
+
         //It can't contain only numbers if it's null or empty...
         if (str == null || str.length() == 0)
             return false;

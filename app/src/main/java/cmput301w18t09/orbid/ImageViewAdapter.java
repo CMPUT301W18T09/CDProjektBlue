@@ -16,28 +16,26 @@ import java.util.ArrayList;
 
 /**
  * Adapter class for the Recycler view to display images
+ *
+ * @author Chady Haidar
  */
 public class ImageViewAdapter extends BaseAdapter {
 
-    private Context context;
     private ArrayList<Bitmap> imageList;
-    private ImageViewHolder holder = null;
-    private LayoutInflater inflater;
 
     /**
      * Constructor for the adapter
+     *
      * @param context
      * @param imageList
      */
     public ImageViewAdapter(final Context context, ArrayList<Bitmap> imageList) {
-        this.context = context;
         this.imageList = imageList;
-        this.inflater = LayoutInflater.from(context);
     }
 
-
     /**
-     * getView for the adapter
+     * Get the view for the adapter
+     *
      * @param position
      * @param view
      * @param parent
@@ -46,19 +44,19 @@ public class ImageViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, @NonNull ViewGroup parent) {
 
+        ImageView imageView;
+
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_stack_view_item, parent, false);
-            holder = new ImageViewHolder();
-            holder.image = (ImageView) view.findViewById(R.id.stack_image);
-            view.setTag(holder);
+            imageView = (ImageView) view.findViewById(R.id.stack_image);
+            view.setTag(imageView);
         } else {
-            holder = (ImageViewHolder) view.getTag();
+            imageView = (ImageView) view.getTag();
         }
-        if(imageList.size() > 0) {
-            holder.image.setImageBitmap(imageList.get(position));
+        if (imageList.size() > 0) {
+            imageView.setImageBitmap(imageList.get(position));
         }
-
 
         return view;
     }
@@ -75,7 +73,8 @@ public class ImageViewAdapter extends BaseAdapter {
 
     /**
      * Returns the size of the image list
-     * @return
+     *
+     * @return Integer size of the image list
      */
     @Override
     public int getCount() {

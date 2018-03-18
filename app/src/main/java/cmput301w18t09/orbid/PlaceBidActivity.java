@@ -19,15 +19,17 @@ import java.util.concurrent.ExecutionException;
 
 
 @SuppressWarnings("ALL")
+/**
+ * Activity used when placing a bid on a given task
+ *
+ * @author Chady Haidar
+ */
 public class PlaceBidActivity extends TaskDetailsActivity {
 
-    // private Button btnBid; not needed
     private EditText etPrice;
     private EditText etDescription;
     private DrawerLayout mDrawerLayout;
     private String id;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
     /**
      * Opens drawer when option menu is selected.
+     *
      * @param item
      * @return
      */
@@ -66,11 +69,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * On click function for the bid button. Adds the bid if the inputted information
      * is valid. Otherwise, it makes a toast telling the user to properly fill out
      * the fields.
+     *
      * @param view
      */
     public void makeBid(View view) {
         Log.i("BID", "title is empty: " + etPrice.getText().toString());
         Log.i("BID", "description is empty: " + etDescription.getText().toString());
+
         // Let the user know this task has been completed and bidding is closed.
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
@@ -82,13 +87,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
                     task.removeBid(b);
                 }
             }
+
             // Add the new bid to the bid list
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
-
 
             // Notify the Task that the requester needs to receive a notification
             if(!task.getShouldNotify()) {
@@ -98,8 +103,6 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             // I'm temporarily going to hide the code for the notification here
             // How dare you
             /*
-
-
 
             // Set notification flag to false
             task.setShouldNotify(False);

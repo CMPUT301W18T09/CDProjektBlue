@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
  * It will list tasks for requestors, sorted by Requested, Bidded,
  * Assigned and Completed. It will also list the tasks a bidder bidded on
  * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
+ *
+ * @author Chady Haidar
  */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
@@ -41,12 +43,14 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflate the layout of the list task activity
         int layoutID = getIntent().getIntExtra("tasks_layout_id", 0);
         isMyBids = getIntent().getIntExtra("isMyBids", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
-        /**/
+
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
         Button addButton = (Button) findViewById(R.id.AddTaskButton);
@@ -61,6 +65,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     /**
      * Opens the Add/Edit task activity when the button is pressed
+     *
      * @param view The current activity view
      */
     public void addTask(View view) {
@@ -70,9 +75,9 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         startActivity(addTask);
     }
 
-
     /**
      * Changes the page forward when the forward button is tapped
+     *
      * @param view The current activity view
      */
     public void pageForward(View view) {
@@ -84,6 +89,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
     /**
      * Changes the page backward when the back button tapped
+     *
      * @param view The current activity view
      */
     public void pageBack(View view) {
@@ -94,8 +100,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     }
 
     /**
-     * Changes the layout depending on the current page
-     * That the user wishes to see
+     * Changes the layout depending on the current page that the user wishes to see
      */
     private void changeLayout() {
 
@@ -183,7 +188,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             ArrayList<String> arguments = new ArrayList<>();
             ArrayList<Task> result = new ArrayList<>();
             arguments.add("and");
-            arguments.add("bidList.provider");
+            arguments.add("provider");
             arguments.add(thisUser);
             arguments.add("status");
             arguments.add(taskStatus.toString());
@@ -210,12 +215,13 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         changeLayout();
     }
 
-    private void openUserProfileDialog() {
-
-    }
+//    private void openUserProfileDialog() {
+//
+//    }
 
     /**
      * Handles the scenarios when a task is tapped, and opens the proper activity
+     *
      * @param view The current activity view
      * @param position The index of the task tapped in the list
      * @param type
@@ -226,6 +232,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
          * selection if the task tapped is in My Bids or My Requests
          */
         if(isMyBids == 0) {
+
             // Opens a task to be editted
             if (currentPage == 0) {
                 // is on my requested tasks so should open as edit
@@ -235,6 +242,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 intent.putExtra("isAdd", 0);
                 this.startActivity(intent);
             }
+
             // Opens a task that is bidded
             if (currentPage == 1) {
                 // is on my bidded tasks so should open as edit
@@ -244,6 +252,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 intent.putExtra("isAdd", 3);
                 this.startActivity(intent);
             }
+
             // opens my Assigned or my Completed task
             if (currentPage == 2 || currentPage == 3) {
                 // Is my assigned so should open Task Details activity

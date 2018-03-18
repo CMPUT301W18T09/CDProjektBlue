@@ -22,6 +22,12 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
+/**
+ * The main screen of the application shown post-login. Displays a list of all tasks on the
+ * server that have been requested or bidded on. Also features a search bar to filter results.
+ *
+ * @author Aidan Kosik
+ */
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Task> taskList = new ArrayList<>();
@@ -30,10 +36,10 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private Switch tbtnToggle;
     private DrawerLayout mDrawerLayout;
 
-
     /**
      * Sets the switch for list view and map view in the toolbar, creates onClick
      * for the switch and initialises the recyclerView for the task.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -74,7 +80,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
-
     }
 
     /**
@@ -99,9 +104,9 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         }
     }
 
-
     /**
      * Function for when an options item is selected.
+     *
      * @param item
      * @return
      */
@@ -118,11 +123,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     /**
      * Parses a string of keywords and returns a result list of
      * the matching tasks.
+     *
      * @param string
      * @return resultList
      */
-    public ArrayList<Task> search(String string)
-    {
+    public ArrayList<Task> search(String string) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         return resultList;
     }
@@ -130,8 +135,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     /**
      * Opens the MapActivity on the switch from List View to Map View
      */
-    public void openMapActivity()
-    {
+    public void openMapActivity() {
         MapActivity mapActivity = new MapActivity();
         FragmentManager fm = getSupportFragmentManager();
         Bundle bundle = new Bundle();
@@ -144,8 +148,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Opens the place bid activity when the user chooses to place
      * a bid on a task.
      */
-    public void openPlaceBidActivity(int position)
-    {
+    public void openPlaceBidActivity(int position) {
         Intent intent = new Intent(this, PlaceBidActivity.class);
         intent.putExtra("layout_id", R.layout.activity_place_bid);
         intent.putExtra("_id", taskList.get(position).getID());
@@ -153,16 +156,8 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     }
 
     /**
-     * When the user clicks on a username of the requester
-     * It opens a dialog with that user's information
-     */
-    public void openUserProfileDialog()
-    {
-
-    }
-
-    /**
      * When a task is clicked the Task Details are opened in a new activity.
+     *
      * @param view
      * @param position
      * @param type
@@ -171,6 +166,4 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     public void onClick(View view, int position, int type) {
         openPlaceBidActivity(position);
     }
-
-
 }
