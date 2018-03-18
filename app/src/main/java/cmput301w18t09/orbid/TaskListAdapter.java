@@ -12,7 +12,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-
+/**
+ * Binds the task view holder with the recycler view task list
+ *
+ * @author Aidan Kosik
+ * @see Task
+ */
 public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     private Context context;
@@ -38,7 +43,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         return new TaskViewHolder(view, this.context, type);
     }
 
-
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         holder.setClickListener(clickListener);
@@ -54,18 +58,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     }
 
-
     @Override
     public int getItemCount() {
         return taskList.size();
     }
-
-    public void updateTaskList(ArrayList<Task> t) {
-        this.taskList = t;
-        taskList.clear();
-        taskList.addAll(t);
-        this.notifyDataSetChanged();
-    }
-
 }
 

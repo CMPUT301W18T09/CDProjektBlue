@@ -7,7 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
+ * Inflates the card for a bid in the recycler view
+ *
  * Created by aidankosik on 2018-03-03.
+ *
+ * @author  Aidan Kosik
+ * @see Bid
  */
 
 public class BidViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -28,6 +33,7 @@ public class BidViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     public void setClickListener(ItemClickListener clickListener) {
         this.clickListener = clickListener;
     }
+
     @Override
     public void onClick(View view) {
         if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), 0);
