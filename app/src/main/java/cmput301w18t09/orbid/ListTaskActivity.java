@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("ALL")
 /**
  * An activity class used to list the requestor/bidders tasks;
  * It will list tasks for requestors, sorted by Requested, Bidded,
@@ -30,12 +29,8 @@ import java.util.concurrent.TimeUnit;
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
-    private ListView listView;
-    private TaskListAdapter taskListAdapter;
     private int currentPage=0;
-    private User user;
     private RecyclerView recyclerView;
-    private ImageView swipe;
     private int isMyBids;
     private int maxPages;
     private Task.TaskStatus taskStatus;
@@ -215,10 +210,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         changeLayout();
     }
 
-//    private void openUserProfileDialog() {
-//
-//    }
-
     /**
      * Handles the scenarios when a task is tapped, and opens the proper activity
      *
@@ -228,9 +219,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      */
     @Override
     public void onClick(View view, int position, int type) {
-        /**
-         * selection if the task tapped is in My Bids or My Requests
-         */
+
+        //selection if the task tapped is in My Bids or My Requests
         if(isMyBids == 0) {
 
             // Opens a task to be editted

@@ -13,7 +13,7 @@ import android.widget.ImageView;
  *
  * @author Chady Haidar
  */
-public class FullScreenImage extends Activity {
+public class FullScreenImageActivity extends Activity {
 
     private int isMyTask;
     private Bitmap bitmap;

@@ -53,8 +53,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
                 holder.task_image.setImageBitmap();
             }
         }*/
-        holder.task_title.setText(task.getTitle());
-        holder.task_description.setText(task.getDescription());
+        holder.taskTitle.setText(task.getTitle());
+        holder.taskDescription.setText(task.getDescription());
 
     }
 

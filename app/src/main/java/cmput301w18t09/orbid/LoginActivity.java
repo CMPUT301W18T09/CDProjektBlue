@@ -57,8 +57,7 @@ public class LoginActivity extends AppCompatActivity{
      * @see RecentListingsActivity
      * @see Task
      */
-    private void openRecentListingsActivity()
-    {
+    private void openRecentListingsActivity() {
 
         // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
