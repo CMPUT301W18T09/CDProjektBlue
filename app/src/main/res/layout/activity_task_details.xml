@@ -37,16 +37,15 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_alignEnd="@+id/details_task_status"
-        android:layout_alignRight="@+id/details_task_status"
-        android:layout_below="@+id/details_task_description"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="11dp"
+        android:layout_toRightOf="@+id/details_task_description"
+        android:layout_alignBaseline="@id/details_task_description"
         android:background="@color/colorTheme" />
 
 
     <TextView
         android:id="@+id/details_task_description"
-        android:layout_width="320dp"
+        android:layout_width="200dp"
         android:layout_height="150dp"
         android:layout_alignLeft="@+id/details_task_status"
         android:layout_alignStart="@+id/details_task_status"
@@ -59,7 +58,7 @@
 
     <TextView
         android:id="@+id/details_lowest_bid"
-        android:layout_width="320dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/details_task_status"
         android:layout_alignStart="@+id/details_task_status"
@@ -72,10 +71,10 @@
     <FrameLayout
         android:id="@+id/details_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/fulfilledButton"
-        android:layout_below="@+id/details_task_description">
-    </FrameLayout>
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/assignedBidTitle"
+        android:layout_toRightOf="@+id/assignedBidTitle"></FrameLayout>
 
     <Button
         android:id="@+id/assignedBidTitle"
@@ -130,7 +129,7 @@
 
     <Button
         android:id="@+id/usernameButton"
-        android:layout_width="170dp"
+        android:layout_width="125dp"
         android:layout_height="25dp"
         android:background="@drawable/new_button_background"
         android:layout_alignLeft="@+id/details_task_status"
