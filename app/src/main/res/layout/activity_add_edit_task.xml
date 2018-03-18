@@ -66,6 +66,7 @@
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:background="@drawable/new_button_background"
         android:layout_alignTop="@+id/ImageStack"
         android:layout_marginTop="36dp"
         android:onClick="addImage"
