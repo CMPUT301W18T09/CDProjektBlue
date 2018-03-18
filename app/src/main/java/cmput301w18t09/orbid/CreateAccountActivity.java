@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("ALL")
 /**
  * Allows a user register an account with the server to use the application
  *

@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("ALL")
 /**
  * Allows the user to edit the information in their own profile (except username).
  *

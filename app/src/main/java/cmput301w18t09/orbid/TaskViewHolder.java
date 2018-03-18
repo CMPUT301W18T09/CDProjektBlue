@@ -15,17 +15,17 @@ import android.widget.TextView;
  */
 public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public ImageView task_image;
-    public TextView task_title;
-    public TextView task_description;
+    public ImageView taskImage;
+    public TextView taskTitle;
+    public TextView taskDescription;
     private ItemClickListener clickListener;
     private int type;
 
     public TaskViewHolder(View view, final Context context, int type) {
         super(view);
-        task_image = view.findViewById(R.id.task_image);
-        task_title = view.findViewById(R.id.details_task_title);
-        task_description = view.findViewById(R.id.details_task_description);
+        taskImage = view.findViewById(R.id.task_image);
+        taskTitle = view.findViewById(R.id.details_task_title);
+        taskDescription = view.findViewById(R.id.details_task_description);
         view.setOnClickListener(this);
         this.type = type;
     }
