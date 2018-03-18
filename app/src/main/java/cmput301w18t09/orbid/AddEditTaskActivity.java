@@ -46,8 +46,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-@SuppressWarnings("ALL")
-
 /**
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
@@ -60,21 +58,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etPrice;
-    private EditText etLocation;
-    private Button tbtnToggle;
     private Context context = this;
-    private Bitmap bitmap;
-    private static Context mContext;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
     private int imagePos;
     private int isAdd;
-    private int position;
     private BidListAdapter bidAdapter;
     private String id;
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
-    private ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
@@ -196,7 +188,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 Bitmap image = temp.get(position);
 
                 // Create a new intent and send it the byte array for bitmap
-                Intent intent = new Intent(context, FullScreenImage.class);
+                Intent intent = new Intent(context, FullScreenImageActivity.class);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();

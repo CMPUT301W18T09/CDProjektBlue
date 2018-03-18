@@ -12,41 +12,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.StackView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-@SuppressWarnings("ALL")
+
 /**
  * Activity Class that lists the details of all the recent listings
  * Tasks, as well as Assigned and Completed tasks in My Requests.
  *
- * @author Aidan Kosik
+ * @author Chady Haidar
  */
 public class TaskDetailsActivity extends NavigationActivity{
 
-    private DrawerLayout mDrawerLayout;
-    protected ArrayList<Task> taskList = new ArrayList<>();
-    private String id;
-    protected boolean mine = false;
     public Task task;
     public Bid bid;
     public int isAssigned = 0;
     public int isBid = 0;
     public Context context = this;
-    private TextView task_title;
-    private TextView task_description;
-    private TextView text_lowest_bid;
-    private TextView text_task_status;
+    protected ArrayList<Task> taskList = new ArrayList<>();
+    private DrawerLayout mDrawerLayout;
+    protected boolean mine = false;
+    private String id;
+    private TextView textLowestBid;
     private Button title;
     private TextView description;
 
@@ -123,7 +115,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 Bitmap image = temp.get(position);
 
                 // Create a new intent and send it the byte array for bitmap
-                Intent intent = new Intent(context, FullScreenImage.class);
+                Intent intent = new Intent(context, FullScreenImageActivity.class);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();
@@ -144,7 +136,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private void isAssignedTask() {
         int b = task.getAcceptedBid();
         bid = task.getBidList().get(b);
-        text_lowest_bid = findViewById(R.id.details_lowest_bid);
+        textLowestBid = findViewById(R.id.details_lowest_bid);
 
         // Show the buttons if the task is Assigned
         if(isAssigned == 1) {
@@ -159,7 +151,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
-        text_lowest_bid.setText("Bid price: $" + Double.toString(bid.getPrice()));
+        textLowestBid.setText("Bid price: $" + Double.toString(bid.getPrice()));
         title.setText(bid.getProvider());
         description.setText(bid.getDescription());
         setTitleListener();
@@ -241,7 +233,6 @@ public class TaskDetailsActivity extends NavigationActivity{
         task.setStatus(Task.TaskStatus.COMPLETED);
         save();
         finish();
-
     }
 
     /**
