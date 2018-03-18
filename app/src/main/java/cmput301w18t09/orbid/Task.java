@@ -287,10 +287,20 @@ public class Task {
         status = TaskStatus.ASSIGNED;
     }
 
+    /**
+     * Sets the flag to true if a new bid was placed on this task
+     *
+     * @param b True if a new bid was placed on the task, false otherwise
+     */
     public void setShouldNotify(Boolean b) {
         this.shouldNotify = b;
     }
 
+    /**
+     * Gets the flag that specifies if a new bid was placed on this task
+     *
+     * @return True if a new bid was placed on the task, false otherwise
+     */
     public Boolean getShouldNotify() {
         return shouldNotify;
     }

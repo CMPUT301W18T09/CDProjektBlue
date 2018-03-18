@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
  *
  * @author Zach Redfern, Chady Haidar, Aidan Kosik
  * @see AddEditTaskActivity
- * @see DisplayAssignedTaskActivity
  * @see EditProfileActivity
  * @see ListTaskActivity
  * @see MapActivity

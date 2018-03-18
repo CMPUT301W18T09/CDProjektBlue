@@ -29,6 +29,8 @@ import java.util.concurrent.ExecutionException;
 /**
  * Activity Class that lists the details of all the recent listings
  * Tasks, as well as Assigned and Completed tasks in My Requests.
+ *
+ * @author Aidan Kosik
  */
 public class TaskDetailsActivity extends NavigationActivity{
 
@@ -51,6 +53,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     /**
      * Inflates the layout for task details. Sets the details of the task
      * being viewed. Initialises the stackView for the images of the task.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -83,7 +86,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
         });
 
-
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
@@ -97,7 +99,6 @@ public class TaskDetailsActivity extends NavigationActivity{
         if (task.getRequester().equals(this.thisUser)) {
             mine = true;
         }
-
     }
 
     /**
@@ -114,9 +115,11 @@ public class TaskDetailsActivity extends NavigationActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ArrayList<Bitmap> temp;
+
                 // Get the bitmap that was tapped from the photo list
                 temp = task.getPhotoList();
                 Bitmap image = temp.get(position);
+
                 // Create a new intent and send it the byte array for bitmap
                 Intent intent = new Intent(context, FullScreenImage.class);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -141,6 +144,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         description = findViewById(R.id.assignedBidDescription);
         int b = task.getAcceptedBid();
         bid = task.getBidList().get(b);
+        text_lowest_bid = findViewById(R.id.details_lowest_bid);
+
         // Show the buttons if the task is Assigned
         if(isAssigned == 1) {
             Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
@@ -148,6 +153,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             fulfilledBtn.setVisibility(View.VISIBLE);
             repostBtn.setVisibility(View.VISIBLE);
         }
+
         // Set necessary elements to visible
         title.setVisibility(View.VISIBLE);
         description.setVisibility(View.VISIBLE);
@@ -168,6 +174,7 @@ public class TaskDetailsActivity extends NavigationActivity{
      * Get the arguments that were passed with the intent.
      */
     private void setIntentArgs() {
+
         // Use the id of the task to get it from the Data Manager
         try {
             id = getIntent().getStringExtra("_id");
@@ -188,6 +195,7 @@ public class TaskDetailsActivity extends NavigationActivity{
      * Find and then set the text for each of the text views.
      */
     private void setTaskValues() {
+
         // Find the text views in the layout
         TextView task_title = findViewById(R.id.details_task_title);
         TextView task_description = findViewById(R.id.details_task_description);
@@ -199,11 +207,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         text_task_status.setText(task.getStatus().toString());
         // Set the lowest bid
         setLowestBid((TextView)findViewById(R.id.details_lowest_bid));
-
     }
 
     /**
      * Function for when an options menu item is selected.
+     *
      * @param item
      * @return boolean if the item was selected
      */
@@ -219,6 +227,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     /**
      * sets the task status to completed and kills the activity
+     *
      * @param view The Activity view
      */
     public void fulfilled(View view) {
@@ -230,6 +239,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
     /**
      * Sets the task status to requested/bidded and deletes the bid
+     *
      * @param view The activity view
      */
     public void repost(View view) {
@@ -267,6 +277,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     /**
      * Find the lowest bid on the displayed task and then display its amount
      * in the text view.
+     *
      * @param text_lowest_bid The textview for the lowest bid
      */
     public void setLowestBid(TextView text_lowest_bid) {
@@ -286,6 +297,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
             text_lowest_bid.setText("Your bid: $" + Double.toString(bid.getPrice()));
         } else {
+
             // Check if the task is completed
             if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
                 text_lowest_bid.setText("TASK FULFILLED");
@@ -293,6 +305,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 if (task.getBidList().size() == 0) {
                     text_lowest_bid.setText("Price: $" + Double.toString(task.getPrice()));
                 } else {
+
                     // Find the lowest bid to display
                     for (Bid bid : task.getBidList()) {
                         if (lowest_bid != null) {
