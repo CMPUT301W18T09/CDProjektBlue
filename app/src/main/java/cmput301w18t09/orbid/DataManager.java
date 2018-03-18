@@ -442,7 +442,7 @@ public class DataManager {
             cachedTasks = new ArrayList<>();
         }
 
-        if (!cachedTasks.isEmpty()){
+        if (cachedTasks.isEmpty()){
             loadFromFile();
         }
     }
