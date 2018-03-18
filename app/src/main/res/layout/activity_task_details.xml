@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/details_task_title"
         android:layout_alignStart="@+id/details_task_title"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
         android:text="@string/taskstatus"
+        android:padding="3dp"
         android:textColor="@color/cast_expanded_controller_background_color"
         android:layout_alignLeft="@+id/details_task_title" />
 
@@ -27,7 +28,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/white_text_box"
+        android:padding="5dp"
+        android:background="@drawable/new_button_background"
         android:text="TASK TITLE"
         android:textColor="@color/cast_expanded_controller_background_color" />
 
@@ -51,8 +53,9 @@
         android:layout_alignStart="@+id/details_task_status"
         android:layout_below="@+id/details_task_status"
         android:layout_marginTop="22dp"
-        android:background="@drawable/white_text_box"
+        android:padding="5dp"
         android:text="TASK DESCRIPTION"
+        android:background="@drawable/new_button_background"
         android:textColor="@color/cast_expanded_controller_background_color" />
 
     <TextView
@@ -77,11 +80,11 @@
 
     <Button
         android:id="@+id/assignedBidTitle"
+        android:background="@drawable/new_button_background"
         android:layout_width="350dp"
         android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/white_text_box"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/cast_expanded_controller_background_color"
@@ -94,7 +97,7 @@
         android:layout_alignEnd="@+id/assignedBidTitle"
         android:layout_alignRight="@+id/assignedBidTitle"
         android:layout_below="@+id/assignedBidTitle"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
         android:text="TextView"
         android:textColor="@color/cast_expanded_controller_background_color"
         android:visibility="gone"/>
@@ -106,7 +109,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:onClick="fulfilled"
         android:text="Fulfilled"
         android:visibility="gone" />
@@ -118,7 +122,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:onClick="repost"
         android:text="Repost"
         android:visibility="gone"/>
@@ -127,10 +132,10 @@
         android:id="@+id/usernameButton"
         android:layout_width="200dp"
         android:layout_height="25dp"
+        android:background="@drawable/new_button_background"
         android:layout_alignLeft="@+id/details_task_status"
         android:layout_alignStart="@+id/details_task_status"
         android:layout_below="@+id/details_task_status"
-        android:background="@drawable/white_text_box"
         android:onClick="openUserInfo"
         android:text="Poster:"
         android:textAllCaps="false"

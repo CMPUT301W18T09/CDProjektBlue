@@ -47,6 +47,7 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/new_button_background"
         android:onClick="postEditTask"
+        android:textAllCaps="false"
         android:textColor="#000000"
         android:text="" />
 
@@ -89,6 +90,7 @@
         android:layout_toStartOf="@+id/AddEditPrice"
         android:background="@drawable/new_button_background"
         android:textColor="#000000"
+        android:textAllCaps="false"
         android:onClick="deleteButton"
         android:text="Delete" />
 
