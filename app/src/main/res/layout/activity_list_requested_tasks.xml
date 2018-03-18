@@ -39,8 +39,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        app:srcCompat="@drawable/ic_page_right"
-        android:onClick = "pageForward"/>
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:onClick="pageForward"
+        app:srcCompat="@drawable/ic_page_right" />
 
     <ImageButton
         android:id="@+id/pageBack"
@@ -49,8 +51,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        app:srcCompat="@drawable/ic_page_left"
-        android:onClick = "pageBack"/>
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:onClick="pageBack"
+        app:srcCompat="@drawable/ic_page_left" />
 
 
 </RelativeLayout>
