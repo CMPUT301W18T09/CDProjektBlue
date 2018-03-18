@@ -76,7 +76,7 @@
         <activity
             android:name=".TaskBidListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FullScreenImage"/>
+        <activity android:name=".FullScreenImageActivity"/>
     </application>
 
 </manifest>
