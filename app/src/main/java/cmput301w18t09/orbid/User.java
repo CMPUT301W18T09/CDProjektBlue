@@ -39,6 +39,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.reviewList = new ArrayList<>();
     }
 
     /**

@@ -263,4 +263,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             this.startActivity(intent);
         }
     }
+
+    public ArrayList<Task> getTaskList() {
+        return this.taskList;
+    }
 }
