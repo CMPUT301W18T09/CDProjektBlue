@@ -12,6 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by david on 13/03/18.
  * This Intent tests performs tests to create a user, edit a user, and open up a users details
+ * Covers: UC 03.01.01, UC 03.02.01, UC 03.03.01
  */
 
 public class UserProfileTest extends ActivityInstrumentationTestCase2 {
