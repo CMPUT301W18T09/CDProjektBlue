@@ -150,7 +150,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
-        textLowestBid.setText("Bid price: $" + Double.toString(bid.getPrice()));
+        textLowestBid.setText("Bid price: $" + String.format("%.2f", bid.getPrice()));
         title.setText(bid.getProvider());
         description.setText(bid.getDescription());
         setTitleListener();
@@ -293,7 +293,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 }
             }
             // Set your bid price, username, and description
-            text_lowest_bid.setText("Your bid: $" + Double.toString(bid.getPrice()));
+            text_lowest_bid.setText("Your bid: $" + String.format("%.2f", bid.getPrice()));
             title.setVisibility(View.VISIBLE);
             title.setText(bid.getProvider());
             description.setVisibility(View.VISIBLE);
@@ -305,7 +305,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 text_lowest_bid.setText("TASK FULFILLED");
             } else {
                 if (task.getBidList().size() == 0) {
-                    text_lowest_bid.setText("Price: $" + Double.toString(task.getPrice()));
+                    text_lowest_bid.setText("Price: $" + String.format("%.2f", task.getPrice()));
                 } else {
                     // Find the lowest bid to display
                     for (Bid bid : task.getBidList()) {
@@ -318,7 +318,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                         }
                     }
                     if (lowest_bid != null) {
-                        text_lowest_bid.setText("Lowest Bid:$" + Double.toString(lowest_bid.getPrice()));
+                        text_lowest_bid.setText("Lowest Bid:$" + String.format("%.2f", lowest_bid.getPrice()));
                     }
                 }
             }
