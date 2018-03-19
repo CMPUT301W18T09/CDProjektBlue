@@ -11,15 +11,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ListIterator;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
@@ -27,7 +31,7 @@ import java.util.concurrent.ExecutionException;
  * The main screen of the application shown post-login. Displays a list of all tasks on the
  * server that have been requested or bidded on. Also features a search bar to filter results.
  *
- * @author Aidan Kosik
+ * @author Aidan Kosik, Zach Redfern
  */
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
@@ -36,6 +40,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private TaskListAdapter taskListAdapter;
     private Switch tbtnToggle;
     private DrawerLayout mDrawerLayout;
+    private SearchView searchView;
 
     /**
      * Sets the switch for list view and map view in the toolbar, creates onClick
@@ -71,6 +76,27 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(tbtnToggle);
 
+        searchView = findViewById(R.id.search_view);
+//        searchView.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refineListings();
+//            }
+//        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                refineListings();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
         // Fill taskList with all tasks
         getListings();
         Collections.reverse(taskList);
@@ -103,6 +129,60 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Refines the listings by keywords provided in the search bar. Only those tasks whose
+     * descriptions contain all keywords are shown to the user.
+     */
+    private void refineListings() {
+
+        // Set up the data manager and split up the search query into tokens
+        StringTokenizer tokenizer = new StringTokenizer(searchView.getQuery().toString());
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        ArrayList<String> searchParams = new ArrayList<>();
+
+        // Build the elastic search query to
+        String token = "";
+        searchParams.add("and");
+        while (tokenizer.hasMoreTokens()) {
+            token = tokenizer.nextToken();
+            Log.e("token", token);
+            searchParams.add("description");
+            searchParams.add(token);
+        }
+
+        // Execute the search
+        try {
+            getTasks.execute(searchParams);
+            taskList = getTasks.get();
+
+            // If there were no results, tell the user
+            if (taskList.size() == 0) {
+                Toast.makeText(this, "Search returned no results", Toast.LENGTH_LONG).show();
+                // TODO: Handle no tasks?
+            }
+
+            // Remove results with status assigned or bidded
+            Task.TaskStatus status;
+            ListIterator<Task> it = taskList.listIterator();
+            while(it.hasNext()) {
+                status = it.next().getStatus();
+                if (status == Task.TaskStatus.ASSIGNED) {
+                    it.remove();
+                }
+                else if (status == Task.TaskStatus.BIDDED) {
+                    it.remove();
+                }
+            }
+
+            taskListAdapter.setTaskList(taskList);
+
+        } catch (Exception e) {
+            Log.e("Refine Tasks Error", "There was an error refining the tasks list");
+        }
+
+        taskListAdapter.notifyDataSetChanged();
     }
 
     /**
