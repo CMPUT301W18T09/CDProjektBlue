@@ -124,7 +124,6 @@ public class TaskDetailsActivity extends NavigationActivity{
                 intent.putExtra("_id", task.getID());
                 intent.putExtra("position", position);
                 startActivity(intent);
-
             }
         });
     }
