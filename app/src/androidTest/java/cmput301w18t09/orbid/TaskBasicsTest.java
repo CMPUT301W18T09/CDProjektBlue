@@ -43,6 +43,7 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
 
         //Testing editing a task by changing all of the editable fields and saving
         solo.clickOnText("Adding Test");
+        solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.clearEditText((EditText) solo.getView(R.id.EditTaskTitle));
         solo.clearEditText((EditText) solo.getView(R.id.EditTaskComment));
