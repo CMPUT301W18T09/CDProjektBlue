@@ -167,4 +167,13 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     public void onClick(View view, int position, int type) {
         openPlaceBidActivity(position);
     }
+
+    /**
+     * Gets the recycler list view in the activity
+     *
+     * @return The recycler list view in the activity
+     */
+    public ArrayList<Task> getTaskList() {
+        return this.taskList;
+    }
 }
