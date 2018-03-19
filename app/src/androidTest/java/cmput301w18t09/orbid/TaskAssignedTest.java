@@ -11,10 +11,10 @@ import java.util.ArrayList;
 /**
  * This class tests the Task Assigned use cases. (UC 06.01.01, UC 06.02.01)
  */
-public class TaskAssingedTest extends ActivityInstrumentationTestCase2 {
+public class TaskAssignedTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
-    public TaskAssingedTest(){
+    public TaskAssignedTest(){
         super(NavigationActivity.class);
     }
 
@@ -41,9 +41,9 @@ public class TaskAssingedTest extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
 
         NavigationActivity.thisUser = "ceeg";
-        solo.clickOnImageButton(1);
+        solo.clickOnImageButton(2);
 
-        //assertTrue(solo.waitForText("My Bidded Tasks"));
+        assertTrue(solo.waitForText("My Bidded Tasks"));
 
         solo.clickOnImageButton(1);
 
