@@ -42,7 +42,8 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
         solo.sleep(1000);
 
         //Testing editing a task by changing all of the editable fields and saving
-        solo.clickOnText("Adding Test");
+        //solo.clickOnText("Adding Test");
+        solo.clickInRecyclerView(0);
         solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.clearEditText((EditText) solo.getView(R.id.EditTaskTitle));
@@ -58,7 +59,8 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
         solo.sleep(1000);
 
         //Testing to delete a task
-        solo.clickOnText("Editing Test");
+        //solo.clickOnText("Editing Test");
+        solo.clickInRecyclerView(0);
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.clickOnButton("Delete");
         solo.assertCurrentActivity("Wrong Activity",ListTaskActivity.class);
