@@ -63,7 +63,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
                 Intent intent = new Intent(getContext(), TaskDetailsActivity.class);
                 Log.i("TEST OLD TEST", marker.getId());
                 intent.putExtra("task_details_layout_id", R.layout.activity_task_details);
-                intent.putExtra("id", marker.getId());
+                intent.putExtra("_id", marker.getSnippet());
                 startActivity(intent);
                 return false;
             }
@@ -71,7 +71,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
 
         // Get the bundle from the previous activity
         Bundle bundle = getArguments();
-        String came_from = bundle.getString("type");
+        String came_from = bundle.getString("came_from");
 
         // If we came from recent_listings
         if (came_from.equals("recent_listings")) {
@@ -106,7 +106,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         for (Task task : taskList) {
             if (task.getLocation() != null) {
 
-                //mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
             }
         }
     }
@@ -137,7 +137,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         // Place all of the markers on the map and center on Task
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-                //mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()));
+                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
             }
         }
     }
