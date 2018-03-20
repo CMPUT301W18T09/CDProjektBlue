@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -83,7 +84,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         id = getIntent().getStringExtra("_id");
 
 
-
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -96,7 +96,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         //toolbarInit();
         // Load the Task and User if it's not adding a new task
-        if(isAdd != 1) {
+        if (isAdd != 1) {
             load();
         }
         // Load the proper views
@@ -114,14 +114,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Adds the add button to the toolbar
      */
     private void toolbarInit() {
-        Toolbar t=(Toolbar)findViewById(R.id.toolbar);
+        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(t);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        Button b1=new Button(this);
+        Button b1 = new Button(this);
         b1.setText("Add");
-        Toolbar.LayoutParams l3=new Toolbar.LayoutParams(30, 30);
-        l3.gravity=Gravity.END;
+        Toolbar.LayoutParams l3 = new Toolbar.LayoutParams(30, 30);
+        l3.gravity = Gravity.END;
         b1.setLayoutParams(l3);
         t.addView(b1);
     }
@@ -139,7 +139,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
-        } else if(isAdd == 3) {
+        } else if (isAdd == 3) {
             etPrice.setVisibility(View.GONE);
             btnSavePost.setVisibility(View.GONE);
             // Initiate the recycler view for bids
@@ -192,7 +192,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] bytes = stream.toByteArray();
-                intent.putExtra("BitmapImage",bytes);
+                intent.putExtra("BitmapImage", bytes);
                 intent.putExtra("isMyTask", 1);
                 intent.putExtra("_id", task.getID());
                 intent.putExtra("position", position);
@@ -234,6 +234,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      *
      * @see DataManager
      */
+    @SuppressLint("MissingPermission")
     private void save() {
 
         // Add location to the task
@@ -304,7 +305,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            task = taskList.get(0);
+            if (taskList.size() > 0) {
+                task = taskList.get(0);
+            } else {
+                Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent( this, ListTaskActivity.class);
+                intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                intent.putExtra("isMyBids",0);
+                this.startActivity(intent);
+            }
             etPrice.setText(Double.toString(task.getPrice()));
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
@@ -325,7 +334,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         userDM.execute(n);
         try {
             usersList = userDM.get();
-            user = usersList.get(0);
+            if (usersList.size() > 0) {
+                user = usersList.get(0);
+            } else {
+                Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             // TODO: Handle the exception
         }

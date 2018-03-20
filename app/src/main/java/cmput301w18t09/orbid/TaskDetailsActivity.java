@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.StackView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -341,7 +342,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            task = taskList.get(0);
+            if (taskList.size() > 0) {
+                task = taskList.get(0);
+            } else {
+                Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
