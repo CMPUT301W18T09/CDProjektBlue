@@ -40,7 +40,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         super.onCreate(savedInstanceState);
 
         // Inflate the layout of the list task activity
-        int layoutID = getIntent().getIntExtra("tasks_layout_id", 0);
         isMyBids = getIntent().getIntExtra("isMyBids", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);

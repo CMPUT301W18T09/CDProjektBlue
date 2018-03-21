@@ -445,6 +445,7 @@ public class DataManager {
         private Context context;
         private NotificationCompat.Builder mBuilder;
         private NotificationManagerCompat notificationManager;
+        private Boolean shouldContinue = true;
 
 
         public NotificationChecker(Context context) {
@@ -454,40 +455,24 @@ public class DataManager {
         }
 
         /**
+         * Tells the runnable method to run or not
+         * @param shouldContinue
+         */
+        public void setShouldContinue(Boolean shouldContinue) {
+            this.shouldContinue = shouldContinue;
+        }
+
+        /**
          * Runnable that runs every 5 seconds to check for notifications
          */
         Runnable timerRunnable = new Runnable() {
             public void run() {
-                timerHandler.postDelayed(this, 5000);
-                sendNotification();
+                if(shouldContinue) {
+                    timerHandler.postDelayed(this, 10000);
+                    sendNotification();
+                }
             }
         };
-
-        /**
-         * Loads the tasks that have the notification flag set to true
-         */
-        private void loadTasks() {
-            ArrayList<String> query = new ArrayList<>();
-            query.add("and");
-            query.add("username");
-            query.add(NavigationActivity.thisUser);
-            query.add("shouldNotify");
-            query.add("true");
-            DataManager.getTasks getTasks = new DataManager.getTasks(context);
-            getTasks.execute(query);
-            try {
-                taskList = getTasks.get();
-                System.out.println("User: " + NavigationActivity.thisUser + "  size: " + Integer.toString(taskList.size()));
-                // Sends the notification if there are any new tasks that need to notify the user
-                if (taskList.size() > 0) {
-                    shouldSendNotification = true;
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
 
         /**
          * Initializes the notification
@@ -512,6 +497,49 @@ public class DataManager {
         }
 
         /**
+         * Loads the tasks that have the notification flag set to true
+         */
+        private void loadTasks() {
+            ArrayList<String> query = new ArrayList<>();
+            query.add("and");
+            query.add("requester");
+            query.add(NavigationActivity.thisUser);
+            //query.add("shouldNotify");
+            //query.add("true");
+            getTasks getTasks = new getTasks(context);
+            getTasks.execute(query);
+            try {
+                taskList = getTasks.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Log.e("NotificationTasks", "Failed to load tasks");
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                Log.e("NotificationTasks", "Failed to load tasks");
+            }
+            System.out.println("Initial Task list size: " + Integer.toString(taskList.size()));
+            ArrayList<Task> removeList = new ArrayList<>();
+            for(Task t: taskList) {
+                System.out.println("BEFORE: Title: " + t.getTitle() + " notify: "+  Boolean.toString(t.getShouldNotify()));
+                if(!t.getShouldNotify()) {
+                    removeList.add(t);
+                }
+            }
+            System.out.println("RemoveList size: " + Integer.toString(removeList.size()));
+            taskList.removeAll(removeList);
+            System.out.println("Task list size: " + Integer.toString(taskList.size()));
+            // Sends the notification if there are any new tasks that need to notify the user
+            if (taskList.size() > 0) {
+                shouldSendNotification = true;
+            }
+            // Clear all the notification flags:
+            for(Task t: taskList) {
+                t.setShouldNotify(false);
+            }
+        }
+
+
+        /**
          * Sends the notification to the user
          */
         private void sendNotification() {
@@ -519,15 +547,13 @@ public class DataManager {
             if(shouldSendNotification) {
                 // Send the notification
                 notificationManager.notify(1, mBuilder.build());
-                // Clear all the notification flags:
-                for(Task t: taskList) {
-                    t.setShouldNotify(false);
-                }
-                // Update the task in DM
-                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
-                updateTasks.execute(taskList);
                 shouldSendNotification = false;
             }
+            // Update the task in DM
+            updateTasks updateTasks = new updateTasks(context);
+            updateTasks.execute(taskList);
+            // Clear the taskList
+            taskList.removeAll(taskList);
         }
     }
 

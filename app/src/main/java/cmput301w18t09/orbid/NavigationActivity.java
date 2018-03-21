@@ -34,6 +34,7 @@ public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String thisUser;
+    private DataManager.NotificationChecker notificationChecker;
 
     /**
      * Method is ran when the navigation activity is first created to instantiate its elements.
@@ -72,7 +73,7 @@ public class NavigationActivity extends AppCompatActivity
             FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
             inflater.inflate(callerLayoutID, frameLayout);
         }
-        DataManager.NotificationChecker notificationChecker = new DataManager.NotificationChecker(this);
+        notificationChecker = new DataManager.NotificationChecker(this);
 
     }
 
@@ -133,33 +134,39 @@ public class NavigationActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_recent_listings) {
+            notificationChecker.setShouldContinue(false);
             Intent intent = new Intent(this, RecentListingsActivity.class);
             intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_gallery) { // TODO: Change name of nav_gallery to represent map activity
+            notificationChecker.setShouldContinue(false);
             MapActivity mapActivity = new MapActivity();
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
 
         } else if (id == R.id.nav_my_tasks) {
+            notificationChecker.setShouldContinue(false);
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
             intent.putExtra("isMyBids",0);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) { // TODO: Change name of nav_manage to represent requested tasks
+            notificationChecker.setShouldContinue(false);
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
             intent.putExtra("isMyBids",1);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_edit_profile) {
+            notificationChecker.setShouldContinue(false);
             Intent intent = new Intent(this, EditProfileActivity.class);
             intent.putExtra("edit_profile_layout_id", R.layout.activity_edit_profile);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
+            notificationChecker.setShouldContinue(false);
             Intent intent = new Intent(this, LoginActivity.class);
             this.startActivity(intent);
             finish();
