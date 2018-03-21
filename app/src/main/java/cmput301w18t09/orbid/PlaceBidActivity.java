@@ -92,13 +92,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
-            updateTasks.execute(taskList);
-
             // Notify the Task that the requester needs to receive a notification
             if(!task.getShouldNotify()) {
                 task.setShouldNotify(true);
             }
+            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
+            updateTasks.execute(taskList);
+
             finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
