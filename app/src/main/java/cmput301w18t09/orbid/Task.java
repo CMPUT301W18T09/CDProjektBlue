@@ -304,4 +304,29 @@ public class Task {
     public Boolean getShouldNotify() {
         return shouldNotify;
     }
+
+    /**
+     * Compares two tasks to see if they are equals. Only works for tasks that have not yet
+     * been placed on the server and subsequently received a unique ID.
+     *
+     * @param t1 The first task to compare against
+     * @param t2 The second task to compare against
+     * @return True if the tasks are the same
+     */
+    public static boolean compareTasks(Task t1, Task t2) {
+        if (!t1.getTitle().equals(t2.getTitle())) {
+            return false;
+        }
+        if (!t1.getDescription().equals(t2.getDescription())) {
+            return false;
+        }
+        if (t1.getStatus() != t2.getStatus()) {
+            return false;
+        }
+        if (t1.getLocation() != t2.getLocation()) {
+            return false;
+        }
+        return true;
+    }
+
 }
