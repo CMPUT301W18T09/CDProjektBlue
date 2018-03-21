@@ -3,6 +3,8 @@ package cmput301w18t09.orbid;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,9 +12,12 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.content.Context;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -75,6 +80,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private boolean permissionsGranted = true;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +100,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
 
-        //toolbarInit();
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
             load();
@@ -108,22 +113,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             checkLocationPermission();
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-    }
-
-    /**
-     * Adds the add button to the toolbar
-     */
-    private void toolbarInit() {
-        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(t);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        Button b1 = new Button(this);
-        b1.setText("Add");
-        Toolbar.LayoutParams l3 = new Toolbar.LayoutParams(30, 30);
-        l3.gravity = Gravity.END;
-        b1.setLayoutParams(l3);
-        t.addView(b1);
     }
 
     /**

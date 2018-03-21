@@ -1,8 +1,15 @@
 package cmput301w18t09.orbid;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -26,6 +33,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
@@ -430,6 +438,99 @@ public class DataManager {
         }
     }
 
+    public static class NotificationChecker {
+        private Handler timerHandler = new Handler();
+        private ArrayList<Task> taskList;
+        private Boolean shouldSendNotification = false;
+        private Context context;
+        private NotificationCompat.Builder mBuilder;
+        private NotificationManagerCompat notificationManager;
+
+
+        public NotificationChecker(Context context) {
+            this.context = context;
+            notificationInit();
+            timerRunnable.run();
+        }
+
+        /**
+         * Runnable that runs every 5 seconds to check for notifications
+         */
+        Runnable timerRunnable = new Runnable() {
+            public void run() {
+                timerHandler.postDelayed(this, 5000);
+                sendNotification();
+            }
+        };
+
+        /**
+         * Loads the tasks that have the notification flag set to true
+         */
+        private void loadTasks() {
+            ArrayList<String> query = new ArrayList<>();
+            query.add("and");
+            query.add("username");
+            query.add(NavigationActivity.thisUser);
+            query.add("shouldNotify");
+            query.add("true");
+            DataManager.getTasks getTasks = new DataManager.getTasks(context);
+            getTasks.execute(query);
+            try {
+                taskList = getTasks.get();
+                System.out.println("User: " + NavigationActivity.thisUser + "  size: " + Integer.toString(taskList.size()));
+                // Sends the notification if there are any new tasks that need to notify the user
+                if (taskList.size() > 0) {
+                    shouldSendNotification = true;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * Initializes the notification
+         */
+        private void notificationInit() {
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            // Create the intent that brings the user to the login page
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("isMyBids", 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            // Setup the notification with the proper settings
+            mBuilder = new NotificationCompat.Builder(context, "default")
+                    .setSound(alarmSound) // A sound for the notification
+                    .setSmallIcon(R.drawable.ic_menu_send) //notification icon
+                    .setAutoCancel(true) // Set to cancel when tapped
+                    .setContentTitle("Orbid") // Notification Title
+                    .setContentText("You have a new Bid!") // Notification description
+                    .setContentIntent(pendingIntent); // Intent to take you to my requests
+            // Create the notification manager and send the notification
+            notificationManager = NotificationManagerCompat.from(context);
+        }
+
+        /**
+         * Sends the notification to the user
+         */
+        private void sendNotification() {
+            loadTasks();
+            if(shouldSendNotification) {
+                // Send the notification
+                notificationManager.notify(1, mBuilder.build());
+                // Clear all the notification flags:
+                for(Task t: taskList) {
+                    t.setShouldNotify(false);
+                }
+                // Update the task in DM
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks(context);
+                updateTasks.execute(taskList);
+                shouldSendNotification = false;
+            }
+        }
+    }
+
     /**
      * Verifies that the client has been established before trying to call server
      */
@@ -517,4 +618,6 @@ public class DataManager {
         }
         Log.i("Offline", "cached tasks have been stored");
     }
+
+
 }
