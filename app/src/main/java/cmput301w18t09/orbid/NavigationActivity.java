@@ -27,7 +27,6 @@ import android.widget.FrameLayout;
  * @see MapActivity
  * @see PlaceBidActivity
  * @see RecentListingsActivity
- * @see TaskBidListActivity
  * @see TaskDetailsActivity
  */
 public class NavigationActivity extends AppCompatActivity
