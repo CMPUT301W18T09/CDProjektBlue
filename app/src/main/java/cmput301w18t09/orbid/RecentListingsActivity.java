@@ -233,7 +233,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         MapActivity mapActivity = new MapActivity();
         FragmentManager fm = getSupportFragmentManager();
         Bundle bundle = new Bundle();
-        bundle.putString("type", "recent_listings");
+        bundle.putString("came_from", "recent_listings");
         mapActivity.setArguments(bundle);
         fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
     }
