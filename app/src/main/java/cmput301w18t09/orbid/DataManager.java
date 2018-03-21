@@ -548,12 +548,12 @@ public class DataManager {
                 // Send the notification
                 notificationManager.notify(1, mBuilder.build());
                 shouldSendNotification = false;
+                // Update the task in DM
+                updateTasks updateTasks = new updateTasks(context);
+                updateTasks.execute(taskList);
+                // Clear the taskList
+                taskList.removeAll(taskList);
             }
-            // Update the task in DM
-            updateTasks updateTasks = new updateTasks(context);
-            updateTasks.execute(taskList);
-            // Clear the taskList
-            taskList.removeAll(taskList);
         }
     }
 
