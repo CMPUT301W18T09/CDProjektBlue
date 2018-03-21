@@ -99,19 +99,6 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             if(!task.getShouldNotify()) {
                 task.setShouldNotify(true);
             }
-
-            // I'm temporarily going to hide the code for the notification here
-            // How dare you
-            /*
-
-            // Set notification flag to false
-            task.setShouldNotify(False);
-            // Update the task in DM
-            ArrayList<Task> taskList = new ArrayList<>();
-            taskList.add(task);
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
-            updateTasks.execute(taskList);
-             */
             finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();

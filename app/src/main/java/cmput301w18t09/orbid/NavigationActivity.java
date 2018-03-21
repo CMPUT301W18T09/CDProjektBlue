@@ -72,6 +72,8 @@ public class NavigationActivity extends AppCompatActivity
             FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
             inflater.inflate(callerLayoutID, frameLayout);
         }
+        DataManager.NotificationChecker notificationChecker = new DataManager.NotificationChecker(this);
+
     }
 
     /**
