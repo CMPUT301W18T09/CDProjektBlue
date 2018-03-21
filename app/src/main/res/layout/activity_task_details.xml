@@ -37,9 +37,11 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_marginTop="11dp"
+        android:layout_alignBottom="@+id/details_task_description"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@+id/details_task_description"
         android:layout_toRightOf="@+id/details_task_description"
-        android:layout_alignBaseline="@id/details_task_description"
         android:background="@color/colorTheme" />
 
 
