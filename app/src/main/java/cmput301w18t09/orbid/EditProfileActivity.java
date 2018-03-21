@@ -61,7 +61,11 @@ public class EditProfileActivity extends NavigationActivity {
         getUsers.execute(queryParameters);
         try {
             returnUsers = getUsers.get();
-            currentUser = returnUsers.get(0);
+            if (returnUsers.size() > 0) {
+                currentUser = returnUsers.get(0);
+            } else {
+                Toast.makeText(this, "This user may no longer exist", Toast.LENGTH_LONG).show();
+            }
         }
         catch (Exception e) {
             Log.e("Error", "Failed to get ArrayList intended as return from getUsers");
