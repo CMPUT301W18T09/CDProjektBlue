@@ -1,9 +1,14 @@
 package cmput301w18t09.orbid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +19,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * The navigation drawer that is seen as the main menu across most activities for ease of use --
@@ -30,9 +40,11 @@ import android.widget.FrameLayout;
  * @see TaskDetailsActivity
  */
 public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public static String thisUser;
+    private GoogleApiClient googleApiClient;
+    public static Location thisLocation;
     private DataManager.NotificationChecker notificationChecker;
 
     /**
@@ -74,6 +86,14 @@ public class NavigationActivity extends AppCompatActivity
         }
         notificationChecker = new DataManager.NotificationChecker(this);
 
+
+        // Set up connection to google api for geo location
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
+
     }
 
     /**
@@ -108,17 +128,12 @@ public class NavigationActivity extends AppCompatActivity
      * @param item The menu item clicked
      * @return Boolean constant true (item was clicked successfully)
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        /*
-        if (id == R.id.action_settings) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     /**
      * Handles the navigation item clicks (like my tasks, logout, etc).
@@ -175,4 +190,28 @@ public class NavigationActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
+                googleApiClient);
+        if (myLocation != null) {
+            Log.i("MAP", "Location is: " + myLocation.toString());
+            this.thisLocation = myLocation;
+        } else {
+            Log.i("MAP", "Location is null:");
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("MAP", "There was an error connecting: " + connectionResult);
+    }
+
 }

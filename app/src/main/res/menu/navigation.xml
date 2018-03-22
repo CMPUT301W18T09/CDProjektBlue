@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/RefreshButton"
+        android:icon="@drawable/quantum_ic_refresh_white_24"
+        android:title="Refresh"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/AddButton"
+        android:enabled="false"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Add"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

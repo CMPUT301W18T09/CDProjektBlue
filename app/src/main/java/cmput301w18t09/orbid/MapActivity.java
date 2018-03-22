@@ -67,18 +67,19 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
         getLocation();
-        if (myLocation != null) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(17)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
+//        if (myLocation != null) {
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
+//
+//            CameraPosition cameraPosition = new CameraPosition.Builder()
+//                    .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))      // Sets the center of the map to location user
+//                    .zoom(17)                   // Sets the zoom
+//                    .bearing(90)                // Sets the orientation of the camera to east
+//                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+//                    .build();                   // Creates a CameraPosition from the builder
+//            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//        }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override

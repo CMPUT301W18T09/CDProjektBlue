@@ -70,7 +70,7 @@ import java.util.concurrent.ExecutionException;
  * @author Chady Haidar, Aidan Kosik, Zach Refern
  * @see Task
  */
-public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private EditText etDescription;
     private EditText etTitle;
@@ -87,7 +87,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
-    private GoogleApiClient googleApiClient;
     private boolean permissionsGranted = true;
 
     @Override
@@ -120,13 +119,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
-
-        // Set up connection to google api for geo location
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
-        googleApiClient.connect();
     }
 
     /**
@@ -239,6 +231,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     @SuppressLint("MissingPermission")
     private void save() {
+
+        // Add location to the task
+        task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -542,30 +537,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         });
 
     }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
-                googleApiClient);
-        if (myLocation != null) {
-            Log.i("MAP", "Location is: " + myLocation.toString());
-            task.setLocation(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
-        } else {
-            Log.i("MAP", "Location is null:");
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("MAP", "There was an error connecting: " + connectionResult);
-    }
-
 
     /**
      * Textwatcher code taken from https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android

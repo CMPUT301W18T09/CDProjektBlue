@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -118,6 +119,31 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         recyclerView.setHasFixedSize(true);
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        menu.getItem(0).setVisible(true);
+        return true;
+    }
+
+    /**
+     * Function for when an options item is selected.
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.RefreshButton) {
+            // Todo refresh the page/the tasks
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Gets all of the tasks that are requested or bidded and stores
      * them in the taskList ArrayList.
@@ -200,21 +226,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         taskListAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Function for when an options item is selected.
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Parses a string of keywords and returns a result list of
