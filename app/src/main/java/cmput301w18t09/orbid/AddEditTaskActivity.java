@@ -58,7 +58,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
@@ -444,14 +446,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         //Updates the recycler image view to show the image selected
         if(resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
+                int dataSize = 0;
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                    if(bitmap.getByteCount() > 65536) {
+                    // Get the size of the image
+                    try {
+                        InputStream fileInputStream=getApplicationContext().getContentResolver().openInputStream(selectedimg);
+                        dataSize = fileInputStream.available();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // Check if the image is too large
+                    if(dataSize > 65536) {
                         Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                     } else {
                         task.addPhoto(bitmap);
                         imageAdapter.updateList(task.getPhotoList());
                     }
+
                 } catch (IOException e) {
 
                 }
