@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Activity used when placing a bid on a given task
  *
- * @author Aidan Kosik, Chady Haidar
+ * @author Aidan Kosik, Chady Haidar, Zach Redfern
  */
 public class PlaceBidActivity extends TaskDetailsActivity {
 
@@ -73,6 +73,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * @param view
      */
     public void makeBid(View view) {
+
+        // Inform the user if they attempt to make a bid offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Log.i("BID", "title is empty: " + etPrice.getText().toString());
         Log.i("BID", "description is empty: " + etDescription.getText().toString());
 

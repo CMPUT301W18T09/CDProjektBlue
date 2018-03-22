@@ -17,8 +17,12 @@ import android.widget.StackView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
 
@@ -26,7 +30,7 @@ import java.util.concurrent.ExecutionException;
  * Activity Class that lists the details of all the recent listings
  * Tasks, as well as Assigned and Completed tasks in My Requests.
  *
- * @author Aidan Kosik, Chady Haidar
+ * @author Aidan Kosik, Chady Haidar, Zach Redfern
  */
 public class TaskDetailsActivity extends NavigationActivity{
 
@@ -138,8 +142,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         bid = task.getBidList().get(b);
         textLowestBid = findViewById(R.id.details_lowest_bid);
 
-        // Show the buttons if the task is Assigned
-        if(isAssigned == 1) {
+        // Show the buttons if the task is Assigned, only if the network is available
+        if (isAssigned == 1) {
             Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
             Button repostBtn = (Button) findViewById(R.id.repostButton);
             fulfilledBtn.setVisibility(View.VISIBLE);
@@ -230,7 +234,24 @@ public class TaskDetailsActivity extends NavigationActivity{
      * @param view The Activity view
      */
     public void fulfilled(View view) {
+
+        // Don't allow the user to set tasks to complete when offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         task.setStatus(Task.TaskStatus.COMPLETED);
+
+        // Alter the task in the backup list to match the status of the fulfilled task
+        ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        while (it.hasNext()) {
+            if (it.next().getID().equals(task.getID())) {
+                it.set(task);
+                break;
+            }
+        }
+
         save();
         finish();
     }
@@ -241,11 +262,28 @@ public class TaskDetailsActivity extends NavigationActivity{
      * @param view The activity view
      */
     public void repost(View view) {
+
+        // Don't allow user to repost tasks when offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // Remove the previously accepted bid
         ArrayList<Bid> temp = new ArrayList<>();
         task.setBidList(temp);
         task.acceptBid(-1);
         task.setStatus(Task.TaskStatus.REQUESTED);
+
+        // Alter the task in the backup list to match the status of the reposted task
+        ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        while (it.hasNext()) {
+            if (it.next().getID().equals(task.getID())) {
+                it.set(task);
+                break;
+            }
+        }
+
         save();
         finish();
     }
@@ -254,6 +292,13 @@ public class TaskDetailsActivity extends NavigationActivity{
      * Opens the user info dialog when pressed
      */
     public void openUserInfo(String username) {
+
+        // Inform the user if they attempt to get user information while offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
         UserProfileDialog dialog = new UserProfileDialog();
@@ -342,11 +387,20 @@ public class TaskDetailsActivity extends NavigationActivity{
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            if (taskList.size() > 0) {
-                task = taskList.get(0);
-            } else {
-                Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+
+            // If there is no network available, fetch the backup task
+            if (!DataManager.isNetworkAvailable()) {
+                task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
+            else {
+                if (taskList.size() > 0) {
+                    task = taskList.get(0);
+                } else {
+                    Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+                    // TODO: This doesn't prevent null pointer exception when the program continues, must resolve
+                }
+            }
+          
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

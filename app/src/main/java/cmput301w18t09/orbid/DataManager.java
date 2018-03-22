@@ -5,6 +5,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
@@ -48,7 +50,7 @@ import io.searchbox.core.SearchResult;
 /**
  * Handles all communication between the application and the server
  *
- * @author Ceegan Hale
+ * @author Ceegan Hale, Zach Redfern, David Laycock
  * @see User
  * @see Task
  */
@@ -56,6 +58,7 @@ import io.searchbox.core.SearchResult;
 public class DataManager {
 
     private static JestDroidClient client;
+    public static ArrayList<Task> backupTasks;
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
@@ -86,6 +89,7 @@ public class DataManager {
                 Index index = new Index.Builder(task).index("cmput301w18t09").type("task").build();
                 try{
                     DocumentResult result = client.execute(index);
+
                     if (result.isSucceeded()){
                         task.setID(result.getId());
                         Log.v("id", task.getID());
@@ -306,6 +310,65 @@ public class DataManager {
                     Log.e("Error", "Failed to connect to the elastic search server");
                     cachedTasks.add(task);
                     saveInFile();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Updates a task when it has no ID. Functions exactly like regular update task, only
+     * this searches the cachedTasks list for a match of the task before update and replaces
+     * it with the after update version. Class is used to resolve a special case where tasks are
+     * added to the cached list twice.
+     */
+    public static class updateTaskNoID extends AsyncTask<ArrayList<Task>, Void, Void>{
+
+        private Task oldTask;
+
+        public updateTaskNoID(Context cont, Task oldTask){
+            this.oldTask = oldTask;
+            if (context == null){
+                context = cont;
+            }
+        }
+
+        /**
+         * @see updateTasks
+         * @param passed An array list of tasks to update
+         * @return no return
+         */
+        @Override
+        protected Void doInBackground(ArrayList<Task>... passed){
+            verifySettings();
+            ArrayList<Task> tasks = passed[0];
+
+            for (Task task: tasks){
+                try {
+                    DocumentResult result = client.execute(new Index.Builder(task).index("cmput301w18t09").type("task").id(task.getID()).build());
+
+                    if (result.isSucceeded()){
+                        Log.v("Success", "Task has been updated");
+                        pushCached();
+                    }
+                    else{
+                        Log.e("Error", "Update has failed");
+                        cachedTasks.add(task);
+                        saveInFile();
+                    }
+
+                }
+                catch (Exception e){
+                    Log.e("Error", "Failed to connect to the elastic search server");
+
+                    for (int i = 0; i < cachedTasks.size(); ++i) {
+                        if (Task.compareTasks(oldTask, cachedTasks.get(i))) {
+                            cachedTasks.set(i, task);
+                            saveInFile();
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -664,5 +727,27 @@ public class DataManager {
         Log.i("Offline", "cached tasks have been stored");
     }
 
+    /**
+     * Tests if the device has an available internet connection by pinging a server
+     *
+     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
+     * Taken from user Levit on March 19, 2018
+     *
+     * @return True if the device has internet connection, false otherwise
+     */
+    public static boolean isNetworkAvailable() {
+
+        // ICMP
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
 
 }
