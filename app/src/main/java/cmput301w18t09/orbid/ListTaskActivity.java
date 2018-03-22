@@ -82,7 +82,9 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
-        menu.getItem(0).setVisible(true);
+        // Refresh button in action bar
+        menu.getItem(0).setVisible(false);
+        // Add button in action bar
         menu.getItem(1).setVisible(true);
         return true;
     }
