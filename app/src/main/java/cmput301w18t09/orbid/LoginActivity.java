@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 @SuppressWarnings("ALL")
@@ -22,6 +30,9 @@ public class LoginActivity extends AppCompatActivity{
     private Button btnCreateAccount;
     private EditText etUsername;
     private static String currentUsername;
+
+    public static ArrayList<Task> backupTasks;
+    public static final String backupTasksFile = "backupTasks.sav";
 
     /**
      * Instantiates the login activity.
@@ -59,6 +70,12 @@ public class LoginActivity extends AppCompatActivity{
      */
     private void openRecentListingsActivity() {
 
+        // Tell the user if they cannot login due to being offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot login while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
@@ -84,12 +101,27 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
 
-        // Prepare the recent listings activity and launch it
+        // Prepare the recent listings
         Intent intent = new Intent(this, RecentListingsActivity.class);
         currentUsername = etUsername.getText().toString();
         intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
         intent.putExtra("isLogin", "true");
         intent.putExtra("username", currentUsername);
+
+        // Get all tasks related to the user
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        ArrayList<String> query = new ArrayList<>();
+        query.add("and");
+        query.add("requester");
+        query.add(currentUsername);
+        try {
+            getTasks.execute(query);
+            DataManager.backupTasks = getTasks.get();
+        } catch (Exception e) {
+            // TODO: Handle
+        }
+
+
         this.startActivity(intent);
     }
 
@@ -121,4 +153,6 @@ public class LoginActivity extends AppCompatActivity{
     public void onBackPressed() {
 
     }
+
+
 }

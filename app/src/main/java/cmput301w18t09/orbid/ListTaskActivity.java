@@ -15,7 +15,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * Assigned and Completed. It will also list the tasks a bidder bidded on
  * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
  *
- * @author Chady Haidar
+ * @author Chady Haidar, Zach Redfern
  */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
@@ -172,16 +180,33 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             DataManager.getTasks getTasks = new DataManager.getTasks(this);
             getTasks.execute(query);
             try {
-                taskList = getTasks.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+
+                // If no network is available, use the backup tasks, else fetch from the server
+                if (!DataManager.isNetworkAvailable()) {
+
+                    // Create a copy of the backupTasks
+                    taskList = new ArrayList<>(DataManager.backupTasks);
+
+                    // Remove tasks that don't have the status of the current filter
+                    Task.TaskStatus status;
+                    ListIterator<Task> it = taskList.listIterator();
+                    while (it.hasNext()) {
+                        status = it.next().getStatus();
+                        if (status != taskStatus) {
+                            it.remove();
+                        }
+                    }
+
+                }
+                else {
+                    taskList = getTasks.get();
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             DataManager.getTasks getTasks = new DataManager.getTasks(this);
             ArrayList<String> arguments = new ArrayList<>();
-            ArrayList<Task> result = new ArrayList<>();
             arguments.add("and");
             arguments.add("provider");
             arguments.add(thisUser);
@@ -230,6 +255,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
                 intent.putExtra("_id", taskList.get(position).getID());
                 intent.putExtra("isAdd", 0);
+
+                // Pass the task to be viewed in case we are offline
+                String backupTask = (new Gson().toJson(taskList.get(position)));
+                intent.putExtra("backupTask", backupTask);
+
                 this.startActivity(intent);
             }
 
@@ -240,6 +270,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
                 intent.putExtra("_id", taskList.get(position).getID());
                 intent.putExtra("isAdd", 3);
+
+                // Pass the task to be viewed in case we are offline
+                String backupTask = (new Gson().toJson(taskList.get(position)));
+                intent.putExtra("backupTask", backupTask);
+
                 this.startActivity(intent);
             }
 
@@ -253,6 +288,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                 } else {
                     intent.putExtra("isAssigned", 2);
                 }
+
+                // Pass the task to be viewed in case we are offline
+                String backupTask = (new Gson().toJson(taskList.get(position)));
+                intent.putExtra("backupTask", backupTask);
+
                 this.startActivity(intent);
             }
         } else {
@@ -260,6 +300,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             Intent intent = new Intent(this, TaskDetailsActivity.class);
             intent.putExtra("_id", taskList.get(position).getID());
             intent.putExtra("isBid", 1);
+
+            // Pass the task to be viewed in case we are offline
+            String backupTask = (new Gson().toJson(taskList.get(position)));
+            intent.putExtra("backupTask", backupTask);
+
             this.startActivity(intent);
         }
     }

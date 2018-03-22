@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,17 +55,19 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
 /**
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
  *
- * @author Chady Haidar, Aidan Kosik
+ * @author Chady Haidar, Aidan Kosik, Zach Refern
  * @see Task
  */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -86,7 +90,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private GoogleApiClient googleApiClient;
     private boolean permissionsGranted = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +97,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Receive the layout ID from navigation activity
         isAdd = getIntent().getIntExtra("isAdd", 0);
         id = getIntent().getStringExtra("_id");
-
 
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -250,10 +252,20 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if(task.getPrice() == 0) {
             Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
         } else {
+
             // Save the new task to the DM
-            DataManager.addTasks object = new DataManager.addTasks(this);
-            object.execute(task);
-            update();
+            Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
+            if (btnSavePost.getText().equals("Post")) {
+                DataManager.addTasks object = new DataManager.addTasks(this);
+                object.execute(task);
+                DataManager.backupTasks.add(task);
+            }
+
+            // Update the task only if we are editing
+            if (btnSavePost.getText().equals("Save")) {
+                update();
+            }
+
             finish();
         }
     }
@@ -266,10 +278,41 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void update() {
 
         // Update the task if it's being editted
+        Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
+        ListIterator<Task> it = DataManager.backupTasks.listIterator();
         ArrayList<Task> n = new ArrayList<>();
         n.add(task);
-        DataManager.updateTasks object = new DataManager.updateTasks(context);
-        object.execute(n);
+
+        // If we are editing a task that was created offline and we have not yet made a
+        // connection, do a special update that will insert the task in the correct spot in the
+        // cached list. If connection is regained, we will send the item to the server as normal
+        if (task.getID() == null && btnSavePost.getText().equals("Save")) {
+
+            Task oldTask = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
+            DataManager.updateTaskNoID object = new DataManager.updateTaskNoID(context, oldTask);
+            ArrayList<Task> backupTasks = DataManager.backupTasks;
+            object.execute(n);
+
+            for (int i = 0; i < backupTasks.size(); ++i) {
+                if (Task.compareTasks(oldTask, backupTasks.get(i))) {
+                    backupTasks.set(i, task);
+                    break;
+                }
+            }
+
+        }
+        else {
+
+            DataManager.updateTasks object = new DataManager.updateTasks(context);
+            object.execute(n);
+
+            while (it.hasNext()) {
+                if (it.next().getID().equals(task.getID())) {
+                    it.set(task);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -289,15 +332,23 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            if (taskList.size() > 0) {
-                task = taskList.get(0);
-            } else {
-                Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent( this, ListTaskActivity.class);
-                intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-                intent.putExtra("isMyBids",0);
-                this.startActivity(intent);
+
+            // If there is no network available, fetch the backup task
+            if (!DataManager.isNetworkAvailable()) {
+                task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
+            else {
+              if (taskList.size() > 0) {
+                  task = taskList.get(0);
+              } else {
+                  Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+                  Intent intent = new Intent( this, ListTaskActivity.class);
+                  intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                  intent.putExtra("isMyBids",0);
+                  this.startActivity(intent);
+              }   
+            }
+
             etPrice.setText(Double.toString(task.getPrice()));
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
@@ -343,9 +394,25 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @param view The current activity view
      */
     public void deleteButton(View view) {
+
+        // Don't allow a user to delete tasks while offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());
         DataManager.deleteTasks object = new DataManager.deleteTasks(this);
+
+        // Find the task in the backup list and remove it
+        ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        while (it.hasNext()) {
+            if (it.next().getID().equals(task.getID())) {
+                it.remove();
+            }
+        }
+
         object.execute(n);
         finish();
     }
@@ -362,7 +429,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         pickIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(pickIntent, SELECT_PICTURE);
     }
-
 
     /**
      * Adds the bitmap to the image list after a user selects/takes a photo
@@ -407,6 +473,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     @Override
     public void onClick(View view, int position, int type) {
+
+        // Don't allow a user to accept or decline bids while off the network
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         // Get the bid that was tapped
         final Bid bid = bidList.get(position);
