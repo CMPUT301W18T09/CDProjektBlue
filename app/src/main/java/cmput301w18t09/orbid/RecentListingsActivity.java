@@ -184,7 +184,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                 if (status == Task.TaskStatus.ASSIGNED) {
                     it.remove();
                 }
-                else if (status == Task.TaskStatus.BIDDED) {
+                else if (status == Task.TaskStatus.COMPLETED) {
                     it.remove();
                 }
             }
