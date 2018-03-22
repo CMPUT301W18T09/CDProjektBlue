@@ -76,6 +76,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(tbtnToggle);
 
+
         searchView = findViewById(R.id.search_view);
 //        searchView.setOnSearchClickListener(new View.OnClickListener() {
 //            @Override
@@ -107,6 +108,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         }
 
         Collections.reverse(taskList);
+
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
