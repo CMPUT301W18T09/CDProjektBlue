@@ -205,7 +205,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         task_description.setText(task.getDescription());
         text_task_status.setText(task.getStatus().toString());
         // Set the bid
-        setBid((TextView)findViewById(R.id.details_lowest_bid));
+        setBid((TextView) findViewById(R.id.details_lowest_bid));
     }
 
     /**
