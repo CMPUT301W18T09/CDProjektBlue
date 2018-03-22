@@ -119,6 +119,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             checkLocationPermission();
         }
 
+        // Set up connection to google api for geo location
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -236,23 +237,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     @SuppressLint("MissingPermission")
     private void save() {
-
-        // Add location to the task
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            // Logic to handle location object
-//                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                            task.setLocation(latLng);
-//                            Log.i("MAP", "Location is" + task.getLocation());
-//                        } else {
-//                            Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
-//                        }
-//                    }
-//                });
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
