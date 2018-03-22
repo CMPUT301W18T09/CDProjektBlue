@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
  * Activity Class that lists the details of all the recent listings
  * Tasks, as well as Assigned and Completed tasks in My Requests.
  *
- * @author Chady Haidar
+ * @author Aidan Kosik, Chady Haidar
  */
 public class TaskDetailsActivity extends NavigationActivity{
 

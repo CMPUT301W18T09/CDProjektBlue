@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Activity used when placing a bid on a given task
  *
- * @author Chady Haidar
+ * @author Aidan Kosik, Chady Haidar
  */
 public class PlaceBidActivity extends TaskDetailsActivity {
 

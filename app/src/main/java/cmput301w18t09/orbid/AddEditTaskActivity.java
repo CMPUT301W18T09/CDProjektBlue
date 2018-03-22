@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -42,8 +44,13 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.Manifest;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -56,10 +63,10 @@ import java.util.concurrent.ExecutionException;
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
  *
- * @author Chady Haidar
+ * @author Chady Haidar, Aidan Kosik
  * @see Task
  */
-public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
+public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private EditText etDescription;
     private EditText etTitle;
@@ -76,9 +83,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
-    private FusedLocationProviderClient fusedLocationClient;
+    private GoogleApiClient googleApiClient;
     private boolean permissionsGranted = true;
-
 
 
     @Override
@@ -112,7 +118,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
     }
 
     /**
@@ -227,21 +238,21 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
 
         // Add location to the task
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            task.setLocation(latLng);
-                            Log.i("MAP", "Location is" + task.getLocation());
-                        } else {
-                            Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
-                        }
-                    }
-                });
+//        fusedLocationClient.getLastLocation()
+//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        // Got last known location. In some rare situations this can be null.
+//                        if (location != null) {
+//                            // Logic to handle location object
+//                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//                            task.setLocation(latLng);
+//                            Log.i("MAP", "Location is" + task.getLocation());
+//                        } else {
+//                            Toast.makeText(context, "Your location could not be set", Toast.LENGTH_LONG);
+//                        }
+//                    }
+//                });
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -474,6 +485,29 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         });
 
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
+                googleApiClient);
+        if (myLocation != null) {
+            Log.i("MAP", "Location is: " + myLocation.toString());
+            task.setLocation(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
+        } else {
+            Log.i("MAP", "Location is null:");
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("MAP", "There was an error connecting: " + connectionResult);
     }
 
 
