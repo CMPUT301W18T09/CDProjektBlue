@@ -137,7 +137,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.RefreshButton) {
+        if (id == R.id.MenuItem_RefreshButton) {
             getListings();
             taskListAdapter.notifyDataSetChanged();
         }
