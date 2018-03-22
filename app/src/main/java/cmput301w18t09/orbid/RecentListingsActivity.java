@@ -73,7 +73,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
         // Fill taskList with all tasks
         getListings();
-        Collections.reverse(taskList);
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

@@ -1,12 +1,16 @@
 package cmput301w18t09.orbid;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -445,7 +449,11 @@ public class DataManager {
         private Context context;
         private NotificationCompat.Builder mBuilder;
         private NotificationManagerCompat notificationManager;
+        private NotificationManager manager;
         private Boolean shouldContinue = true;
+        private static final String NOTIFICATION_CHANNEL_ID = "4031";
+        private String channelName = "Channel";
+
 
 
         public NotificationChecker(Context context) {
@@ -474,18 +482,29 @@ public class DataManager {
             }
         };
 
+
         /**
          * Initializes the notification
          */
         private void notificationInit() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create the NotificationChannel, but only on API 26+ because
+                // the NotificationChannel class is new and not in the support library
+                String description = "notificationChannel";
+                NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+                channel.setDescription(description);
+                // Register the channel with the system
+                manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+            }
+            notificationManager = NotificationManagerCompat.from(context);
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             // Create the intent that brings the user to the login page
             Intent intent = new Intent(context, LoginActivity.class);
-            intent.putExtra("isMyBids", 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             // Setup the notification with the proper settings
-            mBuilder = new NotificationCompat.Builder(context, "default")
+            mBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setSound(alarmSound) // A sound for the notification
                     .setSmallIcon(R.drawable.ic_menu_send) //notification icon
                     .setAutoCancel(true) // Set to cancel when tapped
@@ -493,7 +512,6 @@ public class DataManager {
                     .setContentText("You have a new Bid!") // Notification description
                     .setContentIntent(pendingIntent); // Intent to take you to my requests
             // Create the notification manager and send the notification
-            notificationManager = NotificationManagerCompat.from(context);
         }
 
         /**
@@ -539,7 +557,11 @@ public class DataManager {
             loadTasks();
             if(shouldSendNotification) {
                 // Send the notification
-                notificationManager.notify(1, mBuilder.build());
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    manager.notify(1, mBuilder.build());
+                } else {
+                    notificationManager.notify(1, mBuilder.build());
+                }
                 shouldSendNotification = false;
                 // Update the task in DM
                 ArrayList<Task> tempList = new ArrayList<>();
