@@ -462,7 +462,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         super.onActivityResult(requestCode, resultCode, data);
 
         //Updates the recycler image view to show the image selected
-        if(resultCode==RESULT_OK) {
+        if (resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
