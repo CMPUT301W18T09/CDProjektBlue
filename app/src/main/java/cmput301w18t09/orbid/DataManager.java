@@ -512,26 +512,19 @@ public class DataManager {
                 taskList = getTasks.get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                Log.e("NotificationTasks", "Failed to load tasks");
             } catch (ExecutionException e) {
                 e.printStackTrace();
-                Log.e("NotificationTasks", "Failed to load tasks");
             }
-            System.out.println("Initial Task list size: " + Integer.toString(taskList.size()));
             ArrayList<Task> removeList = new ArrayList<>();
             for(Task t: taskList) {
-                System.out.println("BEFORE: Title: " + t.getTitle() + " notify: "+  Boolean.toString(t.getShouldNotify()));
                 if(!t.getShouldNotify()) {
                     removeList.add(t);
+                } else {
+                    // Sends the notification if there are any new tasks that need to notify the user
+                    shouldSendNotification = true;
                 }
             }
-            System.out.println("RemoveList size: " + Integer.toString(removeList.size()));
             taskList.removeAll(removeList);
-            System.out.println("Task list size: " + Integer.toString(taskList.size()));
-            // Sends the notification if there are any new tasks that need to notify the user
-            if (taskList.size() > 0) {
-                shouldSendNotification = true;
-            }
             // Clear all the notification flags:
             for(Task t: taskList) {
                 t.setShouldNotify(false);
@@ -549,8 +542,12 @@ public class DataManager {
                 notificationManager.notify(1, mBuilder.build());
                 shouldSendNotification = false;
                 // Update the task in DM
+                ArrayList<Task> tempList = new ArrayList<>();
+                for(Task t: taskList) {
+                    tempList.add(t);
+                }
                 updateTasks updateTasks = new updateTasks(context);
-                updateTasks.execute(taskList);
+                updateTasks.execute(tempList);
                 // Clear the taskList
                 taskList.removeAll(taskList);
             }
