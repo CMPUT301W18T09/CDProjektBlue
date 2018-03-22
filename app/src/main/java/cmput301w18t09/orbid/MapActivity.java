@@ -1,6 +1,8 @@
 package cmput301w18t09.orbid;
 
 import android.content.Intent;
+import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,9 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ToggleButton;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -24,11 +33,13 @@ import java.util.concurrent.ExecutionException;
  *
  * @author Aidan Kosik, Zach Redfern, Google
  */
-public class MapActivity extends Fragment implements OnMapReadyCallback {
+public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private ArrayList<Task> taskList = new ArrayList<>();
     private ToggleButton tbtnToggle;
+    private GoogleApiClient googleApiClient;
+    private Location myLocation = null;
 
     @Nullable
     @Override
@@ -56,6 +67,18 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        getLocation();
+        if (myLocation != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -105,7 +128,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         // Place all of the markers on the map and center on current location
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-
+                Log.i("MAP", "Location " + task.getTitle() + " is " + task.getLocation().toString());
                 mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
             }
         }
@@ -148,5 +171,36 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     private void openRecentListingsActivity()
     {
         // Todo
+    }
+
+    public void getLocation() {
+        // Set up connection to google api for geo location
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Location location = LocationServices.FusedLocationApi.getLastLocation(
+                googleApiClient);
+        if (location != null) {
+            this.myLocation = location;
+            Log.i("MAP", "Location is: " + myLocation.toString());
+        } else {
+            Log.i("MAP", "Location is null:");
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("MAP", "There was an error connecting: " + connectionResult);
     }
 }

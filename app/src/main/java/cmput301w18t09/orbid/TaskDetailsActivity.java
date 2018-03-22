@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
  * Activity Class that lists the details of all the recent listings
  * Tasks, as well as Assigned and Completed tasks in My Requests.
  *
- * @author Chady Haidar, Zach Redfern
+ * @author Aidan Kosik, Chady Haidar, Zach Redfern
  */
 public class TaskDetailsActivity extends NavigationActivity{
 
@@ -209,7 +209,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         task_description.setText(task.getDescription());
         text_task_status.setText(task.getStatus().toString());
         // Set the bid
-        setBid((TextView)findViewById(R.id.details_lowest_bid));
+        setBid((TextView) findViewById(R.id.details_lowest_bid));
     }
 
     /**

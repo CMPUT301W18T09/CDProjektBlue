@@ -1,10 +1,21 @@
 package cmput301w18t09.orbid;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
@@ -493,6 +505,140 @@ public class DataManager {
         }
     }
 
+    public static class NotificationChecker {
+        private Handler timerHandler = new Handler();
+        private ArrayList<Task> taskList;
+        private Boolean shouldSendNotification = false;
+        private Context context;
+        private NotificationCompat.Builder mBuilder;
+        private NotificationManagerCompat notificationManager;
+        private NotificationManager manager;
+        private Boolean shouldContinue = true;
+        private static final String NOTIFICATION_CHANNEL_ID = "4031";
+        private String channelName = "Channel";
+
+
+
+        public NotificationChecker(Context context) {
+            this.context = context;
+            notificationInit();
+            timerRunnable.run();
+        }
+
+        /**
+         * Tells the runnable method to run or not
+         * @param shouldContinue
+         */
+        public void setShouldContinue(Boolean shouldContinue) {
+            this.shouldContinue = shouldContinue;
+        }
+
+        /**
+         * Runnable that runs every 5 seconds to check for notifications
+         */
+        Runnable timerRunnable = new Runnable() {
+            public void run() {
+                if(shouldContinue) {
+                    timerHandler.postDelayed(this, 10000);
+                    sendNotification();
+                }
+            }
+        };
+
+
+        /**
+         * Initializes the notification
+         */
+        private void notificationInit() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create the NotificationChannel, but only on API 26+ because
+                // the NotificationChannel class is new and not in the support library
+                String description = "notificationChannel";
+                NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+                channel.setDescription(description);
+                // Register the channel with the system
+                manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+            }
+            notificationManager = NotificationManagerCompat.from(context);
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            // Create the intent that brings the user to the login page
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            // Setup the notification with the proper settings
+            mBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                    .setSound(alarmSound) // A sound for the notification
+                    .setSmallIcon(R.drawable.ic_menu_send) //notification icon
+                    .setAutoCancel(true) // Set to cancel when tapped
+                    .setContentTitle("Orbid") // Notification Title
+                    .setContentText("You have a new Bid!") // Notification description
+                    .setContentIntent(pendingIntent); // Intent to take you to my requests
+            // Create the notification manager and send the notification
+        }
+
+        /**
+         * Loads the tasks that have the notification flag set to true
+         */
+        private void loadTasks() {
+            ArrayList<String> query = new ArrayList<>();
+            query.add("and");
+            query.add("requester");
+            query.add(NavigationActivity.thisUser);
+            //query.add("shouldNotify");
+            //query.add("true");
+            getTasks getTasks = new getTasks(context);
+            getTasks.execute(query);
+            try {
+                taskList = getTasks.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            ArrayList<Task> removeList = new ArrayList<>();
+            for(Task t: taskList) {
+                if(!t.getShouldNotify()) {
+                    removeList.add(t);
+                } else {
+                    // Sends the notification if there are any new tasks that need to notify the user
+                    shouldSendNotification = true;
+                }
+            }
+            taskList.removeAll(removeList);
+            // Clear all the notification flags:
+            for(Task t: taskList) {
+                t.setShouldNotify(false);
+            }
+        }
+
+
+        /**
+         * Sends the notification to the user
+         */
+        private void sendNotification() {
+            loadTasks();
+            if(shouldSendNotification) {
+                // Send the notification
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    manager.notify(1, mBuilder.build());
+                } else {
+                    notificationManager.notify(1, mBuilder.build());
+                }
+                shouldSendNotification = false;
+                // Update the task in DM
+                ArrayList<Task> tempList = new ArrayList<>();
+                for(Task t: taskList) {
+                    tempList.add(t);
+                }
+                updateTasks updateTasks = new updateTasks(context);
+                updateTasks.execute(tempList);
+                // Clear the taskList
+                taskList.removeAll(taskList);
+            }
+        }
+    }
+
     /**
      * Verifies that the client has been established before trying to call server
      */
@@ -603,4 +749,5 @@ public class DataManager {
 
         return false;
     }
+
 }
