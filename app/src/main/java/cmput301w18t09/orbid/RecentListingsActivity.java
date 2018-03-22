@@ -138,7 +138,8 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.RefreshButton) {
-            // Todo refresh the page/the tasks
+            getListings();
+            taskListAdapter.notifyDataSetChanged();
         }
 
         return super.onOptionsItemSelected(item);

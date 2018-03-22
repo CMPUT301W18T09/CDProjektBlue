@@ -94,7 +94,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             addTask();
         }
         if (id == R.id.RefreshButton) {
-            // Todo refresh the page/the tasks
+            filterList();
+            initRecyclerView();
         }
 
         return super.onOptionsItemSelected(item);
