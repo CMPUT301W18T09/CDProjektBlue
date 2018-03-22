@@ -90,10 +90,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.AddButton) {
+        if (id == R.id.MenuItem_AddButton) {
+            Log.i("BUTTON", "add clicked");
             addTask();
         }
-        if (id == R.id.RefreshButton) {
+        if (id == R.id.MenuItem_RefreshButton) {
             filterList();
             initRecyclerView();
         }
