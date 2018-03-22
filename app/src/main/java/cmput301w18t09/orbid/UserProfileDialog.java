@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class UserProfileDialog extends DialogFragment {
         TextView tvemail = content.findViewById(R.id.emailview);
         TextView tvphone = content.findViewById(R.id.phoneview);
         TextView tvusername = content.findViewById(R.id.username_title);
+        RatingBar rbRating = content.findViewById(R.id.ratingBar);
 
         // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(getActivity());
@@ -82,6 +84,19 @@ public class UserProfileDialog extends DialogFragment {
         tvemail.setText(user.getEmail());
         tvphone.setText(user.getPhoneNumber());
         tvfullname.setText(user.getLastName()+", "+ user.getFirstName());
+
+        Double scoreSum = 0.0;
+        Double ave = 3.7;
+        ArrayList<Review> revList = user.getReviewList();
+        if (revList != null) {
+            for (int i = 0; i < revList.size(); i++) {
+                scoreSum += revList.get(i).getRating();
+            }
+            ave = scoreSum/revList.size();
+        }
+        rbRating.setRating(Double.valueOf(ave).floatValue());
+
+
         final AlertDialog dialog = builder.create();
         dialog.show();
         return dialog;
