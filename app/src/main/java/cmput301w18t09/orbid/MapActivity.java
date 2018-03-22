@@ -105,7 +105,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         // Place all of the markers on the map and center on current location
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-
+                Log.i("MAP", "Location " + task.getTitle() + " is " + task.getLocation().toString());
                 mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
             }
         }
