@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,7 +49,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         super.onCreate(savedInstanceState);
 
         // Inflate the layout of the list task activity
-        int layoutID = getIntent().getIntExtra("tasks_layout_id", 0);
         isMyBids = getIntent().getIntExtra("isMyBids", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);

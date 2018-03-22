@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Activity used when placing a bid on a given task
  *
- * @author Chady Haidar, Zach Redfern
+ * @author Aidan Kosik, Chady Haidar, Zach Redfern
  */
 public class PlaceBidActivity extends TaskDetailsActivity {
 
@@ -99,26 +99,13 @@ public class PlaceBidActivity extends TaskDetailsActivity {
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
-            updateTasks.execute(taskList);
-
             // Notify the Task that the requester needs to receive a notification
             if(!task.getShouldNotify()) {
                 task.setShouldNotify(true);
             }
-
-            // I'm temporarily going to hide the code for the notification here
-            // How dare you
-            /*
-
-            // Set notification flag to false
-            task.setShouldNotify(False);
-            // Update the task in DM
-            ArrayList<Task> taskList = new ArrayList<>();
-            taskList.add(task);
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
-             */
+
             finish();
         } else {
             Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
