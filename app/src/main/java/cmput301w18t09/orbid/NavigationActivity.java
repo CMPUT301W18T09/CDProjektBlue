@@ -18,12 +18,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.w3c.dom.Text;
 
 /**
  * The navigation drawer that is seen as the main menu across most activities for ease of use --
@@ -76,7 +80,9 @@ public class NavigationActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        View secondary = navigationView.getHeaderView(0);
+        TextView username = secondary.findViewById(R.id.usernameTextView);
+        username.setText(thisUser);
         // Use actual ID of layout to inflate it
         int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
         if (callerLayoutID != 0) {
@@ -93,6 +99,8 @@ public class NavigationActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
+
+
 
     }
 
@@ -152,13 +160,6 @@ public class NavigationActivity extends AppCompatActivity
             Intent intent = new Intent(this, RecentListingsActivity.class);
             intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
             this.startActivity(intent);
-
-        } else if (id == R.id.nav_gallery) { // TODO: Change name of nav_gallery to represent map activity
-            notificationChecker.setShouldContinue(false);
-            MapActivity mapActivity = new MapActivity();
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
-
         } else if (id == R.id.nav_my_tasks) {
             notificationChecker.setShouldContinue(false);
             Intent intent = new Intent( this, ListTaskActivity.class);
