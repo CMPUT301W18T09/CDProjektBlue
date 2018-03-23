@@ -238,6 +238,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
         } catch(Exception e) {
+            Log.e("LatLng", "Could not get location");
         }
 
         // Check to make sure all the fields are filled in properly
