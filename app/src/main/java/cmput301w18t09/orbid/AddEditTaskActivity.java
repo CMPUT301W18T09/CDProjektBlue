@@ -235,7 +235,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
 
         // Add location to the task
-        task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+        try {
+            task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+        } catch(Exception e) {
+        }
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
