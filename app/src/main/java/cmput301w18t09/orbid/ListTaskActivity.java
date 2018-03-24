@@ -47,6 +47,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private int isMyBids;
     private int maxPages;
     private Task.TaskStatus taskStatus;
+    private int shouldWait = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,9 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_list_requested_tasks, frameLayout);
+        try {
+            shouldWait = getIntent().getIntExtra("shouldWait", 0);;
+        } catch (Exception e) {}
 
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
@@ -88,7 +92,9 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
+        // Refresh button in action bar
         menu.getItem(0).setVisible(false);
+        // Add button in action bar
         menu.getItem(1).setVisible(true);
         return true;
     }
@@ -263,10 +269,14 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public void onResume(){
         super.onResume();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch(InterruptedException e) {
+        if(shouldWait == 1) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(700);
+            } catch (InterruptedException e) {
 
+            }
+        } else {
+            shouldWait = 1;
         }
         changeLayout();
     }
