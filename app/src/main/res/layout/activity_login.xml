@@ -7,6 +7,7 @@
     tools:context="cmput301w18t09.orbid.LoginActivity"
     android:background="@color/colorTheme">
 
+
     <TextView
         android:id="@+id/login_tvAppName"
         android:layout_width="300dp"
@@ -59,4 +60,19 @@
         android:background="@drawable/new_button_background"
         android:textAllCaps="false"
         android:text="@string/signup_button" />
+
+
+    <RelativeLayout
+        android:id="@+id/loadingPanelLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 </RelativeLayout>
