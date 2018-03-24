@@ -234,6 +234,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @SuppressLint("MissingPermission")
     private void save() {
 
+        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
         // Add location to the task
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
