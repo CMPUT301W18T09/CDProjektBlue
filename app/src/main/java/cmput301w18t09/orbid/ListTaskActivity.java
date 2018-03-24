@@ -263,7 +263,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             } catch (InterruptedException e) {
 
             }
-
         } else {
             shouldWait = 1;
         }

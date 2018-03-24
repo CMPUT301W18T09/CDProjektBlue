@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity{
         btnLogin = findViewById(R.id.login_btnSignIn);
         btnLogin.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
+                findViewById(R.id.loadingPanelLogin).setVisibility(View.VISIBLE);
                 openRecentListingsActivity();
             }
         });
@@ -76,10 +77,12 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
 
+
         // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
+
 
         // Query server to ensure username exists
         queryParameters.add("username");
