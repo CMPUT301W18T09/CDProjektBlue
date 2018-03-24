@@ -27,6 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 @SuppressWarnings("ALL")
 /**
  * Uses a google maps API to view some area/location of the planet
@@ -40,6 +44,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private ToggleButton tbtnToggle;
     private GoogleApiClient googleApiClient;
     private Location myLocation = null;
+
 
     @Nullable
     @Override
@@ -68,7 +73,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-        getLocation();
 //        if (myLocation != null) {
 //            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
 //
@@ -130,9 +134,28 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         for (Task task : taskList) {
             if (task.getLocation() != null) {
                 Log.i("MAP", "Location " + task.getTitle() + " is " + task.getLocation().toString());
-                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
+                if (withinDistance(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude(),
+                        task.getLocation().latitude, task.getLocation().longitude)) {
+                    mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
+                }
             }
         }
+    }
+
+    /**
+     * Checks if a task is within 50km of another.
+     *
+     * @param lat1 - lat of the origin
+     * @param lon1 - lon of the origin
+     * @param lat2 - lat of task to check if within
+     * @param lon2 - lon of task to check if within
+     * @return if the task is within the 50km radius of the origin, true within, false outside of
+     */
+    private boolean withinDistance(double lat1, double lon1, double lat2, double lon2) {
+        double d = acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
+        double distance_km = 6371 * d;
+        Log.i("Distance", "The distance is: " + d);
+        return distance_km <= 50;
     }
 
     /**
@@ -172,15 +195,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private void openRecentListingsActivity()
     {
         // Todo
-    }
-
-    public void getLocation() {
-        // Set up connection to google api for geo location
-        googleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
-        googleApiClient.connect();
     }
 
     @Override

@@ -120,11 +120,17 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     }
 
 
-
+    /**
+     * Sets the refresh (index 0) button to visible and the add (index 1) button to invisible
+     *
+     * @param menu The menu and it's items
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
         menu.getItem(0).setVisible(true);
+        menu.getItem(1).setVisible(false);
         return true;
     }
 
