@@ -60,6 +60,13 @@ public class LoginActivity extends AppCompatActivity{
                 openCreateAccountActivity();
             }
         });
+
+        try {
+            Log.e("VERSION", getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionName);
+        }
+        catch (Exception e) {
+
+        }
     }
 
     /**
