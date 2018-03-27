@@ -11,7 +11,8 @@
         <item
             android:id="@+id/nav_my_tasks"
             android:icon="?android:attr/actionModeCopyDrawable"
-            android:title="My Requests" />
+            android:title="My Listings" />
+
         <item
             android:id="@+id/nav_manage"
             android:icon="@android:drawable/ic_menu_myplaces"

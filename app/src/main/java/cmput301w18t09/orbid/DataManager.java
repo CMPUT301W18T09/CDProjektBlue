@@ -538,7 +538,7 @@ public class DataManager {
          */
         Runnable timerRunnable = new Runnable() {
             public void run() {
-                if(shouldContinue) {
+                if(shouldContinue && isNetworkAvailable()) {
                     timerHandler.postDelayed(this, 10000);
                     sendNotification();
                 }
