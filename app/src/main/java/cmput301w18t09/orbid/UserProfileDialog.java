@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -95,6 +96,19 @@ public class UserProfileDialog extends DialogFragment {
             ave = scoreSum/revList.size();
         }
         rbRating.setRating(Double.valueOf(ave).floatValue());
+        rbRating.setIsIndicator(true);  //Stops user from changing value
+
+        //https://stackoverflow.com/questions/3443939/ratingbar-onclick
+        //https://stackoverflow.com/questions/13535640/capture-ratingbar-click
+        rbRating.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // TODO perform your action here
+                }
+                return true;
+            }
+        });
 
 
         final AlertDialog dialog = builder.create();
