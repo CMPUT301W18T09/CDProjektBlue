@@ -135,8 +135,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
             if (task.getLocation() != null) {
                 Log.i("MAP", "Location " + task.getTitle() + " is " + task.getLocation().toString());
                 if (withinDistance(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude(),
-                        task.getLocation().latitude, task.getLocation().longitude)) {
-                    mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
+                        task.getLocation().lat, task.getLocation().lng)) {
+                    LatLng latLng = new LatLng(task.getLocation().lat, task.getLocation().lng);
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(task.getTitle()).snippet(task.getID()));
                 }
             }
         }
@@ -184,7 +185,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         // Place all of the markers on the map and center on Task
         for (Task task : taskList) {
             if (task.getLocation() != null) {
-                mMap.addMarker(new MarkerOptions().position(task.getLocation()).title(task.getTitle()).snippet(task.getID()));
+                LatLng latLng = new LatLng(task.getLocation().lat, task.getLocation().lng);
+                mMap.addMarker(new MarkerOptions().position(latLng).title(task.getTitle()).snippet(task.getID()));
             }
         }
     }

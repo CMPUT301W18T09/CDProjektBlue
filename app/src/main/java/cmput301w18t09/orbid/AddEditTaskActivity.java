@@ -43,19 +43,26 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.StackView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.location.FusedLocationProviderClient;
+//import com.google.android.gms.location.LocationServices;
+//import com.google.android.gms.location.places.GeoDataClient;
+//import com.google.android.gms.location.places.PlaceDetectionClient;
+//import com.google.android.gms.location.places.Places;
+import com.google.gson.GsonBuilder;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -69,7 +76,7 @@ import java.util.concurrent.ExecutionException;
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
  *
- * @author Chady Haidar, Aidan Kosik, Zach Refern
+ * @author Chady Haidar, Aidan Kosik, Zach Redfern
  * @see Task
  */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
@@ -77,6 +84,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etPrice;
+    private TextView tvLocation;
     private Context context = this;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
@@ -108,6 +116,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
+        tvLocation = findViewById(R.id.EditTaskLocation);
 
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
@@ -238,6 +247,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Add location to the task
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+            Log.i("GEO", "Location set");
         } catch(Exception e) {
             Log.e("LatLng", "Could not get location");
         }
@@ -354,11 +364,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etPrice.setText(Double.toString(task.getPrice()));
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
+            LatLng location = task.getLocation();
+            if (location != null) {
+                geocode(location);
+                tvLocation.setText(location.toString());
+            } else {
+                Log.i("GEO", "Location is null");
+            }
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -618,6 +639,16 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 }
             }
         }
+    }
+
+
+    private void geocode(LatLng location) throws InterruptedException, ApiException, IOException {
+        GeoApiContext geoApiContext = new GeoApiContext.Builder()
+                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
+                .build();
+        GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Log.i("GEO", gson.toJson(results[0].addressComponents));
     }
 
 
