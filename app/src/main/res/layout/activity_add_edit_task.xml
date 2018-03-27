@@ -24,6 +24,31 @@
         android:textColor="#000000"
         android:textSize="22sp" />
 
+    <TextView
+        android:id="@+id/EditTaskLocation"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/EditTaskTitle"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/new_button_background"
+        android:gravity="center"
+        android:hint="@string/location"
+        android:textColor="#000000"/>
+
+    <EditText
+        android:id="@+id/EditPrice"
+        android:focusable="true"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/EditTaskLocation"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/new_button_background"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Price: $"
+        android:inputType="numberDecimal"
+        android:textColor="#000000"/>
+
     <EditText
         android:id="@+id/EditTaskComment"
         android:layout_width="300dp"
@@ -97,19 +122,6 @@
         android:onClick="deleteButton"
         android:text="Delete" />
 
-    <EditText
-        android:id="@+id/EditPrice"
-        android:focusable="true"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/EditTaskTitle"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/new_button_background"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Price: $"
-        android:inputType="numberDecimal"
-        android:textColor="#000000"/>
 
     <RelativeLayout
         android:id="@+id/loadingPanelAdd"
