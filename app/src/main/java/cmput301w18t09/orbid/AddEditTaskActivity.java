@@ -357,22 +357,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             e.printStackTrace();
         }
 
-        // Load the user from the Data manager
-        DataManager.getUsers userDM = new DataManager.getUsers(this);
-        ArrayList<String> n = new ArrayList<>();
-        ArrayList<User> usersList;
-        n.add("username");
-        n.add(thisUser);
-        userDM.execute(n);
-        try {
-            usersList = userDM.get();
-            if (usersList.size() > 0) {
-                user = usersList.get(0);
-            } else {
-                Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+        if (DataManager.isNetworkAvailable()) {
+            // Load the user from the Data manager
+            DataManager.getUsers userDM = new DataManager.getUsers(this);
+            ArrayList<String> n = new ArrayList<>();
+            ArrayList<User> usersList;
+            n.add("username");
+            n.add(thisUser);
+            userDM.execute(n);
+            try {
+                usersList = userDM.get();
+                if (usersList.size() > 0) {
+                    user = usersList.get(0);
+                } else {
+                    Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                // TODO: Handle the exception
             }
-        } catch (Exception e) {
-            // TODO: Handle the exception
         }
     }
 
@@ -439,7 +441,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         super.onActivityResult(requestCode, resultCode, data);
 
         //Updates the recycler image view to show the image selected
-        if(resultCode==RESULT_OK) {
+        if (resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
                 int dataSize = 0;
                 try {
