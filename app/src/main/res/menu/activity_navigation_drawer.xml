@@ -6,33 +6,25 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_recent_listings"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@android:drawable/ic_menu_recent_history"
             android:title="Recent Listings" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Map" />
-        <item
             android:id="@+id/nav_my_tasks"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="?android:attr/actionModeCopyDrawable"
             android:title="My Listings" />
+
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@android:drawable/ic_menu_myplaces"
             android:title="My Bids" />
+        <item
+            android:id="@+id/nav_edit_profile"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Edit Profile" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/common_full_open_on_phone"
+            android:title="Logout" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_edit_profile"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Edit Profile" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Logout" />
-        </menu>
-    </item>
 
 </menu>
