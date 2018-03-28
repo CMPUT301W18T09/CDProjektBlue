@@ -3,69 +3,37 @@ package cmput301w18t09.orbid;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.StackView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-//import com.google.android.gms.location.FusedLocationProviderClient;
-//import com.google.android.gms.location.LocationServices;
-//import com.google.android.gms.location.places.GeoDataClient;
-//import com.google.android.gms.location.places.PlaceDetectionClient;
-//import com.google.android.gms.location.places.Places;
-import com.google.gson.GsonBuilder;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
-
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -84,7 +52,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etPrice;
-    private TextView tvLocation;
+    private EditText etLocation;
     private Context context = this;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
@@ -116,7 +84,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
-        tvLocation = findViewById(R.id.EditTaskLocation);
+        etLocation = findViewById(R.id.EditTaskLocation);
 
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
@@ -241,16 +209,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see DataManager
      */
     @SuppressLint("MissingPermission")
-    private void save() {
+    private void save() throws InterruptedException, ApiException, IOException {
 
         findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
-        // Add location to the task
-        try {
-            task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
-            Log.i("GEO", "Location set");
-        } catch(Exception e) {
-            Log.e("LatLng", "Could not get location");
-        }
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -264,6 +225,22 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if(task.getPrice() == 0) {
             Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
         } else {
+
+            if (!etLocation.getText().toString().isEmpty()) {
+                // Check users manually entered location
+                String locationString = etLocation.getText().toString();
+                LatLng latLng = MapActivity.fromAddress(locationString);
+                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
+                task.setLocation(latLng);
+            } else {
+                // If no manual address set current location
+                try {
+                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+                    Log.i("GEO", "Location set");
+                } catch(Exception e) {
+                    Log.e("LatLng", "Could not get location");
+                }
+            }
 
             // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
@@ -331,6 +308,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Loads the task that was opened
      *
      * @see DataManager
+     * @see MapActivity
      */
     private void load() {
 
@@ -366,8 +344,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etDescription.setText(task.getDescription());
             LatLng location = task.getLocation();
             if (location != null) {
-                geocode(location);
-                tvLocation.setText(location.toString());
+                String geoResult = MapActivity.getAddress(location);
+                etLocation.setText(geoResult);
             } else {
                 Log.i("GEO", "Location is null");
             }
@@ -407,7 +385,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      *
      * @param view The current activity view
      */
-    public void postEditTask(View view) {
+    public void postEditTask(View view) throws InterruptedException, ApiException, IOException {
         save();
     }
 
@@ -640,16 +618,4 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         }
     }
-
-
-    private void geocode(LatLng location) throws InterruptedException, ApiException, IOException {
-        GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
-                .build();
-        GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Log.i("GEO", gson.toJson(results[0].addressComponents));
-    }
-
-
 }
