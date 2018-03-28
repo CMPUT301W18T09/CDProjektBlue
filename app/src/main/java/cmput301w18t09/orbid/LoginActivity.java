@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ALL")
 /**
@@ -124,9 +125,15 @@ public class LoginActivity extends AppCompatActivity{
         } catch (Exception e) {
             // TODO: Handle
         }
-
-
+        
         this.startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // Disabled the loading animation
+        findViewById(R.id.loadingPanelLogin).setVisibility(View.GONE);
     }
 
     /**
