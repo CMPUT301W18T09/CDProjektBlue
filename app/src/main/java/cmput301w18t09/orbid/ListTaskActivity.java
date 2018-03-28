@@ -86,10 +86,17 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
-        // Refresh button in action bar
-        menu.getItem(0).setVisible(false);
-        // Add button in action bar
-        menu.getItem(1).setVisible(true);
+        if(isMyBids == 0) {
+            // Hide Refresh button in action bar
+            menu.getItem(0).setVisible(false);
+            // Show Add button in action bar
+            menu.getItem(1).setVisible(true);
+        } else {
+            // Show refresh button in action bar
+            menu.getItem(0).setVisible(true);
+            // hide Add button in action bar
+            menu.getItem(1).setVisible(false);
+        }
         return true;
     }
 
@@ -264,7 +271,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
             }
         } else {
-            shouldWait = 1;
+            shouldWait = 0;
         }
         changeLayout();
     }
