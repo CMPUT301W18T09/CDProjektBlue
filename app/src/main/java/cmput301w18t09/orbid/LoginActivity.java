@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         etUsername = findViewById(R.id.login_etUsername);
 
         // Assign on click listener to the sign in button
@@ -156,6 +157,5 @@ public class LoginActivity extends AppCompatActivity{
     public void onBackPressed() {
 
     }
-
 
 }
