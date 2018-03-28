@@ -17,17 +17,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+
 @SuppressWarnings("ALL")
+/**
+ * Activity used when placing a bid on a given task
+ *
+ * @author Aidan Kosik, Chady Haidar, Zach Redfern
+ */
 public class PlaceBidActivity extends TaskDetailsActivity {
 
-    // private Button btnBid; not needed
     private EditText etPrice;
     private EditText etDescription;
     private DrawerLayout mDrawerLayout;
-    private ArrayList<Task> taskList = new ArrayList<>();
     private String id;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,38 +39,22 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         FrameLayout frameLayout = findViewById(R.id.details_frame_layout);
         inflater.inflate(R.layout.activity_place_bid, frameLayout);
 
-        // Use the id of the task to get it from the Data Manager
-        id = getIntent().getStringExtra("_id");
-        // Get the task that was clicked
-        ArrayList<String> query = new ArrayList<>();
-        query.add("and");
-        query.add("_id");
-        query.add(id);
-        DataManager.getTasks getTasks = new DataManager.getTasks(this);
-        getTasks.execute(query);
-        try {
-            taskList = getTasks.get();
-            task = taskList.get(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
         etPrice = frameLayout.findViewById(R.id.my_bid_amount);
         etDescription = frameLayout.findViewById(R.id.my_bid_description);
 
+        // If this task is owned by the user, hide the frame layout that shows
+        // the bidding section.
         if (mine) {
             frameLayout.setVisibility(View.GONE);
         }
-        if (task.getLocation() != null) {
-            Log.i("MAP", "location attached: " + task.getLocation());
-        } else {
-            Log.i("MAP", "location is null");
-        }
-
     }
 
+    /**
+     * Opens drawer when option menu is selected.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -83,9 +69,21 @@ public class PlaceBidActivity extends TaskDetailsActivity {
      * On click function for the bid button. Adds the bid if the inputted information
      * is valid. Otherwise, it makes a toast telling the user to properly fill out
      * the fields.
+     *
      * @param view
      */
     public void makeBid(View view) {
+
+        // Inform the user if they attempt to make a bid offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Log.i("BID", "title is empty: " + etPrice.getText().toString());
+        Log.i("BID", "description is empty: " + etDescription.getText().toString());
+
+        // Let the user know this task has been completed and bidding is closed.
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
         } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
@@ -96,15 +94,21 @@ public class PlaceBidActivity extends TaskDetailsActivity {
                     task.removeBid(b);
                 }
             }
+
             // Add the new bid to the bid list
             Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
             task.addBid(bid);
             task.setStatus(Task.TaskStatus.BIDDED);
+            // Notify the Task that the requester needs to receive a notification
+            if(!task.getShouldNotify()) {
+                task.setShouldNotify(true);
+            }
             DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
             updateTasks.execute(taskList);
+
             finish();
         } else {
-            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
         }
 
     }

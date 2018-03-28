@@ -1,8 +1,21 @@
 package cmput301w18t09.orbid;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -24,7 +37,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
@@ -34,10 +49,16 @@ import io.searchbox.core.SearchResult;
 
 /**
  * Handles all communication between the application and the server
+ *
+ * @author Ceegan Hale, Zach Redfern, David Laycock
+ * @see User
+ * @see Task
  */
 
 public class DataManager {
+
     private static JestDroidClient client;
+    public static ArrayList<Task> backupTasks;
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
@@ -54,6 +75,8 @@ public class DataManager {
         }
 
         /**
+         * Inserts new tasks into the database
+         *
          * @see addTasks
          * @param tasks A list of tasks to add to the date base
          * @return no return
@@ -66,6 +89,7 @@ public class DataManager {
                 Index index = new Index.Builder(task).index("cmput301w18t09").type("task").build();
                 try{
                     DocumentResult result = client.execute(index);
+
                     if (result.isSucceeded()){
                         task.setID(result.getId());
                         Log.v("id", task.getID());
@@ -99,6 +123,8 @@ public class DataManager {
         }
 
         /**
+         * Inserts new Users into the database
+         *
          * @see addUsers
          * @param users A list of new users to be added
          * @return no return
@@ -126,7 +152,7 @@ public class DataManager {
     }
 
     /**
-     * gets a list of tasks based on the search parameters
+     * Gets a list of tasks based on the search parameters
      */
     public static class getTasks extends AsyncTask<ArrayList<String>, Void, ArrayList<Task>>{
 
@@ -137,6 +163,8 @@ public class DataManager {
         }
 
         /**
+         * Gets a list of tasks based on the search parameters
+         *
          * @see getTasks
          * @param passed An array list of query parameters in key, value sequence i.e
          *               {key, value, key, value, ...}
@@ -170,7 +198,8 @@ public class DataManager {
 
             }
 
-            Search search = new Search.Builder(new SearchSourceBuilder().query(query).toString()).addIndex("cmput301w18t09").addType("task").build();
+            //David modified the next line to change the returned query size, hopefully this doesn't break anything else
+            Search search = new Search.Builder(new SearchSourceBuilder().size(1000).query(query).toString()).addIndex("cmput301w18t09").addType("task").build();
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
@@ -186,12 +215,13 @@ public class DataManager {
                 Log.e("Error", "Failed to communicate to elastic search server");
             }
 
+            Collections.reverse(tasks);
             return tasks;
         }
     }
 
     /**
-     * gets a list of tasks based on the search parameters
+     * Gets a list of users based on the search parameters
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
@@ -202,6 +232,8 @@ public class DataManager {
         }
 
         /**
+         * Gets a list of users based on the search parameters
+         *
          * @see getUsers
          * @param passed An array list of query parameters in key, value sequence i.e
          *               {key, value, key, value, ...}
@@ -278,6 +310,65 @@ public class DataManager {
                     Log.e("Error", "Failed to connect to the elastic search server");
                     cachedTasks.add(task);
                     saveInFile();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Updates a task when it has no ID. Functions exactly like regular update task, only
+     * this searches the cachedTasks list for a match of the task before update and replaces
+     * it with the after update version. Class is used to resolve a special case where tasks are
+     * added to the cached list twice.
+     */
+    public static class updateTaskNoID extends AsyncTask<ArrayList<Task>, Void, Void>{
+
+        private Task oldTask;
+
+        public updateTaskNoID(Context cont, Task oldTask){
+            this.oldTask = oldTask;
+            if (context == null){
+                context = cont;
+            }
+        }
+
+        /**
+         * @see updateTasks
+         * @param passed An array list of tasks to update
+         * @return no return
+         */
+        @Override
+        protected Void doInBackground(ArrayList<Task>... passed){
+            verifySettings();
+            ArrayList<Task> tasks = passed[0];
+
+            for (Task task: tasks){
+                try {
+                    DocumentResult result = client.execute(new Index.Builder(task).index("cmput301w18t09").type("task").id(task.getID()).build());
+
+                    if (result.isSucceeded()){
+                        Log.v("Success", "Task has been updated");
+                        pushCached();
+                    }
+                    else{
+                        Log.e("Error", "Update has failed");
+                        cachedTasks.add(task);
+                        saveInFile();
+                    }
+
+                }
+                catch (Exception e){
+                    Log.e("Error", "Failed to connect to the elastic search server");
+
+                    for (int i = 0; i < cachedTasks.size(); ++i) {
+                        if (Task.compareTasks(oldTask, cachedTasks.get(i))) {
+                            cachedTasks.set(i, task);
+                            saveInFile();
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -380,7 +471,10 @@ public class DataManager {
                 context = cont;
             }
         }
+
         /**
+         * Deletes users from the database
+         *
          * @see deleteUsers
          * @param passed An array list of user IDs
          * @return no return
@@ -408,6 +502,140 @@ public class DataManager {
             }
 
             return null;
+        }
+    }
+
+    public static class NotificationChecker {
+        private Handler timerHandler = new Handler();
+        private ArrayList<Task> taskList;
+        private Boolean shouldSendNotification = false;
+        private Context context;
+        private NotificationCompat.Builder mBuilder;
+        private NotificationManagerCompat notificationManager;
+        private NotificationManager manager;
+        private Boolean shouldContinue = true;
+        private static final String NOTIFICATION_CHANNEL_ID = "4031";
+        private String channelName = "Channel";
+
+
+
+        public NotificationChecker(Context context) {
+            this.context = context;
+            notificationInit();
+            timerRunnable.run();
+        }
+
+        /**
+         * Tells the runnable method to run or not
+         * @param shouldContinue
+         */
+        public void setShouldContinue(Boolean shouldContinue) {
+            this.shouldContinue = shouldContinue;
+        }
+
+        /**
+         * Runnable that runs every 5 seconds to check for notifications
+         */
+        Runnable timerRunnable = new Runnable() {
+            public void run() {
+                if(shouldContinue && isNetworkAvailable()) {
+                    timerHandler.postDelayed(this, 10000);
+                    sendNotification();
+                }
+            }
+        };
+
+
+        /**
+         * Initializes the notification
+         */
+        private void notificationInit() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create the NotificationChannel, but only on API 26+ because
+                // the NotificationChannel class is new and not in the support library
+                String description = "notificationChannel";
+                NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+                channel.setDescription(description);
+                // Register the channel with the system
+                manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+            }
+            notificationManager = NotificationManagerCompat.from(context);
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            // Create the intent that brings the user to the login page
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            // Setup the notification with the proper settings
+            mBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                    .setSound(alarmSound) // A sound for the notification
+                    .setSmallIcon(R.drawable.ic_menu_send) //notification icon
+                    .setAutoCancel(true) // Set to cancel when tapped
+                    .setContentTitle("Orbid") // Notification Title
+                    .setContentText("You have a new Bid!") // Notification description
+                    .setContentIntent(pendingIntent); // Intent to take you to my requests
+            // Create the notification manager and send the notification
+        }
+
+        /**
+         * Loads the tasks that have the notification flag set to true
+         */
+        private void loadTasks() {
+            ArrayList<String> query = new ArrayList<>();
+            query.add("and");
+            query.add("requester");
+            query.add(NavigationActivity.thisUser);
+            //query.add("shouldNotify");
+            //query.add("true");
+            getTasks getTasks = new getTasks(context);
+            getTasks.execute(query);
+            try {
+                taskList = getTasks.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            ArrayList<Task> removeList = new ArrayList<>();
+            for(Task t: taskList) {
+                if(!t.getShouldNotify()) {
+                    removeList.add(t);
+                } else {
+                    // Sends the notification if there are any new tasks that need to notify the user
+                    shouldSendNotification = true;
+                }
+            }
+            taskList.removeAll(removeList);
+            // Clear all the notification flags:
+            for(Task t: taskList) {
+                t.setShouldNotify(false);
+            }
+        }
+
+
+        /**
+         * Sends the notification to the user
+         */
+        private void sendNotification() {
+            loadTasks();
+            if(shouldSendNotification) {
+                // Send the notification
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    manager.notify(1, mBuilder.build());
+                } else {
+                    notificationManager.notify(1, mBuilder.build());
+                }
+                shouldSendNotification = false;
+                // Update the task in DM
+                ArrayList<Task> tempList = new ArrayList<>();
+                for(Task t: taskList) {
+                    tempList.add(t);
+                }
+                updateTasks updateTasks = new updateTasks(context);
+                updateTasks.execute(tempList);
+                // Clear the taskList
+                taskList.removeAll(taskList);
+            }
         }
     }
 
@@ -442,10 +670,9 @@ public class DataManager {
             cachedTasks = gson.fromJson(in, new TypeToken<ArrayList<Task>>(){}.getType());
             Log.i("Offline", "Cached tasks have been loaded");
         }catch (FileNotFoundException e){
-            Log.e("Error", "Cached tasks could not be loaded");
-            throw new RuntimeException();
+            Log.e("Error", "Cached tasks file failed to open");
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -499,4 +726,28 @@ public class DataManager {
         }
         Log.i("Offline", "cached tasks have been stored");
     }
+
+    /**
+     * Tests if the device has an available internet connection by pinging a server
+     *
+     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
+     * Taken from user Levit on March 19, 2018
+     *
+     * @return True if the device has internet connection, false otherwise
+     */
+    public static boolean isNetworkAvailable() {
+
+        // ICMP
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
 }

@@ -3,7 +3,7 @@ package cmput301w18t09.orbid;
 /**
  * A model representation of a bid made on a given task.
  *
- * @author CDProjektBlue
+ * @author Zach Redfern
  * @see Task
  */
 public class Bid {
@@ -13,7 +13,7 @@ public class Bid {
     private String description;
 
     /**
-     *  Bid class constructor
+     * Bid class constructor
      *
      * @param provider The task provider that bid belongs to
      * @param price The price the task provider has set for their bid
@@ -27,7 +27,7 @@ public class Bid {
     }
 
     /**
-     *  Gets the task provider
+     * Gets the task provider
      *
      * @return The task provider the bid belongs to
      */

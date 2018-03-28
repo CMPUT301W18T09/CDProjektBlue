@@ -12,6 +12,7 @@
     <string name="signin_Button">Sign In</string>
     <string name="create_account">Create</string>
     <string name="first_name">First Name</string>
+    <string name="add_button">Add</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
@@ -34,5 +35,8 @@
     <string name="cancel_action">Exit</string>
     <string name="ok">ok</string>
     <string name="taskstatus">TaskStatus</string>
+    <string name="add">Add</string>
+    <string name="refresh">Refresh</string>
+    <string name="reviews">Reviews</string>
 
 </resources>
