@@ -24,6 +24,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -219,5 +225,40 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e("MAP", "There was an error connecting: " + connectionResult);
+    }
+
+    /**
+     * Uses Google's API for geocoding to reverse the LatLng location to a formatted address.
+     * @param location
+     * @return String - the formatted address, or No Address if none was found
+     * @throws InterruptedException
+     * @throws ApiException
+     * @throws IOException
+     */
+    public static String getAddress(com.google.maps.model.LatLng location) throws InterruptedException, ApiException, IOException {
+        GeoApiContext geoApiContext = new GeoApiContext.Builder()
+                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
+                .build();
+        GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
+        String address = "No Address";
+        // Set the address from the results if it did not return null
+        if (results[0] != null) {
+            address = results[0].formattedAddress;
+        }
+        return address;
+    }
+
+    public static com.google.maps.model.LatLng fromAddress(String address) throws InterruptedException, ApiException, IOException {
+        GeoApiContext geoApiContext = new GeoApiContext.Builder()
+                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
+                .build();
+        GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
+        com.google.maps.model.LatLng latLng = new com.google.maps.model.LatLng();
+        if (results[0] != null) {
+            double lat = results[0].geometry.location.lat;
+            double lng = results[0].geometry.location.lng;
+            latLng = new com.google.maps.model.LatLng(lat, lng);
+        }
+        return latLng;
     }
 }

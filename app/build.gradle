@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:9.8.0'
     implementation 'com.google.android.gms:play-services-cast-framework:9.8.0'
     implementation 'com.google.android.gms:play-services-maps:9.8.0'
-//    implementation 'com.google.android.gms:play-services-places:11.4.0'
+    implementation 'com.google.android.gms:play-services-places:9.8.0'
     implementation('com.google.maps:google-maps-services:0.2.6') {
         exclude group: "com.google.code.gson", module: "gson"
         exclude group: "org.slf4j", module: "slf4j-api"
