@@ -86,6 +86,7 @@ public class UserProfileDialog extends DialogFragment {
         tvphone.setText(user.getPhoneNumber());
         tvfullname.setText(user.getLastName()+", "+ user.getFirstName());
 
+        //TODO - Get review score from user
         Double scoreSum = 0.0;
         Double ave = 3.7;
         ArrayList<Review> revList = user.getReviewList();
@@ -103,10 +104,11 @@ public class UserProfileDialog extends DialogFragment {
         rbRating.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // TODO perform your action here
-                }
-                return true;
+                //TODO Open review listing activity, pass username
+
+                Toast.makeText(getActivity().getApplicationContext(), "toast test",
+                        Toast.LENGTH_LONG).show();
+                return false;
             }
         });
 
