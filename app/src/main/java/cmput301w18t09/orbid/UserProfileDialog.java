@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class UserProfileDialog extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View content = layoutInflater.inflate(R.layout.dialog_user_profile, null);
         Bundle args = getArguments();
-        String username = args.getString("username");
+        final String username = args.getString("username");
 
         // Set the functionality of the "OK" dialog button
         builder.setView(content)
@@ -105,9 +106,12 @@ public class UserProfileDialog extends DialogFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //TODO Open review listing activity, pass username
+                Intent intent = new Intent(getActivity(), ListReviewActivity.class);
+                intent.putExtra("username", username);
 
                 Toast.makeText(getActivity().getApplicationContext(), "toast test",
                         Toast.LENGTH_LONG).show();
+                startActivity(intent);
                 return false;
             }
         });
