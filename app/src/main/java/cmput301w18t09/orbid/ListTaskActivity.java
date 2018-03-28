@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -56,26 +60,48 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
-        Button addButton = (Button) findViewById(R.id.AddTaskButton);
 
         if(isMyBids==1) {
             maxPages=2;
-            addButton.setVisibility(View.GONE);
         } else {
             maxPages=3;
         }
     }
 
+
     /**
      * Opens the Add/Edit task activity when the button is pressed
-     *
-     * @param view The current activity view
      */
-    public void addTask(View view) {
+    public void addTask() {
         Intent addTask = new Intent(ListTaskActivity.this, AddEditTaskActivity.class);
         addTask.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
         addTask.putExtra("isAdd", 1);
         startActivity(addTask);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        // Refresh button in action bar
+        menu.getItem(0).setVisible(false);
+        // Add button in action bar
+        menu.getItem(1).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.MenuItem_AddButton) {
+            Log.i("BUTTON", "add clicked");
+            addTask();
+        }
+        if (id == R.id.MenuItem_RefreshButton) {
+            filterList();
+            initRecyclerView();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -111,34 +137,34 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         if(isMyBids==0) {
             switch (currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Requested Tasks");
+                    getSupportActionBar().setTitle("New Listings");
                     taskStatus = Task.TaskStatus.REQUESTED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Bidded Tasks");
+                    getSupportActionBar().setTitle("Bidded Listings");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Assigned Tasks");
+                    getSupportActionBar().setTitle("Assigned Listings");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 3:
-                    getSupportActionBar().setTitle("My Completed Tasks");
+                    getSupportActionBar().setTitle("Completed Listings");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
         } else {
             switch(currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Open Bids");
+                    getSupportActionBar().setTitle("Active Bids");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assigned Bids");
+                    getSupportActionBar().setTitle("My Assignements");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Completed Bids");
+                    getSupportActionBar().setTitle("Completed Assignments");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
