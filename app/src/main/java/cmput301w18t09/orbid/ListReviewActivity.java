@@ -12,8 +12,8 @@ public class ListReviewActivity extends NavigationActivity implements ItemClickL
 
     private ArrayList<Review> reviewList = new ArrayList<>();
 
-    @Override
-    protected void onCreate
+//    @Override
+//    protected void onCreate
 
     @Override
     public void onClick(View view, int position, int type) {

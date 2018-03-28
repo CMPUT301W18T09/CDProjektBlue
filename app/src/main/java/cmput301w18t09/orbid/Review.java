@@ -8,8 +8,13 @@ package cmput301w18t09.orbid;
  */
 public class Review {
 
-    private double rating;
+    private float rating;
     private String description;
+    private reviewType type;
+
+    public enum reviewType {
+        REQUESTOR_REVIEW, PROVIDER_REVIEW
+    }
 
     /**
      * Review class constructor
@@ -17,17 +22,31 @@ public class Review {
      * @param rating The user rating associated with the review
      * @param description The textual description of the review
      */
-    public Review(double rating, String description) {
+    public Review(float rating, String description) {
         this.rating = rating;
         this.description = description;
     }
+
+    /**
+     * Gets the review type.  Determines if it was created by a requestor or provider
+     *
+     * @return The review type associated with the review
+     */
+    public reviewType getType() {return type;}
+
+    /**
+     * Sets the review type. Determines if it was created by a requestor or provider
+     *
+     * @param type The review type associated with the review
+     */
+    public void setType(reviewType type) {this.type = type;}
 
     /**
      * Gets the user rating associated with the review
      *
      * @return The user rating associated with the review
      */
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
