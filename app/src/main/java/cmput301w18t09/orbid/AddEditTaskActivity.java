@@ -234,7 +234,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @SuppressLint("MissingPermission")
     private void save() {
 
-        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
         // Add location to the task
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
@@ -254,7 +253,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if(task.getPrice() == 0) {
             Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
         } else {
-
+            findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
             // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
