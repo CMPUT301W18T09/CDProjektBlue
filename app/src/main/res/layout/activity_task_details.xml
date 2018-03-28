@@ -9,25 +9,27 @@
 
     <TextView
         android:id="@+id/details_task_status"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/details_task_title"
+        android:layout_alignLeft="@+id/details_task_title"
         android:layout_alignStart="@+id/details_task_title"
-        android:background="@drawable/white_text_box"
+        android:layout_below="@+id/details_task_title"
+        android:background="@drawable/new_button_background"
+        android:padding="3dp"
         android:text="@string/taskstatus"
-        android:textColor="@color/cast_expanded_controller_background_color"
-        android:layout_alignLeft="@+id/details_task_title" />
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <TextView
         android:id="@+id/details_task_title"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/white_text_box"
+        android:padding="5dp"
+        android:background="@drawable/new_button_background"
         android:text="TASK TITLE"
         android:textColor="@color/cast_expanded_controller_background_color" />
 
@@ -35,9 +37,9 @@
         android:id="@+id/ImageStack"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:layout_below="@+id/usernameButton"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
+        android:layout_alignBottom="@+id/details_task_description"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
         android:layout_toEndOf="@+id/details_task_description"
         android:layout_toRightOf="@+id/details_task_description"
         android:background="@color/colorTheme" />
@@ -51,17 +53,17 @@
         android:layout_alignStart="@+id/details_task_status"
         android:layout_below="@+id/details_task_status"
         android:layout_marginTop="22dp"
-        android:background="@drawable/white_text_box"
+        android:padding="5dp"
         android:text="TASK DESCRIPTION"
+        android:background="@drawable/new_button_background"
         android:textColor="@color/cast_expanded_controller_background_color" />
 
     <TextView
         android:id="@+id/details_lowest_bid"
-        android:layout_width="match_parent"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/details_task_title"
-        android:layout_alignRight="@+id/details_task_title"
-        android:layout_below="@+id/details_task_title"
+        android:layout_toRightOf="@id/usernameButton"
+        android:layout_alignTop="@+id/usernameButton"
         android:gravity="end"
         android:text="Lowest bid: N/A"
         android:textColor="@android:color/holo_green_light"
@@ -70,22 +72,22 @@
     <FrameLayout
         android:id="@+id/details_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/fulfilledButton"
-        android:layout_below="@+id/details_task_description">
-    </FrameLayout>
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/assignedBidTitle"
+        android:layout_toRightOf="@+id/assignedBidTitle"></FrameLayout>
 
     <Button
         android:id="@+id/assignedBidTitle"
+        android:background="@drawable/new_button_background"
         android:layout_width="350dp"
         android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/white_text_box"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/cast_expanded_controller_background_color"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/assignedBidDescription"
@@ -94,7 +96,8 @@
         android:layout_alignEnd="@+id/assignedBidTitle"
         android:layout_alignRight="@+id/assignedBidTitle"
         android:layout_below="@+id/assignedBidTitle"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
+        android:padding="5dp"
         android:text="TextView"
         android:textColor="@color/cast_expanded_controller_background_color"
         android:visibility="gone"/>
@@ -106,7 +109,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:onClick="fulfilled"
         android:text="Fulfilled"
         android:visibility="gone" />
@@ -118,7 +122,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/white_text_box"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
         android:onClick="repost"
         android:text="Repost"
         android:visibility="gone"/>
@@ -127,10 +132,10 @@
         android:id="@+id/usernameButton"
         android:layout_width="200dp"
         android:layout_height="25dp"
+        android:background="@drawable/new_button_background"
         android:layout_alignLeft="@+id/details_task_status"
         android:layout_alignStart="@+id/details_task_status"
         android:layout_below="@+id/details_task_status"
-        android:background="@drawable/white_text_box"
         android:onClick="openUserInfo"
         android:text="Poster:"
         android:textAllCaps="false"

@@ -13,7 +13,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("ALL")
+/**
+ * Allows the user to edit the information in their own profile (except username).
+ *
+ * @author Zach Redfern
+ * @see User
+ */
 public class EditProfileActivity extends NavigationActivity {
 
     private Button btnSave;
@@ -24,6 +29,11 @@ public class EditProfileActivity extends NavigationActivity {
     private EditText etEmail;
     private User currentUser;
 
+    /**
+     * Method is ran when the edit profile activity is first created to instantiate its elements.
+     *
+     * @param savedInstanceState Any information that needs to be passed to this activity instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +61,11 @@ public class EditProfileActivity extends NavigationActivity {
         getUsers.execute(queryParameters);
         try {
             returnUsers = getUsers.get();
-            currentUser = returnUsers.get(0);
+            if (returnUsers.size() > 0) {
+                currentUser = returnUsers.get(0);
+            } else {
+                Toast.makeText(this, "This user may no longer exist", Toast.LENGTH_LONG).show();
+            }
         }
         catch (Exception e) {
             Log.e("Error", "Failed to get ArrayList intended as return from getUsers");
@@ -74,17 +88,20 @@ public class EditProfileActivity extends NavigationActivity {
                 save();
             }
         });
-
-
     }
 
+    /**
+     * Attempt to perform a profile update (save to server) after user information is error checked.
+     */
     private void save()
     {
         User user;
 
+        // Set up the data manager
         DataManager.updateUsers updateUsers = new DataManager.updateUsers(this);
         ArrayList<User> queryParameters = new ArrayList<>();
 
+        // Get currently populated information from the activity
         String username = tvUsername.getText().toString();
         String email = etEmail.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
@@ -93,67 +110,68 @@ public class EditProfileActivity extends NavigationActivity {
 
         // Check first name length is not zero
         if (firstName.length() == 0) {
-            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_LONG).show();
             return;
         }
 
-
         // Check last name length is not zero
         if (lastName.length() == 0) {
-            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Check e-mail length is not zero
         if (email.length() == 0) {
-            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Check e-mail format is acceptable
         if (email.indexOf('@') == -1 || email.indexOf('@') == 0 || email.indexOf('@') == email.length() - 1) {
-
-            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Check phone number is not empty
         if (phoneNumber.length() == 0) {
-            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Check phone number does not exceed 10 digits
-        if (phoneNumber.length() > 10) {
-            Toast.makeText(this, "Phone number cannot exceed 10 digits", Toast.LENGTH_SHORT).show();
+        if (phoneNumber.length() != 10) {
+            Toast.makeText(this, "Phone number must be exactly 10 digits", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Check phone number format is acceptable
         if (!containsOnlyNumbers(phoneNumber)) {
-            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Add the new user to the server
         user = new User(username, email, phoneNumber, firstName, lastName);
-        //Log.v("Current User ID:", currentUser.getID());
         user.setID(currentUser.getID());
-
-
-        //
         queryParameters.add(user);
         updateUsers.execute(queryParameters);
 
         // If all goes well, tell the user
         Toast.makeText(this, "Save successful", Toast.LENGTH_LONG).show();
         return;
-
     }
 
-    // Taken from user Jean-Charles on Monday, March 5th, 2018.
-    // https://stackoverflow.com/questions/7607260/check-non-numeric-characters-in-string
+    /**
+     * Checks an input string to ensure it contains only digits/numbers.
+     *
+     * Taken from user Jean-Charles on Monday, March 5th, 2018.
+     * https://stackoverflow.com/questions/7607260/check-non-numeric-characters-in-string
+     *
+     * @param str The input string to be checked
+     * @return True if input string contained only numbers, false otherwise
+     */
     public boolean containsOnlyNumbers(String str) {
+
         //It can't contain only numbers if it's null or empty...
         if (str == null || str.length() == 0)
             return false;

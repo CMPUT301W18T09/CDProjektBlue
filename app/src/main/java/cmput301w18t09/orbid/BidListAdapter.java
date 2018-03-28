@@ -8,7 +8,12 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-
+/**
+ * Binds the bid view holder with the recycler view bid list
+ *
+ * @author Aidan Kosik
+ * @see Bid
+ */
 public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
 
     private Context context;
@@ -35,12 +40,10 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
     public void onBindViewHolder(BidViewHolder holder, int position) {
         Bid bid = bidList.get(position);
         holder.setClickListener(clickListener);
-        // Todo fill out bid information here
-        holder.bid_description.setText(bid.getDescription());
-        holder.bid_price.setText(Double.toString(bid.getPrice()));
-
+        holder.bidDescription.setText(bid.getDescription());
+        holder.bidPrice.setText(Double.toString(bid.getPrice()));
+        holder.bidUsername.setText(bid.getProvider());
     }
-
 
     @Override
     public int getItemCount() {

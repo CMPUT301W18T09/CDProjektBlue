@@ -8,7 +8,7 @@ import io.searchbox.annotations.JestId;
 /**
  * A model representation of a user of the application (requester or provider).
  *
- * @author CDProjektBlue
+ * @author Zach Redfern, Ceegan Hale
  * @see Review
  */
 public class User {
@@ -33,13 +33,13 @@ public class User {
      * @param firstName The first name of the user
      * @param lastName The last name of the user
      */
-    public User(String username, String email, String phoneNumber, String firstName, String lastName)
-    {
+    public User(String username, String email, String phoneNumber, String firstName, String lastName) {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.reviewList = new ArrayList<>();
     }
 
     /**
@@ -180,6 +180,6 @@ public class User {
      */
     public void addReview(Review review)
     {
-
+        reviewList.add(review);
     }
 }

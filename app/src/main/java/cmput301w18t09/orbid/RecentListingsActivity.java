@@ -5,23 +5,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ListIterator;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
+/**
+ * The main screen of the application shown post-login. Displays a list of all tasks on the
+ * server that have been requested or bidded on. Also features a search bar to filter results.
+ *
+ * @author Aidan Kosik, Zach Redfern
+ */
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Task> taskList = new ArrayList<>();
@@ -29,11 +39,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private TaskListAdapter taskListAdapter;
     private Switch tbtnToggle;
     private DrawerLayout mDrawerLayout;
-
+    private SearchView searchView;
 
     /**
      * Sets the switch for list view and map view in the toolbar, creates onClick
      * for the switch and initialises the recyclerView for the task.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -63,6 +74,80 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             }
         });
         toolbar.addView(tbtnToggle);
+
+
+        searchView = findViewById(R.id.search_view);
+//        searchView.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refineListings();
+//            }
+//        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                refineListings();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        // Fill taskList with all tasks if the network is available, otherwise report
+        // to the user that that functionality is not available offline
+        if (DataManager.isNetworkAvailable()) {
+            getListings();
+        }
+        else {
+            Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_LONG).show();
+        }
+
+        Collections.reverse(taskList);
+
+        taskListAdapter = new TaskListAdapter(this, taskList, 0);
+        taskListAdapter.setClickListener(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_reviews);
+        recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(taskListAdapter);
+        recyclerView.setHasFixedSize(true);
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        menu.getItem(0).setVisible(true);
+        return true;
+    }
+
+    /**
+     * Function for when an options item is selected.
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.MenuItem_RefreshButton) {
+            getListings();
+            taskListAdapter.notifyDataSetChanged();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Gets all of the tasks that are requested or bidded and stores
+     * them in the taskList ArrayList.
+     */
+    private void getListings() {
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
         ArrayList<String> query = new ArrayList<String>();
         query.add("or");
@@ -78,41 +163,77 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        taskListAdapter = new TaskListAdapter(this, taskList, 0);
-        taskListAdapter.setClickListener(this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(taskListAdapter);
-        recyclerView.setHasFixedSize(true);
-
     }
-
 
     /**
-     * Function for when an options item is selected.
-     * @param item
-     * @return
+     * Refines the listings by keywords provided in the search bar. Only those tasks whose
+     * descriptions contain all keywords are shown to the user.
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+    private void refineListings() {
+
+        // Don't attempt a search if we are offline
+        if (!DataManager.isNetworkAvailable()) {
+            Toast.makeText(this, "Cannot perform search while offline", Toast.LENGTH_LONG).show();
+            return;
         }
-        return super.onOptionsItemSelected(item);
+
+        // Set up the data manager and split up the search query into tokens
+        StringTokenizer tokenizer = new StringTokenizer(searchView.getQuery().toString());
+        DataManager.getTasks getTasks = new DataManager.getTasks(this);
+        ArrayList<String> searchParams = new ArrayList<>();
+
+        // Build the elastic search query to
+        String token = "";
+        searchParams.add("and");
+        while (tokenizer.hasMoreTokens()) {
+            token = tokenizer.nextToken();
+            Log.e("token", token);
+            searchParams.add("description");
+            searchParams.add(token);
+        }
+
+        // Execute the search
+        try {
+            getTasks.execute(searchParams);
+            taskList = getTasks.get();
+
+            // If there were no results, tell the user
+            if (taskList.size() == 0) {
+                Toast.makeText(this, "Search returned no results", Toast.LENGTH_LONG).show();
+                // TODO: Handle no tasks?
+            }
+
+            // Remove results with status assigned or bidded
+            Task.TaskStatus status;
+            ListIterator<Task> it = taskList.listIterator();
+            while(it.hasNext()) {
+                status = it.next().getStatus();
+                if (status == Task.TaskStatus.ASSIGNED) {
+                    it.remove();
+                }
+                else if (status == Task.TaskStatus.COMPLETED) {
+                    it.remove();
+                }
+            }
+
+            taskListAdapter.setTaskList(taskList);
+
+        } catch (Exception e) {
+            Log.e("Refine Tasks Error", "There was an error refining the tasks list");
+        }
+
+        taskListAdapter.notifyDataSetChanged();
     }
+
 
     /**
      * Parses a string of keywords and returns a result list of
      * the matching tasks.
+     *
      * @param string
      * @return resultList
      */
-    public ArrayList<Task> search(String string)
-    {
+    public ArrayList<Task> search(String string) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         return resultList;
     }
@@ -120,12 +241,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     /**
      * Opens the MapActivity on the switch from List View to Map View
      */
-    public void openMapActivity()
-    {
+    public void openMapActivity() {
         MapActivity mapActivity = new MapActivity();
         FragmentManager fm = getSupportFragmentManager();
         Bundle bundle = new Bundle();
-        bundle.putString("type", "recent_listings");
+        bundle.putString("came_from", "recent_listings");
         mapActivity.setArguments(bundle);
         fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
     }
@@ -134,33 +254,37 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Opens the place bid activity when the user chooses to place
      * a bid on a task.
      */
-    public void openPlaceBidActivity()
-    {
-
-    }
-
-    /**
-     * When the user clicks on a username of the requester
-     * It opens a dialog with that user's information
-     */
-    public void openUserProfileDialog()
-    {
-
-    }
-
-    /**
-     * When a task is clicked the Task Details are opened in a new activity.
-     * @param view
-     * @param position
-     * @param type
-     */
-    @Override
-    public void onClick(View view, int position, int type) {
+    public void openPlaceBidActivity(int position) {
         Intent intent = new Intent(this, PlaceBidActivity.class);
         intent.putExtra("layout_id", R.layout.activity_place_bid);
         intent.putExtra("_id", taskList.get(position).getID());
         this.startActivity(intent);
     }
 
+    /**
+     * When a task is clicked the Task Details are opened in a new activity only
+     * if a network connection is available. (Cannot bid offline.)
+     *
+     * @param view
+     * @param position
+     * @param type
+     */
+    @Override
+    public void onClick(View view, int position, int type) {
+        if (DataManager.isNetworkAvailable()) {
+            openPlaceBidActivity(position);
+        }
+        else {
+            Toast.makeText(this, "Cannot open task details for bidding while offline", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    /**
+     * Gets the recycler list view in the activity
+     *
+     * @return The recycler list view in the activity
+     */
+    public ArrayList<Task> getTaskList() {
+        return this.taskList;
+    }
 }

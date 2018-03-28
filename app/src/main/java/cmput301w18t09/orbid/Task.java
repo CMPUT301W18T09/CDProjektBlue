@@ -3,7 +3,6 @@ package cmput301w18t09.orbid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,7 +14,7 @@ import io.searchbox.annotations.JestId;
 /**
  * A model representation of a task made by a task provider and to be completed by a task provider.
  *
- * @author CDProjektBlue
+ * @author Zach Redfern, Ceegan Hale, Chady Haidar
  * @see Bid
  */
 public class Task {
@@ -30,6 +29,7 @@ public class Task {
     private int acceptedBid;
     private LatLng location;
     private ArrayList<Bid> bidList;
+    private Boolean shouldNotify = false;
     private ArrayList<byte[]> photoList;
 
     public enum TaskStatus {
@@ -53,7 +53,6 @@ public class Task {
         this.bidList = new ArrayList<Bid>();
         this.photoList = new ArrayList<byte[]>();
         this.status = status;
-
     }
 
     /**
@@ -286,6 +285,48 @@ public class Task {
     public void acceptBid(int bid) {
         acceptedBid = bid;
         status = TaskStatus.ASSIGNED;
+    }
+
+    /**
+     * Sets the flag to true if a new bid was placed on this task
+     *
+     * @param b True if a new bid was placed on the task, false otherwise
+     */
+    public void setShouldNotify(Boolean b) {
+        this.shouldNotify = b;
+    }
+
+    /**
+     * Gets the flag that specifies if a new bid was placed on this task
+     *
+     * @return True if a new bid was placed on the task, false otherwise
+     */
+    public Boolean getShouldNotify() {
+        return shouldNotify;
+    }
+
+    /**
+     * Compares two tasks to see if they are equals. Only works for tasks that have not yet
+     * been placed on the server and subsequently received a unique ID.
+     *
+     * @param t1 The first task to compare against
+     * @param t2 The second task to compare against
+     * @return True if the tasks are the same
+     */
+    public static boolean compareTasks(Task t1, Task t2) {
+        if (!t1.getTitle().equals(t2.getTitle())) {
+            return false;
+        }
+        if (!t1.getDescription().equals(t2.getDescription())) {
+            return false;
+        }
+        if (t1.getStatus() != t2.getStatus()) {
+            return false;
+        }
+        if (t1.getLocation() != t2.getLocation()) {
+            return false;
+        }
+        return true;
     }
 
 }

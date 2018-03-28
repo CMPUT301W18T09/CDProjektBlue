@@ -4,11 +4,14 @@ import android.view.View;
 
 /**
  * Interface to be implemented by activities that utilize a Recycler view.
+ *
+ * @author Aidan Kosik
  */
 public interface ItemClickListener {
+
     /**
-     * Function to be implemented when a card in the recycler
-     * view is selected.
+     * Function to be implemented when a card in the recycler view is selected.
+     *
      * @param view
      * @param position
      * @param type
