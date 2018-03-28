@@ -58,7 +58,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
@@ -70,7 +72,7 @@ import java.util.concurrent.ExecutionException;
  * @author Chady Haidar, Aidan Kosik, Zach Refern
  * @see Task
  */
-public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
 
     private EditText etDescription;
     private EditText etTitle;
@@ -87,7 +89,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task task;
     private User user;
     private DrawerLayout mDrawerLayout;
-    private GoogleApiClient googleApiClient;
     private boolean permissionsGranted = true;
 
     @Override
@@ -120,13 +121,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
-
-        // Set up connection to google api for geo location
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
-        googleApiClient.connect();
     }
 
     /**
@@ -239,6 +233,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     @SuppressLint("MissingPermission")
     private void save() {
+
+        // Add location to the task
+        task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -360,22 +357,24 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             e.printStackTrace();
         }
 
-        // Load the user from the Data manager
-        DataManager.getUsers userDM = new DataManager.getUsers(this);
-        ArrayList<String> n = new ArrayList<>();
-        ArrayList<User> usersList;
-        n.add("username");
-        n.add(thisUser);
-        userDM.execute(n);
-        try {
-            usersList = userDM.get();
-            if (usersList.size() > 0) {
-                user = usersList.get(0);
-            } else {
-                Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+        if (DataManager.isNetworkAvailable()) {
+            // Load the user from the Data manager
+            DataManager.getUsers userDM = new DataManager.getUsers(this);
+            ArrayList<String> n = new ArrayList<>();
+            ArrayList<User> usersList;
+            n.add("username");
+            n.add(thisUser);
+            userDM.execute(n);
+            try {
+                usersList = userDM.get();
+                if (usersList.size() > 0) {
+                    user = usersList.get(0);
+                } else {
+                    Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                // TODO: Handle the exception
             }
-        } catch (Exception e) {
-            // TODO: Handle the exception
         }
     }
 
@@ -442,16 +441,26 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         super.onActivityResult(requestCode, resultCode, data);
 
         //Updates the recycler image view to show the image selected
-        if(resultCode==RESULT_OK) {
+        if (resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
+                int dataSize = 0;
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedimg);
-                    if(bitmap.getByteCount() > 65536) {
+                    // Get the size of the image
+                    try {
+                        InputStream fileInputStream=getApplicationContext().getContentResolver().openInputStream(selectedimg);
+                        dataSize = fileInputStream.available();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // Check if the image is too large
+                    if(dataSize > 65536) {
                         Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                     } else {
                         task.addPhoto(bitmap);
                         imageAdapter.updateList(task.getPhotoList());
                     }
+
                 } catch (IOException e) {
 
                 }
@@ -542,30 +551,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         });
 
     }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
-                googleApiClient);
-        if (myLocation != null) {
-            Log.i("MAP", "Location is: " + myLocation.toString());
-            task.setLocation(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
-        } else {
-            Log.i("MAP", "Location is null:");
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("MAP", "There was an error connecting: " + connectionResult);
-    }
-
 
     /**
      * Textwatcher code taken from https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android

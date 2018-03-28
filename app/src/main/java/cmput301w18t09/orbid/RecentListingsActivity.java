@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -111,11 +110,37 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_reviews);
         recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        menu.getItem(0).setVisible(true);
+        return true;
+    }
+
+    /**
+     * Function for when an options item is selected.
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.MenuItem_RefreshButton) {
+            getListings();
+            taskListAdapter.notifyDataSetChanged();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -186,7 +211,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                 if (status == Task.TaskStatus.ASSIGNED) {
                     it.remove();
                 }
-                else if (status == Task.TaskStatus.BIDDED) {
+                else if (status == Task.TaskStatus.COMPLETED) {
                     it.remove();
                 }
             }
@@ -200,21 +225,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         taskListAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Function for when an options item is selected.
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Parses a string of keywords and returns a result list of
