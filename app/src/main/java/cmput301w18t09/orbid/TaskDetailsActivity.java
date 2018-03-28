@@ -138,8 +138,8 @@ public class TaskDetailsActivity extends NavigationActivity{
      * it needs to make these changes.
      */
     private void isAssignedTask() {
-        int b = task.getAcceptedBid();
-        bid = task.getBidList().get(b);
+//        int b = task.getAcceptedBid();
+        bid = task.getBidList().get(0);
         textLowestBid = findViewById(R.id.details_lowest_bid);
 
         // Show the buttons if the task is Assigned, only if the network is available
