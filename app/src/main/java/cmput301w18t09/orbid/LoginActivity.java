@@ -2,6 +2,8 @@ package cmput301w18t09.orbid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,6 +67,24 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
+     * Checks if the app is connected to the internet
+     * Taken from: https://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
+     * @return connected; Boolean that states if the phone is connected or not
+     */
+    private Boolean isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        else
+            connected = false;
+        return connected;
+    }
+
+    /**
      * Opens the recent listings activity on a successful login attempt.
      *
      * @see RecentListingsActivity
@@ -73,7 +93,7 @@ public class LoginActivity extends AppCompatActivity{
     private void openRecentListingsActivity() {
 
         // Tell the user if they cannot login due to being offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!isConnected()) {
             Toast.makeText(this, "Cannot login while offline", Toast.LENGTH_LONG).show();
             return;
         }
