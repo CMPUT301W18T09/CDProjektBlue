@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -70,6 +71,17 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Find the recent listing tasks from DM
         getTaskDetails();
+
+        // Check for errors to avoid app crashes
+        if(task == null) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        } else if (isBid == 1 && task.getAcceptedBid() == -1) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         // Set the tasks values
         setTaskValues();
@@ -326,7 +338,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void setBid(TextView text_lowest_bid) {
         Bid lowest_bid = null;
         if (task == null) {
-            Log.i("MSG", "task is null here");
+            Log.i("MSG", "task isa null here");
         }
 
         // Display your bid price
@@ -395,16 +407,14 @@ public class TaskDetailsActivity extends NavigationActivity{
             else {
                 if (taskList.size() > 0) {
                     task = taskList.get(0);
-                } else {
-                    Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
-                    // TODO: This doesn't prevent null pointer exception when the program continues, must resolve
                 }
             }
-          
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
+
+
 }

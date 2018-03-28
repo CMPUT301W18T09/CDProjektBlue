@@ -266,12 +266,12 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         super.onResume();
         if(shouldWait == 1) {
             try {
-                TimeUnit.MILLISECONDS.sleep(700);
+                TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
 
             }
         } else {
-            shouldWait = 0;
+            shouldWait = 1;
         }
         changeLayout();
     }
@@ -288,7 +288,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
         //selection if the task tapped is in My Bids or My Requests
         if(isMyBids == 0) {
-
             // Opens a task to be editted
             if (currentPage == 0) {
                 // is on my requested tasks so should open as edit
