@@ -43,10 +43,10 @@
         <activity
             android:name=".RecentListingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
-
         <activity
             android:name=".ListTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ListReviewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
