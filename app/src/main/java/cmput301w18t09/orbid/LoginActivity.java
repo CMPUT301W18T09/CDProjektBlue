@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity{
         btnLogin = findViewById(R.id.login_btnSignIn);
         btnLogin.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                findViewById(R.id.loadingPanelLogin).setVisibility(View.VISIBLE);
                 openRecentListingsActivity();
             }
         });
@@ -105,7 +104,7 @@ public class LoginActivity extends AppCompatActivity{
             Toast.makeText(this, "That user name does not exist", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        findViewById(R.id.loadingPanelLogin).setVisibility(View.VISIBLE);
         // Prepare the recent listings
         Intent intent = new Intent(this, RecentListingsActivity.class);
         currentUsername = etUsername.getText().toString();
