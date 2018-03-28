@@ -78,6 +78,10 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         if (!DataManager.isNetworkAvailable()) {
             Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
             return;
+        } else if(task == null) {
+            Toast.makeText(context, "This task no longer exists", Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
 
         Log.i("BID", "title is empty: " + etPrice.getText().toString());

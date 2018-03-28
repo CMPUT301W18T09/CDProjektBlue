@@ -112,6 +112,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
             load();
+            // Don't create the activity if the task is null
+            if(task == null) {
+                Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
         }
         // Load the proper views
         activityTypeInit();
