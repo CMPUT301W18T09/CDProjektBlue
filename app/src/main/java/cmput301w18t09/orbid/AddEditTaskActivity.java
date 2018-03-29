@@ -229,7 +229,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             if (!etLocation.getText().toString().isEmpty()) {
                 // Check users manually entered location
                 String locationString = etLocation.getText().toString();
-                LatLng latLng = MapActivity.fromAddress(locationString);
+                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
                 Log.i("GEO", "Manually entered latlng: " + latLng.toString());
                 task.setLocation(latLng);
             } else {
@@ -344,7 +344,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etDescription.setText(task.getDescription());
             LatLng location = task.getLocation();
             if (location != null) {
-                String geoResult = MapActivity.getAddress(location);
+                String geoResult = MapActivity.getAddress(location, getResources());
                 etLocation.setText(geoResult);
             } else {
                 Log.i("GEO", "Location is null");

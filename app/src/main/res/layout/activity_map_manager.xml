@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/mapFrame"
-        android:name="cmput301w18t09.orbid.MapActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/locationSearchBar">
