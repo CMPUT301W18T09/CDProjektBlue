@@ -99,7 +99,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             getListings();
         }
         else {
-            Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -271,7 +271,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             openPlaceBidActivity(position);
         }
         else {
-            Toast.makeText(this, "Cannot open task details for bidding while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot open task details for bidding while offline", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -114,7 +114,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             load();
             // Don't create the activity if the task is null
             if(task == null) {
-                Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
@@ -249,15 +249,15 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
-            Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getTitle().length() < 1) {
-            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() > 300) {
-            Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() < 1) {
-            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else if(task.getPrice() == 0) {
-            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
         } else {
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
             // Save the new task to the DM
@@ -348,7 +348,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
               if (taskList.size() > 0) {
                   task = taskList.get(0);
               } else {
-                  Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
+                  Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_SHORT).show();
                   Intent intent = new Intent( this, ListTaskActivity.class);
                   intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
                   intent.putExtra("isMyBids",0);
@@ -360,10 +360,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
         } catch (InterruptedException e) {
-            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
-            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -380,7 +380,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 if (usersList.size() > 0) {
                     user = usersList.get(0);
                 } else {
-                    Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 // TODO: Handle the exception
@@ -406,7 +406,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         // Don't allow a user to delete tasks while offline
         if (!DataManager.isNetworkAvailable(this )) {
-            Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_SHORT).show();
             return;
         }
         findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
@@ -496,7 +496,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         // Don't allow a user to accept or decline bids while off the network
         if (!DataManager.isNetworkAvailable(this )) {
-            Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 

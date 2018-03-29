@@ -76,10 +76,10 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
         // Inform the user if they attempt to make a bid offline
         if (!DataManager.isNetworkAvailable(this )) {
-            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_SHORT).show();
             return;
         } else if(task == null) {
-            Toast.makeText(context, "This task no longer exists", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "This task no longer exists", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -112,7 +112,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
 
             finish();
         } else {
-            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
 
     }
