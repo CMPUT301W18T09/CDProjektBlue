@@ -12,7 +12,6 @@
 
     <EditText
         android:id="@+id/edit_profile_etFirstName"
-
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:gravity="center"
@@ -35,13 +34,10 @@
         android:gravity="center"
         android:hint="@string/last_name"
         android:inputType="textPersonName"
-
-
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#fcfcf9"
-
         android:textAlignment="center"
         android:textColor="#fcfcf9"
         android:textColorHint="#fcfcf9"/>
@@ -64,7 +60,6 @@
 
     <EditText
         android:id="@+id/edit_profile_etPhoneNumber"
-
         android:layout_alignStart="@+id/edit_profile_etEmail"
         android:layout_below="@+id/edit_profile_etEmail"
         android:layout_marginTop="20dp"
@@ -123,7 +118,6 @@
 
     <EditText
         android:id="@+id/edit_profile_etPassword"
-
         android:layout_alignStart="@+id/edit_profile_etEmail"
         android:layout_below="@+id/create_account_etUsername"
         android:layout_marginTop="20dp"
