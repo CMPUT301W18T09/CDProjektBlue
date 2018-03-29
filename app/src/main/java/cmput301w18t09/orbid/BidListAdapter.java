@@ -41,7 +41,7 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
         Bid bid = bidList.get(position);
         holder.setClickListener(clickListener);
         holder.bidDescription.setText(bid.getDescription());
-        holder.bidPrice.setText(Double.toString(bid.getPrice()));
+        holder.bidPrice.setText("$" + Double.toString(bid.getPrice()));
         holder.bidUsername.setText(bid.getProvider());
     }
 
