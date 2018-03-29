@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity{
     private Button btnLogin;
     private Button btnCreateAccount;
     private EditText etUsername;
+    private EditText etPassword;
     private static String currentUsername;
 
     public static ArrayList<Task> backupTasks;
@@ -48,6 +49,7 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         etUsername = findViewById(R.id.login_etUsername);
+        etPassword = findViewById(R.id.login_etPassword);
 
         // Assign on click listener to the sign in button
         btnLogin = findViewById(R.id.login_btnSignIn);
@@ -95,6 +97,8 @@ public class LoginActivity extends AppCompatActivity{
         // Query server to ensure username exists
         queryParameters.add("username");
         queryParameters.add(etUsername.getText().toString());
+        queryParameters.add("password");
+        queryParameters.add(etPassword.getText().toString());
         getUsers.execute(queryParameters);
         try {
             returnUsers = getUsers.get();
@@ -107,7 +111,7 @@ public class LoginActivity extends AppCompatActivity{
         }
         // If the user name does not exist, tell the user
         if (returnUsers.isEmpty()) {
-            Toast.makeText(this, "That user name does not exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid login", Toast.LENGTH_SHORT).show();
             return;
         }
         findViewById(R.id.loadingPanelLogin).setVisibility(View.VISIBLE);

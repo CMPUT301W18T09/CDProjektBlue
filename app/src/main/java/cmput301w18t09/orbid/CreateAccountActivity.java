@@ -23,6 +23,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPhoneNumber;
     private EditText etFirstName;
+    private EditText etPassword;
     private EditText etLastName;
     private Button btnCreateAccount;
 
@@ -42,6 +43,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         etPhoneNumber = findViewById(R.id.edit_profile_etPhoneNumber);
         etFirstName = findViewById(R.id.edit_profile_etFirstName);
         etLastName = findViewById(R.id.edit_profile_etLastName);
+        etPassword = findViewById(R.id.edit_profile_etPassword);
 
         // Assign on click listener to create account button
         btnCreateAccount = findViewById(R.id.create_account_btnCreate);
@@ -74,6 +76,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
+        String password = etPassword.getText().toString();
 
         // Ensure username is not yet taken
         queryParameters.add("username");
@@ -89,6 +92,12 @@ public class CreateAccountActivity extends AppCompatActivity {
             return;
         }
 
+
+        // Check if the PW length is 0 or > 30
+        if (password.length() == 0  || password.length() > 30) {
+            Toast.makeText(this, "Invalid password", Toast.LENGTH_LONG).show();
+            return;
+        }
         // If the user name was taken, tell the user
         if (!returnUsers.isEmpty()) {
             Toast.makeText(this, "That user name already exists.", Toast.LENGTH_LONG).show();
@@ -144,7 +153,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
 
         // Add the new user to the server
-        user = new User(username, email, phoneNumber, firstName, lastName);
+        user = new User(username, password, email, phoneNumber, firstName, lastName);
         addUsers.execute(user);
 
         // If all goes well, then re-open the login activity
