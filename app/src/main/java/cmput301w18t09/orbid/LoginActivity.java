@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity{
 
         // Tell the user if they cannot login due to being offline
         if (!DataManager.isNetworkAvailable(this, etUsername.getText().toString())) {
-            Toast.makeText(this, "Cannot login while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot login while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
