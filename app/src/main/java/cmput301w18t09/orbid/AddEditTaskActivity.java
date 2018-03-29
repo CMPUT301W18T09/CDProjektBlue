@@ -367,7 +367,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             e.printStackTrace();
         }
 
-        if (DataManager.isNetworkAvailable()) {
+        if (DataManager.isNetworkAvailable(this )) {
             // Load the user from the Data manager
             DataManager.getUsers userDM = new DataManager.getUsers(this);
             ArrayList<String> n = new ArrayList<>();

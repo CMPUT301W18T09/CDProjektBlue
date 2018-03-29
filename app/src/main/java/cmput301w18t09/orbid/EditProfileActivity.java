@@ -27,6 +27,8 @@ public class EditProfileActivity extends NavigationActivity {
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etEmail;
+    private EditText etPassword;
+
     private User currentUser;
 
     /**
@@ -50,7 +52,7 @@ public class EditProfileActivity extends NavigationActivity {
         etPhoneNumber = findViewById(R.id.edit_profile_etPhoneNumber);
         etFirstName = findViewById(R.id.edit_profile_etFirstName);
         etLastName = findViewById(R.id.edit_profile_etLastName);
-
+        etPassword = findViewById(R.id.edit_profile_etPassword);
         // Get the currently logged in user
         String username = LoginActivity.getCurrentUsername();
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
@@ -107,7 +109,13 @@ public class EditProfileActivity extends NavigationActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
+        String password = etPassword.getText().toString();
 
+        // Check if the PW length is 0 or > 30
+        if (password.length() == 0  || password.length() > 30) {
+            Toast.makeText(this, "Invalid password", Toast.LENGTH_LONG).show();
+            return;
+        }
         // Check first name length is not zero
         if (firstName.length() == 0) {
             Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_LONG).show();
@@ -151,7 +159,7 @@ public class EditProfileActivity extends NavigationActivity {
         }
 
         // Add the new user to the server
-        user = new User(username, email, phoneNumber, firstName, lastName);
+        user = new User(username,password, email, phoneNumber, firstName, lastName);
         user.setID(currentUser.getID());
         queryParameters.add(user);
         updateUsers.execute(queryParameters);
