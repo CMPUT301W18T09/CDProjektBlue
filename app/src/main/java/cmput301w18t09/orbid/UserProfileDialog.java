@@ -88,13 +88,11 @@ public class UserProfileDialog extends DialogFragment {
         tvphone.setText(user.getPhoneNumber());
         tvfullname.setText(user.getLastName()+", "+ user.getFirstName());
 
-        //TODO - Get review score from user
+        //Get review score from user
         Float scoreSum = 0.0f;
         Float ave = 3.7f;
         ArrayList<Review> revList = user.getReviewList();
-        Toast.makeText(getActivity().getApplicationContext(), revList.size(),
-                Toast.LENGTH_LONG).show();
-        if (revList != null) {
+        if (revList.size() > 0) {
             for (int i = 0; i < revList.size(); i++) {
                 scoreSum += revList.get(i).getRating();
             }
