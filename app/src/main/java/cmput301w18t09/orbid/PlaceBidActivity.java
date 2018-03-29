@@ -75,7 +75,7 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     public void makeBid(View view) {
 
         // Inform the user if they attempt to make a bid offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
             return;
         } else if(task == null) {

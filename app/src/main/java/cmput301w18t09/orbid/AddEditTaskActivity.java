@@ -341,7 +341,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             taskList = getTasks.get();
 
             // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
+            if (!DataManager.isNetworkAvailable(this )) {
                 task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
             else {
@@ -403,7 +403,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void deleteButton(View view) {
 
         // Don't allow a user to delete tasks while offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
             return;
         }
@@ -493,7 +493,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void onClick(View view, int position, int type) {
 
         // Don't allow a user to accept or decline bids while off the network
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_LONG).show();
             return;
         }
