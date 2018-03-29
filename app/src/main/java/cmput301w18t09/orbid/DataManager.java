@@ -398,6 +398,7 @@ public class DataManager {
             ArrayList<User> users = passed[0];
 
             for (User user: users){
+                user.setPassword(encrpytion(user.getPassword()));
                 try {
                     DocumentResult result = client.execute(new Index.Builder(user).index("cmput301w18t09").type("user").id(user.getID()).build());
 
