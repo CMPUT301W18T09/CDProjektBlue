@@ -74,11 +74,11 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Check for errors to avoid app crashes
         if(task == null) {
-            Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
             finish();
             return;
         } else if (isBid == 1 && task.getAcceptedBid() == -1) {
-            Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -249,7 +249,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Don't allow the user to set tasks to complete when offline
         if (!DataManager.isNetworkAvailable(this)) {
-            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -277,7 +277,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Don't allow user to repost tasks when offline
         if (!DataManager.isNetworkAvailable(this)) {
-            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -307,7 +307,7 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Inform the user if they attempt to get user information while offline
         if (!DataManager.isNetworkAvailable(this )) {
-            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 

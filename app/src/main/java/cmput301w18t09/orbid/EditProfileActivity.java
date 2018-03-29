@@ -27,6 +27,8 @@ public class EditProfileActivity extends NavigationActivity {
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etEmail;
+    private EditText etPassword;
+
     private User currentUser;
 
     /**
@@ -50,7 +52,7 @@ public class EditProfileActivity extends NavigationActivity {
         etPhoneNumber = findViewById(R.id.edit_profile_etPhoneNumber);
         etFirstName = findViewById(R.id.edit_profile_etFirstName);
         etLastName = findViewById(R.id.edit_profile_etLastName);
-
+        etPassword = findViewById(R.id.edit_profile_etPassword);
         // Get the currently logged in user
         String username = LoginActivity.getCurrentUsername();
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
@@ -64,7 +66,7 @@ public class EditProfileActivity extends NavigationActivity {
             if (returnUsers.size() > 0) {
                 currentUser = returnUsers.get(0);
             } else {
-                Toast.makeText(this, "This user may no longer exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "This user may no longer exist", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e) {
@@ -107,57 +109,63 @@ public class EditProfileActivity extends NavigationActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
+        String password = etPassword.getText().toString();
 
+        // Check if the PW length is 0 or > 30
+        if (password.length() == 0  || password.length() > 30) {
+            Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Check first name length is not zero
         if (firstName.length() == 0) {
-            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check last name length is not zero
         if (lastName.length() == 0) {
-            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check e-mail length is not zero
         if (email.length() == 0) {
-            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check e-mail format is acceptable
         if (email.indexOf('@') == -1 || email.indexOf('@') == 0 || email.indexOf('@') == email.length() - 1) {
-            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check phone number is not empty
         if (phoneNumber.length() == 0) {
-            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check phone number does not exceed 10 digits
         if (phoneNumber.length() != 10) {
-            Toast.makeText(this, "Phone number must be exactly 10 digits", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Phone number must be exactly 10 digits", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check phone number format is acceptable
         if (!containsOnlyNumbers(phoneNumber)) {
-            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Add the new user to the server
-        user = new User(username, email, phoneNumber, firstName, lastName);
+        user = new User(username,password, email, phoneNumber, firstName, lastName);
         user.setID(currentUser.getID());
         queryParameters.add(user);
         updateUsers.execute(queryParameters);
 
         // If all goes well, tell the user
-        Toast.makeText(this, "Save successful", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Save successful", Toast.LENGTH_SHORT).show();
         return;
     }
 
