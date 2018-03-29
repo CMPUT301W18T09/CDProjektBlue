@@ -121,4 +121,21 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/edit_profile_etPassword"
+
+        android:layout_alignStart="@+id/edit_profile_etEmail"
+        android:layout_below="@+id/create_account_etUsername"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="password"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9" />
+
 </RelativeLayout>
