@@ -219,7 +219,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             try {
 
                 // If no network is available, use the backup tasks, else fetch from the server
-                if (!DataManager.isNetworkAvailable()) {
+                if (!DataManager.isNetworkAvailable(this )) {
 
                     // Create a copy of the backupTasks
                     taskList = new ArrayList<>(DataManager.backupTasks);
