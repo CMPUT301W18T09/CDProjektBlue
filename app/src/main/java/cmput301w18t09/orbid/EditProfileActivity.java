@@ -111,6 +111,8 @@ public class EditProfileActivity extends NavigationActivity {
         String lastName = etLastName.getText().toString();
         String password = etPassword.getText().toString();
 
+
+
         // Check if the PW length is 0 or > 30
         if (password.length() == 0  || password.length() > 30) {
             Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
@@ -140,11 +142,6 @@ public class EditProfileActivity extends NavigationActivity {
             return;
         }
 
-        // Check phone number is not empty
-        if (phoneNumber.length() == 0) {
-            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // Check phone number does not exceed 10 digits
         if (phoneNumber.length() != 10) {
@@ -159,14 +156,14 @@ public class EditProfileActivity extends NavigationActivity {
         }
 
         // Add the new user to the server
-        user = new User(username,password, email, phoneNumber, firstName, lastName);
+        user = new User(username, password, email, phoneNumber, firstName, lastName);
         user.setID(currentUser.getID());
         queryParameters.add(user);
         updateUsers.execute(queryParameters);
 
         // If all goes well, tell the user
         Toast.makeText(this, "Save successful", Toast.LENGTH_SHORT).show();
-        return;
+        finish();
     }
 
     /**
