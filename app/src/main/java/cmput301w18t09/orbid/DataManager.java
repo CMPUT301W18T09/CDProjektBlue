@@ -5,10 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -134,6 +131,7 @@ public class DataManager {
             verifySettings();
 
             for (User user: users){
+                user.setPassword(encrpytion(user.getPassword()));
                 Index index = new Index.Builder(user).index("cmput301w18t09").type("user").build();
 
                 try{
@@ -245,12 +243,15 @@ public class DataManager {
             ArrayList<User> users = new ArrayList<>();
             ArrayList<String> search_Parameters = passed[0];
 
-            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            BoolQueryBuilder query = QueryBuilders.boolQuery();
             for (int x=0; x < search_Parameters.size(); x+=2){
-                searchSourceBuilder.query(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
+                if (search_Parameters.get(x).equals("password")){
+                    search_Parameters.set(x+1, encrpytion(search_Parameters.get(x+1)));
+                }
+                query.must(QueryBuilders.matchQuery(search_Parameters.get(x), search_Parameters.get(x+1)));
             }
 
-            Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("cmput301w18t09").addType("user").build();
+            Search search = new Search.Builder(new SearchSourceBuilder().size(1).query(query).toString()).addIndex("cmput301w18t09").addType("user").build();
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
@@ -748,6 +749,14 @@ public class DataManager {
         catch (InterruptedException e) { e.printStackTrace(); }
 
         return false;
+    }
+
+    public static String encrpytion(String pass){
+        String encrypt = "";
+        for(int x = 0; x < pass.length(); x++){
+            encrypt += pass.charAt(x) + 4;
+        }
+        return encrypt;
     }
 
 }
