@@ -12,12 +12,12 @@
         android:id="@+id/login_tvAppName"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/login_etUsername"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+
+        android:layout_marginBottom="90dp"
         android:fontFamily="monospace"
         android:text="@string/app_name"
-
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="#fcfcf9"
@@ -75,4 +75,15 @@
             android:layout_height="wrap_content"
             android:indeterminate="true" />
     </RelativeLayout>
+
+    <EditText
+        android:id="@+id/login_etPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login_etUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="password" />
 </RelativeLayout>
