@@ -79,22 +79,18 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
 
         searchView = findViewById(R.id.search_view);
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                refineListings();
-//            }
-//        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                refineListings();
+//                refineListings();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                // If search string is empty, refresh the listings
+                refineListings();
                 return false;
             }
         });
