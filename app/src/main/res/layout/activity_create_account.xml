@@ -1,81 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme">
+    tools:context="cmput301w18t09.orbid.CreateAccountActivity"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <EditText
         android:id="@+id/edit_profile_etFirstName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
 
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:background="@drawable/new_button_background"
         android:gravity="center"
         android:hint="@string/first_name"
         android:inputType="textPersonName"
-        android:textColor="@android:color/black" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etLastName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:layout_alignStart="@+id/edit_profile_etFirstName"
         android:layout_below="@+id/edit_profile_etFirstName"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/last_name"
         android:inputType="textPersonName"
-        android:textColor="@android:color/black" />
+
+
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etEmail"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:layout_alignStart="@+id/edit_profile_etLastName"
         android:layout_below="@+id/edit_profile_etLastName"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
-        android:ems="10"
         android:gravity="center"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:textColor="@android:color/black" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etPhoneNumber"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+
         android:layout_alignStart="@+id/edit_profile_etEmail"
         android:layout_below="@+id/edit_profile_etEmail"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/phone_number"
         android:inputType="textPersonName|phone"
-        android:textColor="@android:color/black" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
 
     <EditText
         android:id="@+id/create_account_etUsername"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:layout_below="@+id/edit_profile_etPhoneNumber"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textColor="@android:color/black" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
 
     <Button
         android:id="@+id/create_account_btnCreate"
@@ -86,7 +104,8 @@
         android:layout_marginBottom="18dp"
         android:background="@drawable/new_button_background"
         android:textAllCaps="false"
-        android:text="@string/create_account" />
+        android:text="@string/create_account"
+        android:textColor="@color/colorTheme"/>
 
     <TextView
         android:id="@+id/create_account_tvTitle"
@@ -94,12 +113,11 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/new_button_background"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="@string/create_account_title"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="#fcfcf9"
         android:textSize="30sp"
         android:textStyle="bold" />
 
