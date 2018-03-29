@@ -407,6 +407,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
             return;
         }
+        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());

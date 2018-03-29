@@ -108,7 +108,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_LONG).show();
         }
 
-        Collections.reverse(taskList);
 
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
@@ -139,6 +138,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         int id = item.getItemId();
         if (id == R.id.MenuItem_RefreshButton) {
             getListings();
+            taskListAdapter.setTaskList(taskList);
             taskListAdapter.notifyDataSetChanged();
         }
 
@@ -198,6 +198,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         try {
             getTasks.execute(searchParams);
             taskList = getTasks.get();
+            Collections.reverse(taskList);
 
             // If there were no results, tell the user
             if (taskList.size() == 0) {
@@ -217,7 +218,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                     it.remove();
                 }
             }
-
             taskListAdapter.setTaskList(taskList);
 
         } catch (Exception e) {
