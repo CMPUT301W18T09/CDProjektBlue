@@ -14,17 +14,13 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     private ArrayList<Review> reviewList;
     private ItemClickListener clickListener;
     private int type;
-    private String userName;
 
 
-
-    public ReviewListAdapter(final Context context, ArrayList<Review> reviewList, int type, String userName) {
+    public ReviewListAdapter(final Context context, ArrayList<Review> reviewList, int type) {
         this.context = context;
         this.reviewList = reviewList;
         this.type = type;
-        this.userName = userName;
     }
-
 
 
     public void setClickListener(ItemClickListener clickListener) {
@@ -44,7 +40,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
         Review review = reviewList.get(position);
         holder.reviewType.setText(review.getType().toString());
         holder.reviewDescription.setText(review.getDescription());
-        holder.reviewUsername.setText(userName);
+        holder.reviewUsername.setText(review.getSubmittingUser());
         holder.reviewRating.setRating(review.getRating());
     }
 
