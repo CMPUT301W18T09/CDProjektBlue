@@ -58,7 +58,7 @@ import io.searchbox.core.SearchResult;
 public class DataManager {
 
     private static JestDroidClient client;
-    public static ArrayList<Task> backupTasks;
+    public static ArrayList<Task> backupTasks = new ArrayList<>();
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
