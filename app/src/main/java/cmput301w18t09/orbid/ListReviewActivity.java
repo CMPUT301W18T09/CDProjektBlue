@@ -34,6 +34,7 @@ public class ListReviewActivity extends NavigationActivity implements ItemClickL
 
         Review testr = new Review(4.0f, "description", Review.reviewType.PROVIDER_REVIEW, "subuser");
         reviewList.add(testr);
+        reviewList.add(testr);
         reviewListAdapter = new ReviewListAdapter(this, reviewList, 0);
         reviewListAdapter.setClickListener(this);
         recyclerView = findViewById(R.id.recyclerView_reviews);

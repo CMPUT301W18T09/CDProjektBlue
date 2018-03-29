@@ -19,7 +19,7 @@ public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.On
         super(view);
         reviewType = view.findViewById(R.id.review_type);
         reviewDescription = view.findViewById(R.id.description);
-        reviewUsername = view.findViewById(R.id.review_username);
+        reviewUsername = view.findViewById(R.id.reviewer_username);
         reviewRating = view.findViewById(R.id.ratingBar);
         view.setOnClickListener(this);
         this.type = type;
