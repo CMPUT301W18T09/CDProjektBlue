@@ -87,9 +87,10 @@
         android:id="@+id/edit_profile_tvUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#fcfcf9"
         android:ems="10"
         android:gravity="center"
@@ -100,6 +101,22 @@
         android:textColor="#fcfcf9"
         android:textSize="30sp"
         android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edit_profile_etPassword"
+        android:layout_below="@+id/edit_profile_etPhoneNumber"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="New Password"
+        android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColorHint="#fcfcf9"
+        android:textColor="#fcfcf9"/>
 
 
 </RelativeLayout>
