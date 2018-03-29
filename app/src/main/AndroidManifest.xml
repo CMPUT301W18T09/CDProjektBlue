@@ -75,6 +75,8 @@
             android:name=".PlaceBidActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FullScreenImageActivity"/>
+        <activity android:name=".MapManager"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

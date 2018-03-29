@@ -66,7 +66,8 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-                    openMapActivity();
+                    Intent intent = new Intent(getBaseContext(), MapManager.class);
+                    getBaseContext().startActivity(intent);
                 }
                 else {
                     Intent intent = new Intent(getBaseContext(), RecentListingsActivity.class);

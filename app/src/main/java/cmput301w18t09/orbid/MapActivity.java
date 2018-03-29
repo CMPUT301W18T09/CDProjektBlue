@@ -103,19 +103,19 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
             }
         });
 
-        // Get the bundle from the previous activity
-        Bundle bundle = getArguments();
-        String came_from = bundle.getString("came_from");
-
-        // If we came from recent_listings
-        if (came_from.equals("recent_listings")) {
-            displayAllListings();
-        }
-        // If we came from a single ad - * id needs to be passed in arguments *
-        else if (came_from.equals("single_ad")) {
-            String id = bundle.getString("id");
-            displaySingleListing(id);
-        }
+//        // Get the bundle from the previous activity
+//        Bundle bundle = getArguments();
+//        String came_from = bundle.getString("came_from");
+//
+//        // If we came from recent_listings
+//        if (came_from.equals("recent_listings")) {
+//            displayAllListings();
+//        }
+//        // If we came from a single ad - * id needs to be passed in arguments *
+//        else if (came_from.equals("single_ad")) {
+//            String id = bundle.getString("id");
+//            displaySingleListing(id);
+//        }
     }
 
     /**
