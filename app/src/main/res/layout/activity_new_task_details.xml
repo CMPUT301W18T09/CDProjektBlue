@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fcfcf9">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#fcfcf9"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Looking for a babysitter"
+            android:textAlignment="center"
+            android:textColor="#fcfcf9" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etTitle"
+            android:textColor="#fcfcf9"
+            android:backgroundTint="#fcfcf9"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="14 1510 Parkland Drive"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fcfcf9"
+                android:backgroundTint="#fcfcf9"
+                android:layout_below="@id/etLocation"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Requested"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/etPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fcfcf9"
+                android:backgroundTint="#fcfcf9"
+                android:layout_below="@+id/etLocation"
+                android:layout_toRightOf="@+id/etPrice"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Lowest Bid: $42"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:gravity="top|left"
+            android:inputType="text|textMultiLine|textCapSentences"
+            android:maxLength="300"
+            android:text="I'm going out of town and will not have to be in touch and I not have to go back and I have a great time and place and we will have a good time for you and I have a good time for you and I'm​I have to go to the gym and then I will be there in a few minutes late but I don't know if you want to go to"
+            android:textColor="#fcfcf9" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTheme"
+            android:layout_marginLeft="4dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:background="@drawable/new_button_background"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btnBid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/new_button_background"
+            android:text="Bid"
+            android:textColor="@color/colorTheme" />
+    </LinearLayout>
+
+</RelativeLayout>

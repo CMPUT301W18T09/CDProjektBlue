@@ -9,6 +9,8 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
+
+
     <EditText
         android:id="@+id/EditTaskTitle"
         android:layout_width="300dp"
@@ -17,6 +19,8 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/new_button_background"
         android:gravity="center_vertical|center"
+        android:maxLines="1"
+        android:inputType="text"
         android:hint="Title:"
         android:text=""
         android:textColor="#000000"
@@ -88,7 +92,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="18dp"
-        android:layout_toStartOf="@+id/AddEditPrice"
+        android:layout_toStartOf="@+id/EditPrice"
         android:background="@drawable/new_button_background"
         android:textColor="#000000"
         android:textAllCaps="false"
@@ -109,5 +113,17 @@
         android:inputType="numberDecimal"
         android:textColor="#000000"/>
 
+    <RelativeLayout
+        android:id="@+id/loadingPanelAdd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

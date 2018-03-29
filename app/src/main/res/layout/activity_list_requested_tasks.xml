@@ -12,6 +12,8 @@
     android:focusableInTouchMode="true">
 
 
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RequestedTasks"
         android:layout_width="match_parent"
@@ -48,6 +50,7 @@
         android:layout_marginStart="12dp"
         android:onClick="pageBack"
         app:srcCompat="@drawable/ic_page_left" />
+
 
 
 </RelativeLayout>

@@ -112,6 +112,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
             load();
+            // Don't create the activity if the task is null
+            if(task == null) {
+                Toast.makeText(context, "This no longer exists", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
         }
         // Load the proper views
         activityTypeInit();
@@ -235,7 +241,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void save() {
 
         // Add location to the task
-        task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+        try {
+            task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+        } catch(Exception e) {
+            Log.e("LatLng", "Could not get location");
+        }
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -249,7 +259,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if(task.getPrice() == 0) {
             Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
         } else {
-
+            findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
             // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
@@ -331,7 +341,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             taskList = getTasks.get();
 
             // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
+            if (!DataManager.isNetworkAvailable(this )) {
                 task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
             else {
@@ -395,10 +405,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void deleteButton(View view) {
 
         // Don't allow a user to delete tasks while offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
             return;
         }
+        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());
@@ -484,7 +495,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void onClick(View view, int position, int type) {
 
         // Don't allow a user to accept or decline bids while off the network
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_LONG).show();
             return;
         }

@@ -2,6 +2,8 @@ package cmput301w18t09.orbid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ALL")
 /**
@@ -43,6 +46,7 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         etUsername = findViewById(R.id.login_etUsername);
 
         // Assign on click listener to the sign in button
@@ -78,7 +82,7 @@ public class LoginActivity extends AppCompatActivity{
     private void openRecentListingsActivity() {
 
         // Tell the user if they cannot login due to being offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this, etUsername.getText().toString())) {
             Toast.makeText(this, "Cannot login while offline", Toast.LENGTH_LONG).show();
             return;
         }
@@ -101,13 +105,12 @@ public class LoginActivity extends AppCompatActivity{
             Toast.makeText(this, "Error checking uniqueness of username", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // If the user name does not exist, tell the user
         if (returnUsers.isEmpty()) {
             Toast.makeText(this, "That user name does not exist", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        findViewById(R.id.loadingPanelLogin).setVisibility(View.VISIBLE);
         // Prepare the recent listings
         Intent intent = new Intent(this, RecentListingsActivity.class);
         currentUsername = etUsername.getText().toString();
@@ -127,9 +130,15 @@ public class LoginActivity extends AppCompatActivity{
         } catch (Exception e) {
             // TODO: Handle
         }
-
-
+        
         this.startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // Disabled the loading animation
+        findViewById(R.id.loadingPanelLogin).setVisibility(View.GONE);
     }
 
     /**
@@ -160,6 +169,5 @@ public class LoginActivity extends AppCompatActivity{
     public void onBackPressed() {
 
     }
-
 
 }
