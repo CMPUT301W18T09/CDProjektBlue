@@ -81,14 +81,14 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-//                refineListings();
+                refineListings(1);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 // If search string is empty, refresh the listings
-                refineListings();
+                refineListings(0);
                 return false;
             }
         });
@@ -165,7 +165,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Refines the listings by keywords provided in the search bar. Only those tasks whose
      * descriptions contain all keywords are shown to the user.
      */
-    private void refineListings() {
+    private void refineListings(Integer type) {
 
         // Don't attempt a search if we are offline
         if (!DataManager.isNetworkAvailable(this )) {
@@ -195,7 +195,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             Collections.reverse(taskList);
 
             // If there were no results, tell the user
-            if (taskList.size() == 0) {
+            if (taskList.size() == 0 && type == 1) {
                 Toast.makeText(this, "Search returned no results", Toast.LENGTH_SHORT).show();
                 // TODO: Handle no tasks?
             }
