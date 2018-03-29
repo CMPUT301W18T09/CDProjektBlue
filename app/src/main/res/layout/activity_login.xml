@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.LoginActivity"
-    android:background="@color/colorTheme">
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
 
     <TextView
         android:id="@+id/login_tvAppName"
         android:layout_width="300dp"
         android:layout_height="70dp"
-
         android:layout_below="@+id/loadingPanelLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110dp"
@@ -31,14 +32,16 @@
         android:layout_below="@+id/login_tvAppName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="58dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:selectAllOnFocus="false"
         android:singleLine="false"
-        android:textColor="@android:color/black" />
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9" />
 
     <Button
         android:id="@+id/login_btnSignIn"
@@ -81,18 +84,17 @@
 
     <EditText
         android:id="@+id/login_etPassword"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/login_etUsername"
-        android:layout_alignStart="@+id/login_etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/login_etUsername"
-        android:layout_marginTop="13dp"
-        android:background="@drawable/new_button_background"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:gravity="center"
-        android:hint="Password"
         android:inputType="textPassword"
-        android:selectAllOnFocus="false"
-        android:singleLine="false"
-        android:textColor="@android:color/black" />
+        android:text="password"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9"/>
+
 </RelativeLayout>
