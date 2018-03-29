@@ -97,7 +97,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
         // Fill taskList with all tasks if the network is available, otherwise report
         // to the user that that functionality is not available offline
-        if (DataManager.isNetworkAvailable()) {
+        if (DataManager.isNetworkAvailable(this )) {
             getListings();
         }
         else {
@@ -170,8 +170,8 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private void refineListings() {
 
         // Don't attempt a search if we are offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot perform search while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "Cannot perform search while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -198,7 +198,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
             // If there were no results, tell the user
             if (taskList.size() == 0) {
-                Toast.makeText(this, "Search returned no results", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Search returned no results", Toast.LENGTH_SHORT).show();
                 // TODO: Handle no tasks?
             }
 
@@ -269,7 +269,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     public void onClick(View view, int position, int type) {
-        if (DataManager.isNetworkAvailable()) {
+        if (DataManager.isNetworkAvailable(this )) {
             openPlaceBidActivity(position);
         }
         else {

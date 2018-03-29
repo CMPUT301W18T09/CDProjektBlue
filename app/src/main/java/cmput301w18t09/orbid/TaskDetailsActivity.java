@@ -248,7 +248,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void fulfilled(View view) {
 
         // Don't allow the user to set tasks to complete when offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this)) {
             Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_LONG).show();
             return;
         }
@@ -276,7 +276,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void repost(View view) {
 
         // Don't allow user to repost tasks when offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this)) {
             Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_LONG).show();
             return;
         }
@@ -306,7 +306,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void openUserInfo(String username) {
 
         // Inform the user if they attempt to get user information while offline
-        if (!DataManager.isNetworkAvailable()) {
+        if (!DataManager.isNetworkAvailable(this )) {
             Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_LONG).show();
             return;
         }
@@ -401,7 +401,7 @@ public class TaskDetailsActivity extends NavigationActivity{
             taskList = getTasks.get();
 
             // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
+            if (!DataManager.isNetworkAvailable(this )) {
                 task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
             else {
