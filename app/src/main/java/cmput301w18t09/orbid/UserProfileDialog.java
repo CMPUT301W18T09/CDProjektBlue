@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -88,29 +89,26 @@ public class UserProfileDialog extends DialogFragment {
         tvfullname.setText(user.getLastName()+", "+ user.getFirstName());
 
         //TODO - Get review score from user
-        Double scoreSum = 0.0;
-        Double ave = 3.7;
+        Float scoreSum = 0.0f;
+        Float ave = 3.7f;
         ArrayList<Review> revList = user.getReviewList();
+        Toast.makeText(getActivity().getApplicationContext(), revList.size(),
+                Toast.LENGTH_LONG).show();
         if (revList != null) {
             for (int i = 0; i < revList.size(); i++) {
                 scoreSum += revList.get(i).getRating();
             }
             ave = scoreSum/revList.size();
         }
-        rbRating.setRating(Double.valueOf(ave).floatValue());
+        rbRating.setRating(ave);
         rbRating.setIsIndicator(true);  //Stops user from changing value
 
-        //https://stackoverflow.com/questions/3443939/ratingbar-onclick
-        //https://stackoverflow.com/questions/13535640/capture-ratingbar-click
+
         rbRating.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //TODO Open review listing activity, pass username
                 Intent intent = new Intent(getActivity(), ListReviewActivity.class);
                 intent.putExtra("username", username);
-
-                Toast.makeText(getActivity().getApplicationContext(), "toast test",
-                        Toast.LENGTH_LONG).show();
                 startActivity(intent);
                 return false;
             }
