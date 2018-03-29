@@ -14,11 +14,9 @@
         android:id="@+id/login_tvAppName"
         android:layout_width="300dp"
         android:layout_height="70dp"
-
         android:layout_below="@+id/loadingPanelLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110dp"
-
         android:fontFamily="monospace"
         android:text="@string/app_name"
         android:textAlignment="center"
@@ -31,13 +29,9 @@
         android:id="@+id/login_etUsername"
         android:layout_width="250dp"
         android:layout_height="50dp"
-
         android:layout_below="@+id/login_tvAppName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="58dp"
-
-
-
         android:ems="10"
         android:gravity="center"
         android:hint="@string/username"
@@ -53,12 +47,10 @@
         android:id="@+id/login_btnSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignLeft="@+id/login_etPassword"
         android:layout_alignStart="@+id/login_etPassword"
         android:layout_below="@+id/login_etPassword"
         android:layout_marginTop="21dp"
-
         android:background="@drawable/new_button_background"
         android:text="@string/signin_Button"
         android:textAllCaps="false" />
@@ -92,8 +84,6 @@
 
     <EditText
         android:id="@+id/login_etPassword"
-
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_etUsername"
