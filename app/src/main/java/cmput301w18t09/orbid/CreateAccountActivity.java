@@ -132,14 +132,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
 
         // Check phone number is not empty
-        if (phoneNumber.length() == 0) {
-            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // Check phone number does not exceed 10 digits
-        if (phoneNumber.length() > 10) {
-            Toast.makeText(this, "Phone number cannot exceed 10 digits", Toast.LENGTH_LONG).show();
+        if (phoneNumber.length() != 10) {
+            Toast.makeText(this, "Invalid phone number", Toast.LENGTH_LONG).show();
             return;
         }
 

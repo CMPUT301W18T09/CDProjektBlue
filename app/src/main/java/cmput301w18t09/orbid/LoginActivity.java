@@ -80,12 +80,10 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
 
-
         // Set up the data manager
         DataManager.getUsers getUsers = new DataManager.getUsers(this);
         ArrayList<String> queryParameters = new ArrayList<>();
         ArrayList<User> returnUsers;
-
 
         // Query server to ensure username exists
         queryParameters.add("username");
@@ -100,7 +98,6 @@ public class LoginActivity extends AppCompatActivity{
             Toast.makeText(this, "Error checking uniqueness of username", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // If the user name does not exist, tell the user
         if (returnUsers.isEmpty()) {
             Toast.makeText(this, "That user name does not exist", Toast.LENGTH_SHORT).show();
