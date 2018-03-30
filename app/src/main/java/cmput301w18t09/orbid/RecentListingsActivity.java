@@ -77,36 +77,31 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
 
 
         searchView = findViewById(R.id.search_view);
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                refineListings();
-//            }
-//        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                refineListings();
+                refineListings(1);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                // If search string is empty, refresh the listings
+                refineListings(0);
                 return false;
             }
         });
 
         // Fill taskList with all tasks if the network is available, otherwise report
         // to the user that that functionality is not available offline
-        if (DataManager.isNetworkAvailable()) {
+        if (DataManager.isNetworkAvailable(this )) {
             getListings();
         }
         else {
-            Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_SHORT).show();
         }
 
-        Collections.reverse(taskList);
 
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
@@ -137,6 +132,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         int id = item.getItemId();
         if (id == R.id.MenuItem_RefreshButton) {
             getListings();
+            taskListAdapter.setTaskList(taskList);
             taskListAdapter.notifyDataSetChanged();
         }
 
@@ -169,11 +165,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Refines the listings by keywords provided in the search bar. Only those tasks whose
      * descriptions contain all keywords are shown to the user.
      */
-    private void refineListings() {
+    private void refineListings(Integer type) {
 
         // Don't attempt a search if we are offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot perform search while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "Cannot perform search while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -196,10 +192,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         try {
             getTasks.execute(searchParams);
             taskList = getTasks.get();
+            Collections.reverse(taskList);
 
             // If there were no results, tell the user
-            if (taskList.size() == 0) {
-                Toast.makeText(this, "Search returned no results", Toast.LENGTH_LONG).show();
+            if (taskList.size() == 0 && type == 1) {
+                Toast.makeText(this, "Search returned no results", Toast.LENGTH_SHORT).show();
                 // TODO: Handle no tasks?
             }
 
@@ -215,7 +212,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                     it.remove();
                 }
             }
-
             taskListAdapter.setTaskList(taskList);
 
         } catch (Exception e) {
@@ -271,11 +267,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     public void onClick(View view, int position, int type) {
-        if (DataManager.isNetworkAvailable()) {
+        if (DataManager.isNetworkAvailable(this )) {
             openPlaceBidActivity(position);
         }
         else {
-            Toast.makeText(this, "Cannot open task details for bidding while offline", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot open task details for bidding while offline", Toast.LENGTH_SHORT).show();
         }
     }
 

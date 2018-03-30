@@ -165,6 +165,7 @@ public class NavigationActivity extends AppCompatActivity
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
             intent.putExtra("isMyBids",0);
+            intent.putExtra("shouldWait",0);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_manage) { // TODO: Change name of nav_manage to represent requested tasks
@@ -172,6 +173,7 @@ public class NavigationActivity extends AppCompatActivity
             Intent intent = new Intent( this, ListTaskActivity.class);
             intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
             intent.putExtra("isMyBids",1);
+            intent.putExtra("shouldWait",0);
             this.startActivity(intent);
 
         } else if (id == R.id.nav_edit_profile) {
