@@ -148,34 +148,34 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         if(isMyBids==0) {
             switch (currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Requested Tasks");
+                    getSupportActionBar().setTitle("New Listings");
                     taskStatus = Task.TaskStatus.REQUESTED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Bidded Tasks");
+                    getSupportActionBar().setTitle("Bidded Listings");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Assigned Tasks");
+                    getSupportActionBar().setTitle("Assigned Listings");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 3:
-                    getSupportActionBar().setTitle("My Completed Tasks");
+                    getSupportActionBar().setTitle("Completed Listings");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
         } else {
             switch(currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Open Bids");
+                    getSupportActionBar().setTitle("Active Bids");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assigned Bids");
+                    getSupportActionBar().setTitle("My Assignements");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Completed Bids");
+                    getSupportActionBar().setTitle("Completed Assignments");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
@@ -219,7 +219,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             try {
 
                 // If no network is available, use the backup tasks, else fetch from the server
-                if (!DataManager.isNetworkAvailable()) {
+                if (!DataManager.isNetworkAvailable(this )) {
 
                     // Create a copy of the backupTasks
                     taskList = new ArrayList<>(DataManager.backupTasks);
