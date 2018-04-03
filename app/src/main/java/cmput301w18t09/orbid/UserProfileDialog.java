@@ -42,7 +42,7 @@ public class UserProfileDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View content = layoutInflater.inflate(R.layout.dialog_user_profile, null);
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
         final String username = args.getString("username");
 
         // Set the functionality of the "OK" dialog button
@@ -54,6 +54,25 @@ public class UserProfileDialog extends DialogFragment {
 
                     }
                 });
+
+        // Let the current user review only those individuals they have had a completed task interaction with
+        if (args.getBoolean("canReview") && !username.equals(LoginActivity.getCurrentUsername())) {
+            builder.setView(content).setPositiveButton("Add Review", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                    if (args.get("reviewType").equals("Requester")) {
+                        intent.putExtra("reviewType", "Requester");
+                    }
+                    else if (args.get("reviewType").equals("Provider")) {
+                        intent.putExtra("reviewType", "Provider");
+                    }
+                    intent.putExtra("taskID", args.get("taskID").toString());
+                    intent.putExtra("reviewee", username);
+                    startActivity(intent);
+                }
+            });
+        }
 
         // Assign the layout's text views
         TextView tvfullname = content.findViewById(R.id.fullnameview);
@@ -117,5 +136,7 @@ public class UserProfileDialog extends DialogFragment {
         dialog.show();
         return dialog;
     }
+
+
 }
 
