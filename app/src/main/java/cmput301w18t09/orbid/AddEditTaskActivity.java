@@ -197,17 +197,23 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void setAfterLocationValues() {
         if (getIntent().getStringExtra("title") != null) {
-            etTitle.setText(getIntent().getStringExtra("title"));
+            String title = getIntent().getStringExtra("title");
+            etTitle.setText(title);
+            task.setTitle(title);
         }
         if (getIntent().getStringExtra("description") != null) {
-            etDescription.setText(getIntent().getStringExtra("description"));
+            String description = getIntent().getStringExtra("description");
+            etDescription.setText(description);
+            task.setDescription(description);
         }
         if (getIntent().getStringExtra("location") != null) {
-            etLocation.setText(getIntent().getStringExtra("location"));
+            String location = getIntent().getStringExtra("location");
+            etLocation.setText(location);
         }
         if (getIntent().getStringExtra("price") != null) {
-            Log.i("PRICE", "Setting after added loc.");
-            etPrice.setText(getIntent().getStringExtra("price"));
+            String price = getIntent().getStringExtra("price");
+            etPrice.setText(price);
+            task.setPrice(Double.parseDouble(price));
         }
     }
 
