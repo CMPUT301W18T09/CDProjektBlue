@@ -313,6 +313,36 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
+
+        // Let the dialog know if the user being clicked can be reviewed
+        if (getIntent().getBooleanExtra("cameFromCompletedBid", false)) {
+
+            if (task.getIsReviewedByProvider() == false) {
+                bundle.putBoolean("canReview", true);
+                bundle.putString("reviewType", "Requester");
+                bundle.putString("taskID", task.getID());
+            }
+            else {
+                bundle.putBoolean("canReview", false);
+            }
+
+        }
+        else if (getIntent().getBooleanExtra("cameFromCompletedRequest", false)) {
+
+            if (task.getIsReviewedByRequester() == false) {
+                bundle.putBoolean("canReview", true);
+                bundle.putString("reviewType", "Provider");
+                bundle.putString("taskID", task.getID());
+            }
+            else {
+                bundle.putBoolean("canReview", false);
+            }
+
+        }
+        else {
+            bundle.putBoolean("canReview", false);
+        }
+
         UserProfileDialog dialog = new UserProfileDialog();
         dialog.setArguments(bundle);
         dialog.show(getFragmentManager(), "User Profile Dialog");

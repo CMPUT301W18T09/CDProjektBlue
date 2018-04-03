@@ -15,7 +15,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testAddBid() {
-        User testUser = new User("CoolGuy123", "coolguy@hotmail.com",
+        User testUser = new User("CoolGuy123", "test", "coolguy@hotmail.com",
                 "123-123-5678", "Cool", "Guy");
         Bid testBid = new Bid("testUser", 3.14,
                 "I have a GrassCutter3000, so I can do it quickly." );
@@ -26,7 +26,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testRemoveBid() {
-        User testUser = new User("CoolGuy123", "coolguy@hotmail.com",
+        User testUser = new User("CoolGuy123", "test", "coolguy@hotmail.com",
                 "123-123-5678", "Cool", "Guy");
         Bid testBid = new Bid("testUser", 3.14,
                 "I have a GrassCutter3000, so I can do it quickly." );
@@ -48,7 +48,7 @@ public class TaskTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testAcceptBid() {
-        User testUser = new User("CoolGuy123", "coolguy@hotmail.com",
+        User testUser = new User("CoolGuy123", "test","coolguy@hotmail.com",
                 "123-123-5678", "Cool", "Guy");
         Bid testBid = new Bid("testUser", 3.14,
                 "I have a GrassCutter3000, so I can do it quickly." );
