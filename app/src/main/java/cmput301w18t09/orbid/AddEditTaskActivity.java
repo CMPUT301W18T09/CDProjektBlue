@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.content.Context;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -66,14 +67,20 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private User user;
     private DrawerLayout mDrawerLayout;
     private boolean permissionsGranted = true;
+    private boolean fromMap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Receive the layout ID from navigation activity
-        isAdd = getIntent().getIntExtra("isAdd", 0);
+        isAdd = getIntent().getIntExtra("isAdd", -1);
         id = getIntent().getStringExtra("_id");
+
+        // Check if the user had just come from setting their location
+        if (getIntent().getStringExtra("from_map") != null) {
+            fromMap = true;
+        }
 
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -101,6 +108,46 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
+     * On click for the location button to open the map activity.
+     * Different on click for adding and for on editing.
+     * @param view - the button associated with the onClick
+     * @see MapActivity
+     */
+    public void onClickLocation(View view) {
+        // If we are not adding a task
+        if (isAdd != 1) {
+            MapActivity mapActivity = new MapActivity();
+            FragmentManager fm = getSupportFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putString("came_from", "edit_task");
+            bundle.putInt("isAdd", 0);
+            bundle.putString("_id", task.getID());
+            mapActivity.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+        }
+        // If we are adding a task
+        else {
+            MapActivity mapActivity = new MapActivity();
+            FragmentManager fm = getSupportFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putString("came_from", "add_task");
+            bundle.putInt("isAdd", 1);
+            // Bring all of the entered info with us so we can reload it when we come back
+            if (!etTitle.getText().toString().isEmpty()) {
+                bundle.putString("title", etTitle.getText().toString());
+            }
+            if (!etDescription.getText().toString().isEmpty()) {
+                bundle.putString("description", etDescription.getText().toString());
+            }
+            if (!etPrice.getText().toString().isEmpty()) {
+                bundle.putString("price", etPrice.getText().toString());
+            }
+            mapActivity.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+        }
+    }
+
+    /**
      * Displays the appropriate views for the type of task
      */
     private void activityTypeInit() {
@@ -110,9 +157,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         Button delete = (Button) findViewById(R.id.DeleteButton);
 
         if (isAdd == 1) {
+            btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
+            if (fromMap) {
+                setAfterLocationValues();
+            }
         } else if (isAdd == 3) {
             etPrice.setVisibility(View.GONE);
             btnSavePost.setVisibility(View.GONE);
@@ -130,6 +181,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etPrice.setEnabled(false);
         } else {
             // Show the price and bid list if you're only editing a task
+            btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Save");
         }
 
@@ -137,6 +189,26 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
         etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
+    }
+
+    /**
+     * Sets the values that were entered when the user went to the map activity
+     * so that they do not have to renter forms.
+     */
+    private void setAfterLocationValues() {
+        if (getIntent().getStringExtra("title") != null) {
+            etTitle.setText(getIntent().getStringExtra("title"));
+        }
+        if (getIntent().getStringExtra("description") != null) {
+            etDescription.setText(getIntent().getStringExtra("description"));
+        }
+        if (getIntent().getStringExtra("location") != null) {
+            etLocation.setText(getIntent().getStringExtra("location"));
+        }
+        if (getIntent().getStringExtra("price") != null) {
+            Log.i("PRICE", "Setting after added loc.");
+            etPrice.setText(getIntent().getStringExtra("price"));
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package cmput301w18t09.orbid;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,6 +27,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
@@ -31,6 +35,7 @@ import com.google.maps.model.GeocodingResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.Math.acos;
@@ -50,6 +55,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private ToggleButton tbtnToggle;
     private GoogleApiClient googleApiClient;
     private Location myLocation = null;
+    private int isAdd;
+    private Task task;
+    private LatLng chosenLocation;
 
 
     @Nullable
@@ -73,23 +81,130 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     *
      * @param googleMap
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-//        if (myLocation != null) {
-//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 13));
-//
-//            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                    .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))      // Sets the center of the map to location user
-//                    .zoom(17)                   // Sets the zoom
-//                    .bearing(90)                // Sets the orientation of the camera to east
-//                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-//                    .build();                   // Creates a CameraPosition from the builder
-//            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//        }
+
+        // Get the bundle from the previous activity
+        Bundle bundle = getArguments();
+        String came_from = bundle.getString("came_from");
+
+        // If we came from recent_listings
+        if (came_from.equals("recent_listings")) {
+            displayAllListings();
+        }
+        // If we came from a single ad
+        else if (came_from.equals("add_task")) {
+            changeLocation();
+        } else if (came_from.equals("edit_task")) {
+            changeLocation();
+        } else {
+            String id = getArguments().getString("_id");
+            displaySingleListing(id);
+        }
+    }
+
+    private void changeLocation() {
+        Bundle bundle = getArguments();
+
+        isAdd = getArguments().getInt("isAdd");
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(final LatLng latLng) {
+                MarkerOptions marker = new MarkerOptions().position(latLng).title(NavigationActivity.thisUser + "'s Location.");
+                mMap.addMarker(marker);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setTitle("Is this your location?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (isAdd != 1) {
+                                locationSet(latLng);
+                                update();
+                                openEditActivty();
+                                } else {
+                                    chosenLocation = latLng;
+                                    openAddActivity();
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mMap.clear();
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+    }
+
+    private void openAddActivity() {
+        Bundle bundle = getArguments();
+        Log.i("MAP", "openAdd");
+        Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
+        intent.putExtra("from_map", "true");
+        intent.putExtra("isAdd", 1);
+        com.google.maps.model.LatLng newLoc = new com.google.maps.model.LatLng(chosenLocation.latitude, chosenLocation.longitude);
+        String stringLocation = null;
+        try {
+            stringLocation = getAddress(newLoc);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (stringLocation != null) {
+            intent.putExtra("location", stringLocation);
+        } else {
+            Log.e("MAP", "There was no address found to be added to intent");
+        }
+        if (bundle.getString("title") != null) {
+            intent.putExtra("title", bundle.getString("title"));
+        }
+        if (bundle.getString("description") != null) {
+            intent.putExtra("description", bundle.getString("description"));
+        }
+        if (bundle.getString("price") != null) {
+            intent.putExtra("price", bundle.getString("price"));
+        }
+        startActivity(intent);
+    }
+
+    private void openEditActivty() {
+        Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
+        Log.i("MAP", "openEdit");
+        intent.putExtra("isAdd", 0);
+        intent.putExtra("_id", getArguments().getString("_id"));
+        startActivity(intent);
+    }
+
+    private void locationSet(LatLng latLng) {
+        com.google.maps.model.LatLng loc = new com.google.maps.model.LatLng(latLng.latitude, latLng.longitude);
+        if (task != null) {
+            task.setLocation(loc);
+        } else {
+            Log.e("GEO", "The task was null and location could not be set.");
+        }
+
+    }
+
+    /**
+     * Displays all the tasks on the map. Used when coming from recent
+     * listings list view mode.
+     */
+    private void displayAllListings() {
+        // Todo
+        // Get the task using the query
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -103,29 +218,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
             }
         });
 
-        // Get the bundle from the previous activity
-        Bundle bundle = getArguments();
-        String came_from = bundle.getString("came_from");
-
-        // If we came from recent_listings
-        if (came_from.equals("recent_listings")) {
-            displayAllListings();
-        }
-        // If we came from a single ad - * id needs to be passed in arguments *
-        else if (came_from.equals("single_ad")) {
-            String id = bundle.getString("id");
-            displaySingleListing(id);
-        }
-    }
-
-    /**
-     * Displays all the tasks on the map. Used when coming from recent
-     * listings list view mode.
-     */
-    private void displayAllListings()
-    {
-        // Todo
-        // Get the task using the query
         DataManager.getTasks getTasks = new DataManager.getTasks(getActivity());
         getTasks.execute(new ArrayList<String>());
         try {
@@ -159,7 +251,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      * @return if the task is within the 50km radius of the origin, true within, false outside of
      */
     private boolean withinDistance(double lat1, double lon1, double lat2, double lon2) {
-        double d = acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
+        double d = acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2));
         double distance_km = 6371 * d;
         Log.i("Distance", "The distance is: " + d);
         return distance_km <= 50;
@@ -170,8 +262,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      *
      * @param id
      */
-    private void displaySingleListing(String id)
-    {
+    private void displaySingleListing(String id) {
         // Todo
         // Get the task using the query
         ArrayList<String> query = new ArrayList<>();
@@ -182,6 +273,11 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         getTasks.execute(new ArrayList<String>());
         try {
             taskList = getTasks.get();
+            try {
+                task = taskList.get(0);
+            } catch (Error e) {
+                Log.e("GEO", "Task list didn't have anything a index 0.");
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -200,8 +296,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     /**
      * opens the recent listings activity in list view mode.
      */
-    private void openRecentListingsActivity()
-    {
+    private void openRecentListingsActivity() {
         // Todo
     }
 
@@ -229,6 +324,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
 
     /**
      * Uses Google's API for geocoding to reverse the LatLng location to a formatted address.
+     *
      * @param location
      * @return String - the formatted address, or No Address if none was found
      * @throws InterruptedException
@@ -260,5 +356,13 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
             latLng = new com.google.maps.model.LatLng(lat, lng);
         }
         return latLng;
+    }
+
+    private void update() {
+        ArrayList<Task> n = new ArrayList<>();
+        n.add(task);
+
+        DataManager.updateTasks object = new DataManager.updateTasks(getContext());
+        object.execute(n);
     }
 }
