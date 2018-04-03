@@ -3,6 +3,7 @@ package cmput301w18t09.orbid;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -155,7 +156,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         com.google.maps.model.LatLng newLoc = new com.google.maps.model.LatLng(chosenLocation.latitude, chosenLocation.longitude);
         String stringLocation = null;
         try {
-            stringLocation = getAddress(newLoc);
+            stringLocation = getAddress(newLoc, getResources());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ApiException e) {
@@ -331,9 +332,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      * @throws ApiException
      * @throws IOException
      */
-    public static String getAddress(com.google.maps.model.LatLng location) throws InterruptedException, ApiException, IOException {
+    public static String getAddress(com.google.maps.model.LatLng location, Resources resources) throws InterruptedException, ApiException, IOException {
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
+                .apiKey(resources.getString(R.string.google_maps_key))
                 .build();
         GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
         String address = "No Address";
@@ -344,9 +345,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         return address;
     }
 
-    public static com.google.maps.model.LatLng fromAddress(String address) throws InterruptedException, ApiException, IOException {
+    public static com.google.maps.model.LatLng fromAddress(String address, Resources resources) throws InterruptedException, ApiException, IOException {
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("AIzaSyCFhs36VgfawZw6hGOsPrPuDIjGzC4Z7Yk")
+                .apiKey(resources.getString(R.string.google_maps_key))
                 .build();
         GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
         com.google.maps.model.LatLng latLng = new com.google.maps.model.LatLng();
