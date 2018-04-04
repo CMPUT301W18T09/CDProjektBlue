@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.w3c.dom.Text;
 
@@ -79,6 +78,7 @@ public class NavigationActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View view  = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
         View secondary = navigationView.getHeaderView(0);
         TextView username = secondary.findViewById(R.id.usernameTextView);

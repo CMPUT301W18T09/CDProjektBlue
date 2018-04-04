@@ -4,7 +4,8 @@ package cmput301w18t09.orbid;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.google.android.gms.maps.model.LatLng;
+
+import com.google.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

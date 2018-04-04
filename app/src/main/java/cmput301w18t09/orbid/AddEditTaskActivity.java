@@ -3,62 +3,38 @@ package cmput301w18t09.orbid;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.StackView;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.Manifest;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
-
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.LatLng;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -69,7 +45,7 @@ import java.util.concurrent.ExecutionException;
  * An activity class used to display the Requesting users
  * Add task interface, edit task interface, and bidded task interface
  *
- * @author Chady Haidar, Aidan Kosik, Zach Refern
+ * @author Chady Haidar, Aidan Kosik, Zach Redfern
  * @see Task
  */
 public class AddEditTaskActivity extends NavigationActivity implements ItemClickListener {
@@ -77,6 +53,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etDescription;
     private EditText etTitle;
     private EditText etPrice;
+    private EditText etLocation;
     private Context context = this;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
@@ -90,14 +67,20 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private Task changeTask;
     private DrawerLayout mDrawerLayout;
     private boolean permissionsGranted = true;
+    private boolean fromMap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Receive the layout ID from navigation activity
-        isAdd = getIntent().getIntExtra("isAdd", 0);
+        isAdd = getIntent().getIntExtra("isAdd", -1);
         id = getIntent().getStringExtra("_id");
+
+        // Check if the user had just come from setting their location
+        if (getIntent().getStringExtra("from_map") != null) {
+            fromMap = true;
+        }
 
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -108,6 +91,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle = findViewById(R.id.EditTaskTitle);
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
+        etLocation = findViewById(R.id.EditTaskLocation);
 
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
@@ -130,6 +114,46 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
+     * On click for the location button to open the map activity.
+     * Different on click for adding and for on editing.
+     * @param view - the button associated with the onClick
+     * @see MapActivity
+     */
+    public void onClickLocation(View view) {
+        // If we are not adding a task
+        if (isAdd != 1) {
+            MapActivity mapActivity = new MapActivity();
+            FragmentManager fm = getSupportFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putString("came_from", "edit_task");
+            bundle.putInt("isAdd", 0);
+            bundle.putString("_id", task.getID());
+            mapActivity.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+        }
+        // If we are adding a task
+        else {
+            MapActivity mapActivity = new MapActivity();
+            FragmentManager fm = getSupportFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putString("came_from", "add_task");
+            bundle.putInt("isAdd", 1);
+            // Bring all of the entered info with us so we can reload it when we come back
+            if (!etTitle.getText().toString().isEmpty()) {
+                bundle.putString("title", etTitle.getText().toString());
+            }
+            if (!etDescription.getText().toString().isEmpty()) {
+                bundle.putString("description", etDescription.getText().toString());
+            }
+            if (!etPrice.getText().toString().isEmpty()) {
+                bundle.putString("price", etPrice.getText().toString());
+            }
+            mapActivity.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+        }
+    }
+
+    /**
      * Displays the appropriate views for the type of task
      */
     private void activityTypeInit() {
@@ -139,9 +163,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         Button delete = (Button) findViewById(R.id.DeleteButton);
 
         if (isAdd == 1) {
+            btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
+            if (fromMap) {
+                setAfterLocationValues();
+            }
         } else if (isAdd == 3) {
             etPrice.setVisibility(View.GONE);
             btnSavePost.setVisibility(View.GONE);
@@ -159,6 +187,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etPrice.setEnabled(false);
         } else {
             // Show the price and bid list if you're only editing a task
+            btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Save");
         }
 
@@ -166,6 +195,32 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
         etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
+    }
+
+    /**
+     * Sets the values that were entered when the user went to the map activity
+     * so that they do not have to renter forms.
+     */
+    private void setAfterLocationValues() {
+        if (getIntent().getStringExtra("title") != null) {
+            String title = getIntent().getStringExtra("title");
+            etTitle.setText(title);
+            task.setTitle(title);
+        }
+        if (getIntent().getStringExtra("description") != null) {
+            String description = getIntent().getStringExtra("description");
+            etDescription.setText(description);
+            task.setDescription(description);
+        }
+        if (getIntent().getStringExtra("location") != null) {
+            String location = getIntent().getStringExtra("location");
+            etLocation.setText(location);
+        }
+        if (getIntent().getStringExtra("price") != null) {
+            String price = getIntent().getStringExtra("price");
+            etPrice.setText(price);
+            task.setPrice(Double.parseDouble(price));
+        }
     }
 
     /**
@@ -238,7 +293,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see DataManager
      */
     @SuppressLint("MissingPermission")
-    private void save() {
+    private void save() throws InterruptedException, ApiException, IOException {
+
+        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
         // Add location to the task
         try {
@@ -246,6 +303,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } catch(Exception e) {
             Log.e("LatLng", "Could not get location");
         }
+
 
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
@@ -259,8 +317,26 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if(task.getPrice() == 0) {
             Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
         } else {
+
+            if (!etLocation.getText().toString().isEmpty()) {
+                // Check users manually entered location
+                String locationString = etLocation.getText().toString();
+                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
+                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
+                task.setLocation(latLng);
+            } else {
+                // If no manual address set current location
+                try {
+                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+                    Log.i("GEO", "Location set");
+                } catch(Exception e) {
+                    Log.e("LatLng", "Could not get location");
+                }
+            }
+
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
-            // Save the new task to the DM
+
+          // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
                 DataManager.addTasks object = new DataManager.addTasks(this);
@@ -326,6 +402,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Loads the task that was opened
      *
      * @see DataManager
+     * @see MapActivity
      */
     private void load(Boolean checkChanged) {
 
@@ -361,11 +438,28 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             } else {
                 changeTask = taskList.get(0);
             }
+
+
+            etPrice.setText(Double.toString(task.getPrice()));
+            etTitle.setText(task.getTitle());
+            etDescription.setText(task.getDescription());
+            LatLng location = task.getLocation();
+            if (location != null) {
+                String geoResult = MapActivity.getAddress(location, getResources());
+                etLocation.setText(geoResult);
+            } else {
+                Log.i("GEO", "Location is null");
+            }
+
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -624,6 +718,4 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         }
     }
-
-
 }
