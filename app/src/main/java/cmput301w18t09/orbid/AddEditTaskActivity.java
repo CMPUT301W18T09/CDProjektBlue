@@ -64,7 +64,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private ImageViewAdapter imageAdapter;
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private Task task;
-    private User user;
+    private Task changeTask;
     private DrawerLayout mDrawerLayout;
     private boolean permissionsGranted = true;
     private boolean fromMap = false;
@@ -95,7 +95,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
-            load();
+            load(false);
+            // Don't create the activity if the task is null
+            if(task == null) {
+                Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
         }
         // Load the proper views
         activityTypeInit();
@@ -291,17 +297,25 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
+        // Add location to the task
+        try {
+            task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+        } catch(Exception e) {
+            Log.e("LatLng", "Could not get location");
+        }
+
+
         // Check to make sure all the fields are filled in properly
         if (task.getTitle().length() > 30) {
-            Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Title cannot be longer than 30 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getTitle().length() < 1) {
-            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() > 300) {
-            Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() < 1) {
-            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else if(task.getPrice() == 0) {
-            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
         } else {
 
             if (!etLocation.getText().toString().isEmpty()) {
@@ -320,7 +334,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 }
             }
 
-            // Save the new task to the DM
+            findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
+
+          // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
                 DataManager.addTasks object = new DataManager.addTasks(this);
@@ -388,7 +404,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see DataManager
      * @see MapActivity
      */
-    private void load() {
+    private void load(Boolean checkChanged) {
 
         // Load the task from the Data manager
         ArrayList<Task> taskList = new ArrayList<>();
@@ -400,22 +416,29 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
+            if(!checkChanged) {
+                // If there is no network available, fetch the backup task
+                if (!DataManager.isNetworkAvailable(this)) {
+                    task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
+                } else {
+                    if (taskList.size() > 0) {
+                        task = taskList.get(0);
+                    } else {
+                        Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, ListTaskActivity.class);
+                        intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                        intent.putExtra("isMyBids", 0);
+                        this.startActivity(intent);
+                    }
+                }
 
-            // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
-                task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
+                etPrice.setText(Double.toString(task.getPrice()));
+                etTitle.setText(task.getTitle());
+                etDescription.setText(task.getDescription());
+            } else {
+                changeTask = taskList.get(0);
             }
-            else {
-              if (taskList.size() > 0) {
-                  task = taskList.get(0);
-              } else {
-                  Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
-                  Intent intent = new Intent( this, ListTaskActivity.class);
-                  intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-                  intent.putExtra("isMyBids",0);
-                  this.startActivity(intent);
-              }   
-            }
+
 
             etPrice.setText(Double.toString(task.getPrice()));
             etTitle.setText(task.getTitle());
@@ -427,34 +450,17 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             } else {
                 Log.i("GEO", "Location is null");
             }
+
         } catch (InterruptedException e) {
-            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
-            Toast.makeText(this, "Failed to load task", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ApiException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        // Load the user from the Data manager
-        DataManager.getUsers userDM = new DataManager.getUsers(this);
-        ArrayList<String> n = new ArrayList<>();
-        ArrayList<User> usersList;
-        n.add("username");
-        n.add(thisUser);
-        userDM.execute(n);
-        try {
-            usersList = userDM.get();
-            if (usersList.size() > 0) {
-                user = usersList.get(0);
-            } else {
-                Toast.makeText(context, "This user may no longer exist", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            // TODO: Handle the exception
         }
     }
 
@@ -463,8 +469,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      *
      * @param view The current activity view
      */
-    public void postEditTask(View view) throws InterruptedException, ApiException, IOException {
-        save();
+    public void postEditTask(View view) {
+        // Check if the task has been bidded on if it is being editted
+        if(isAdd == 0 && checkChanged()) {
+            Toast.makeText(this, "Your task has been bidded on.", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            save();
+        }
     }
 
     /**
@@ -475,10 +487,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void deleteButton(View view) {
 
         // Don't allow a user to delete tasks while offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "Cannot delete tasks while offline", Toast.LENGTH_SHORT).show();
             return;
         }
+        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
         ArrayList<String> n = new ArrayList<>();
         n.add(task.getID());
@@ -521,7 +534,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         super.onActivityResult(requestCode, resultCode, data);
 
         //Updates the recycler image view to show the image selected
-        if(resultCode==RESULT_OK) {
+        if (resultCode==RESULT_OK) {
                 Uri selectedimg = data.getData();
                 int dataSize = 0;
                 try {
@@ -554,7 +567,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
-     * Handles when a task in My Bidded Tasks is tapped
+     * Handles when a bid in My Bidded Tasks is tapped
      *
      * @param view The current activity view
      * @param position The index of the bid tapped
@@ -564,8 +577,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void onClick(View view, int position, int type) {
 
         // Don't allow a user to accept or decline bids while off the network
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "Cannot accept or decline bids while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -590,12 +603,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Bid> temp = new ArrayList<>();
-                temp.add(bid);
+                int index = task.getBidList().indexOf(bid);
                 // Accept the bid in the task class
-                task.acceptBid(task.getBidList().indexOf(bid));
-                // Set the tasks bidList to only the accepted bid
-                task.setBidList(temp);
+                task.acceptBid(index);
                 // Update the Task in data manager
                 update();
                 dialog.dismiss();
@@ -630,6 +640,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         });
 
+    }
+
+    /**
+     * Checks if the task status has changed to bidded if you save it
+     */
+    private Boolean checkChanged() {
+        load(true);
+        if(changeTask.getStatus().equals(Task.TaskStatus.BIDDED)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

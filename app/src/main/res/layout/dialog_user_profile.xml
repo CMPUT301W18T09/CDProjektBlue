@@ -46,4 +46,13 @@
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/phoneview"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:stepSize="0.5" />
 </RelativeLayout>

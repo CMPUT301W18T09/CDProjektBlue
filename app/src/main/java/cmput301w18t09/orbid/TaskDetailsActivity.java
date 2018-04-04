@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -70,6 +71,17 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Find the recent listing tasks from DM
         getTaskDetails();
+
+        // Check for errors to avoid app crashes
+        if(task == null) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        } else if (isBid == 1 && task.getAcceptedBid() == -1) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Set the tasks values
         setTaskValues();
@@ -138,8 +150,8 @@ public class TaskDetailsActivity extends NavigationActivity{
      * it needs to make these changes.
      */
     private void isAssignedTask() {
-        int b = task.getAcceptedBid();
-        bid = task.getBidList().get(b);
+//        int b = task.getAcceptedBid();
+        bid = task.getBidList().get(task.getAcceptedBid());
         textLowestBid = findViewById(R.id.details_lowest_bid);
 
         // Show the buttons if the task is Assigned, only if the network is available
@@ -155,7 +167,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
-        textLowestBid.setText("Bid price: $" + String.format("%.2f", bid.getPrice()));
+        textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
         title.setText(bid.getProvider());
         description.setText(bid.getDescription());
         setTitleListener();
@@ -236,8 +248,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void fulfilled(View view) {
 
         // Don't allow the user to set tasks to complete when offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -264,25 +276,30 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void repost(View view) {
 
         // Don't allow user to repost tasks when offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Remove the previously accepted bid
         ArrayList<Bid> temp = new ArrayList<>();
+        temp = task.getBidList();
+        temp.remove(task.getAcceptedBid());
         task.setBidList(temp);
         task.acceptBid(-1);
-        task.setStatus(Task.TaskStatus.REQUESTED);
-
+        if(temp.size() == 0) {
+            task.setStatus(Task.TaskStatus.REQUESTED);
+        } else {
+            task.setStatus(Task.TaskStatus.BIDDED);
+        }
         // Alter the task in the backup list to match the status of the reposted task
-        ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        /*ListIterator<Task> it = DataManager.backupTasks.listIterator();
         while (it.hasNext()) {
             if (it.next().getID().equals(task.getID())) {
                 it.set(task);
                 break;
             }
-        }
+        }*/
 
         save();
         finish();
@@ -294,13 +311,47 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void openUserInfo(String username) {
 
         // Inform the user if they attempt to get user information while offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
+
+        // Let the dialog know if the user being clicked can be reviewed
+        if (getIntent().getBooleanExtra("cameFromCompletedBid", false)) {
+
+            getTaskDetails();
+
+            if (task.getIsReviewedByProvider() == false) {
+                bundle.putBoolean("canReview", true);
+                bundle.putString("reviewType", "Requester");
+                bundle.putString("taskID", task.getID());
+            }
+            else {
+                bundle.putBoolean("canReview", false);
+            }
+
+        }
+        else if (getIntent().getBooleanExtra("cameFromCompletedRequest", false)) {
+
+            getTaskDetails();
+
+            if (task.getIsReviewedByRequester() == false) {
+                bundle.putBoolean("canReview", true);
+                bundle.putString("reviewType", "Provider");
+                bundle.putString("taskID", task.getID());
+            }
+            else {
+                bundle.putBoolean("canReview", false);
+            }
+
+        }
+        else {
+            bundle.putBoolean("canReview", false);
+        }
+
         UserProfileDialog dialog = new UserProfileDialog();
         dialog.setArguments(bundle);
         dialog.show(getFragmentManager(), "User Profile Dialog");
@@ -326,7 +377,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void setBid(TextView text_lowest_bid) {
         Bid lowest_bid = null;
         if (task == null) {
-            Log.i("MSG", "task is null here");
+            Log.i("MSG", "task isa null here");
         }
 
         // Display your bid price
@@ -339,7 +390,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 }
             }
             // Set your bid price, username, and description
-            text_lowest_bid.setText("Your bid: $" + String.format("%.2f", bid.getPrice()));
+            text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
             title.setVisibility(View.VISIBLE);
             title.setText(bid.getProvider());
             description.setVisibility(View.VISIBLE);
@@ -351,7 +402,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                 text_lowest_bid.setText("TASK FULFILLED");
             } else {
                 if (task.getBidList().size() == 0) {
-                    text_lowest_bid.setText("Price: $" + String.format("%.2f", task.getPrice()));
+                    text_lowest_bid.setText("Price:\n$" + String.format("%.2f", task.getPrice()));
                 } else {
                     // Find the lowest bid to display
                     for (Bid bid : task.getBidList()) {
@@ -364,7 +415,7 @@ public class TaskDetailsActivity extends NavigationActivity{
                         }
                     }
                     if (lowest_bid != null) {
-                        text_lowest_bid.setText("Lowest Bid:$" + String.format("%.2f", lowest_bid.getPrice()));
+                        text_lowest_bid.setText("Lowest Bid:\n$" + String.format("%.2f", lowest_bid.getPrice()));
                     }
                 }
             }
@@ -389,22 +440,20 @@ public class TaskDetailsActivity extends NavigationActivity{
             taskList = getTasks.get();
 
             // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
+            if (!DataManager.isNetworkAvailable(this )) {
                 task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
             else {
                 if (taskList.size() > 0) {
                     task = taskList.get(0);
-                } else {
-                    Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
-                    // TODO: This doesn't prevent null pointer exception when the program continues, must resolve
                 }
             }
-          
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
+
+
 }

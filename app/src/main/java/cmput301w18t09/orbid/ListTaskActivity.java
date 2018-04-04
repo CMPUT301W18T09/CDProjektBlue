@@ -92,10 +92,17 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
-        // Refresh button in action bar
-        menu.getItem(0).setVisible(false);
-        // Add button in action bar
-        menu.getItem(1).setVisible(true);
+        if(isMyBids == 0) {
+            // Hide Refresh button in action bar
+            menu.getItem(0).setVisible(false);
+            // Show Add button in action bar
+            menu.getItem(1).setVisible(true);
+        } else {
+            // Show refresh button in action bar
+            menu.getItem(0).setVisible(true);
+            // hide Add button in action bar
+            menu.getItem(1).setVisible(false);
+        }
         return true;
     }
 
@@ -153,34 +160,34 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         if(isMyBids==0) {
             switch (currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Requested Tasks");
+                    getSupportActionBar().setTitle("New Listings");
                     taskStatus = Task.TaskStatus.REQUESTED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Bidded Tasks");
+                    getSupportActionBar().setTitle("Bidded Listings");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Assigned Tasks");
+                    getSupportActionBar().setTitle("Assigned Listings");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 3:
-                    getSupportActionBar().setTitle("My Completed Tasks");
+                    getSupportActionBar().setTitle("Completed Listings");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
         } else {
             switch(currentPage) {
                 case 0:
-                    getSupportActionBar().setTitle("My Open Bids");
+                    getSupportActionBar().setTitle("Active Bids");
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assigned Bids");
+                    getSupportActionBar().setTitle("My Assignements");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
-                    getSupportActionBar().setTitle("My Completed Bids");
+                    getSupportActionBar().setTitle("Completed Assignments");
                     taskStatus = Task.TaskStatus.COMPLETED;
                     break;
             }
@@ -224,7 +231,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             try {
 
                 // If no network is available, use the backup tasks, else fetch from the server
-                if (!DataManager.isNetworkAvailable()) {
+                if (!DataManager.isNetworkAvailable(this )) {
 
                     // Create a copy of the backupTasks
                     taskList = new ArrayList<>(DataManager.backupTasks);
@@ -271,7 +278,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         super.onResume();
         if(shouldWait == 1) {
             try {
-                TimeUnit.MILLISECONDS.sleep(700);
+                TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
 
             }
@@ -293,7 +300,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
         //selection if the task tapped is in My Bids or My Requests
         if(isMyBids == 0) {
-
             // Opens a task to be editted
             if (currentPage == 0) {
                 // is on my requested tasks so should open as edit
@@ -333,6 +339,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     intent.putExtra("isAssigned", 1);
                 } else {
                     intent.putExtra("isAssigned", 2);
+                    intent.putExtra("cameFromCompletedRequest", true);
                 }
 
                 // Pass the task to be viewed in case we are offline
@@ -350,6 +357,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             // Pass the task to be viewed in case we are offline
             String backupTask = (new Gson().toJson(taskList.get(position)));
             intent.putExtra("backupTask", backupTask);
+
+            if (currentPage == 2) {
+                intent.putExtra("cameFromCompletedBid", true);
+            }
 
             this.startActivity(intent);
         }
