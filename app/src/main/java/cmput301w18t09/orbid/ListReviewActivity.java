@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,8 @@ import java.util.ArrayList;
 public class ListReviewActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Review> reviewList = new ArrayList<>();
-    private TextView userName;
+    private TextView tvUsername;
+    private String username;
     private ReviewListAdapter reviewListAdapter;
     private RecyclerView recyclerView;
 
@@ -29,12 +32,31 @@ public class ListReviewActivity extends NavigationActivity implements ItemClickL
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_view_reviews, frameLayout);
 
-        userName = findViewById(R.id.review_username);
-        userName.setText(getIntent().getStringExtra("username").toUpperCase());
+        tvUsername = findViewById(R.id.review_username);
+        username = getIntent().getStringExtra("username");
+        tvUsername.setText(username.toUpperCase());
 
-        Review testr = new Review(4.0f, "description", Review.reviewType.PROVIDER_REVIEW, "subuser");
-        reviewList.add(testr);
-        reviewList.add(testr);
+        // Get the user we are adding a review to
+        DataManager.getUsers getUsers = new DataManager.getUsers(this);
+        ArrayList<String> queryParameters = new ArrayList<>();
+        ArrayList<User> returnUsers;
+
+        queryParameters.add("username");
+        queryParameters.add(username);
+        getUsers.execute(queryParameters);
+        try {
+            returnUsers = getUsers.get();
+        }
+        catch (Exception e) {
+            Log.e("Error", "Failed to get ArrayList intended as return from getUsers");
+            e.printStackTrace();
+            Toast.makeText(this, "Error getting the user to be reviewed", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Populate the recycler view 
+        User user = returnUsers.get(0);
+        reviewList = user.getReviewList();
         reviewListAdapter = new ReviewListAdapter(this, reviewList, 0);
         reviewListAdapter.setClickListener(this);
         recyclerView = findViewById(R.id.recyclerView_reviews);
