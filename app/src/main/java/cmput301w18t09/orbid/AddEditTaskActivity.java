@@ -105,12 +105,16 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
         // Load the proper views
         activityTypeInit();
+
         // Initiate the stack view
         stackViewInit();
+
         // Initiate Location Client
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
+
+
     }
 
     /**
@@ -120,6 +124,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see MapActivity
      */
     public void onClickLocation(View view) {
+
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot connect to Google Maps while offline.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // If we are not adding a task
         if (isAdd != 1) {
             MapActivity mapActivity = new MapActivity();
@@ -444,9 +454,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
             LatLng location = task.getLocation();
-            if (location != null) {
+
+            // TODO: We need to save the human readable address in the Task object so we do not
+            // TODO: have to make a server request when offline. Performing the below code while
+            // TODO: offline results in an ~10 second wait time before the timeout occurs.
+            if (location != null && DataManager.isNetworkAvailable(this)) {
                 String geoResult = MapActivity.getAddress(location, getResources());
                 etLocation.setText(geoResult);
+
             } else {
                 Log.i("GEO", "Location is null");
             }
@@ -475,7 +490,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(this, "Your task has been bidded on.", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            save();
+            try {
+                save();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -646,6 +666,11 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Checks if the task status has changed to bidded if you save it
      */
     private Boolean checkChanged() {
+
+        if (!DataManager.isNetworkAvailable(this)) {
+            return false;
+        }
+
         load(true);
         if(changeTask.getStatus().equals(Task.TaskStatus.BIDDED)) {
             return true;

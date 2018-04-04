@@ -152,6 +152,10 @@ public class LoginActivity extends AppCompatActivity{
      */
     private void openCreateAccountActivity()
     {
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot create accounts offline", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(this, CreateAccountActivity.class);
         this.startActivity(intent);
     }
