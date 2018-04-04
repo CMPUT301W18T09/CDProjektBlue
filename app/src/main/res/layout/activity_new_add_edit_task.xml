@@ -16,16 +16,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fcfcf9">
+            android:orientation="horizontal">
 
-        </android.support.v7.widget.RecyclerView>
+            <ImageButton
+                android:id="@+id/AddImageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/new_button_background"
+                android:layout_alignTop="@+id/ImageStack"
+                android:layout_marginTop="64dp"
+                android:layout_marginLeft="16dp"
+                android:onClick="addImage"
+                app:srcCompat="@drawable/ic_menu_gallery" />
+
+            <StackView
+                android:id="@+id/ImageStack"
+                android:layout_width="300dp"
+                android:layout_height="140dp"
+                android:layout_marginLeft="32dp"
+                android:layout_below="@+id/EditTaskTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorTheme" />
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/etTitle"
+            android:id="@+id/EditTaskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -55,7 +76,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/etPrice"
+                android:id="@+id/etStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/etLocation"
@@ -69,7 +90,7 @@
                 android:textColor="#fcfcf9" />
 
             <EditText
-                android:id="@+id/etPrice"
+                android:id="@+id/EditPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etLocation"
@@ -84,7 +105,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/etComment"
+            android:id="@+id/EditTaskComment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
@@ -109,7 +130,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnBack"
+            android:id="@+id/DeleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -122,7 +143,7 @@
             android:textColor="@color/colorTheme" />
 
         <Button
-            android:id="@+id/btnSave"
+            android:id="@+id/SavePostTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
