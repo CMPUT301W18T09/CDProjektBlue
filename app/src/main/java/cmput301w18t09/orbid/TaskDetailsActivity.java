@@ -317,6 +317,8 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Let the dialog know if the user being clicked can be reviewed
         if (getIntent().getBooleanExtra("cameFromCompletedBid", false)) {
 
+            getTaskDetails();
+
             if (task.getIsReviewedByProvider() == false) {
                 bundle.putBoolean("canReview", true);
                 bundle.putString("reviewType", "Requester");
@@ -328,6 +330,8 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         }
         else if (getIntent().getBooleanExtra("cameFromCompletedRequest", false)) {
+
+            getTaskDetails();
 
             if (task.getIsReviewedByRequester() == false) {
                 bundle.putBoolean("canReview", true);
