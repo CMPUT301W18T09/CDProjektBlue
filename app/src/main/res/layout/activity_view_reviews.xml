@@ -19,13 +19,10 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/recyclerView_reviews"
+        android:gravity="center"
         android:layout_marginTop="50dp"
-        android:layout_alignStart="@+id/recyclerView_reviews"
-        android:layout_marginLeft="126dp"
-        android:layout_marginStart="126dp"
         android:text="@string/reviews"
         android:textColor="@android:color/black"
         android:textSize="30sp"

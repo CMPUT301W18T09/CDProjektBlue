@@ -32,6 +32,9 @@ public class Task {
     private Boolean shouldNotify = false;
     private ArrayList<byte[]> photoList;
 
+    private Boolean isReviewedByRequester = false;
+    private Boolean isReviewedByProvider = false;
+
     public enum TaskStatus {
         REQUESTED, BIDDED, ASSIGNED, COMPLETED;
     }
@@ -304,6 +307,32 @@ public class Task {
     public Boolean getShouldNotify() {
         return shouldNotify;
     }
+
+    /**
+     *
+     * @param b
+     */
+    public void setIsReviewedByRequester(Boolean b) { this.isReviewedByRequester = b; }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getIsReviewedByRequester() { return this.isReviewedByRequester; }
+
+    /**
+     *
+     * @param b
+     */
+    public void setIsReviewedByProvider(Boolean b) { this.isReviewedByProvider = b; }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getIsReviewedByProvider() { return this.isReviewedByProvider; }
+
+
 
     /**
      * Compares two tasks to see if they are equals. Only works for tasks that have not yet

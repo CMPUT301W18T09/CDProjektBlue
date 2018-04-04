@@ -137,19 +137,19 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Create an account for the test requester
         // NOTE: Creating accounts is covered in another use case
         DataManager.addUsers addRequester = new DataManager.addUsers(context);
-        User requester = new User("bidTestRequester", "zred@hotmail.com", "7809396963", "Zach", "Redfern");
+        User requester = new User("bidTestRequester", "test", "zred@hotmail.com", "7809396963", "Zach", "Redfern");
         addRequester.execute(requester);
 
         // Create an account for the first test provider
         // NOTE: Creating accounts is covered in another use case
         DataManager.addUsers addProvider1 = new DataManager.addUsers(context);
-        User provider1 = new User("bidTestProvider1", "bpanda@hotmail.com", "5875551234", "Bobbi", "Pandachuck");
+        User provider1 = new User("bidTestProvider1", "test","bpanda@hotmail.com", "5875551234", "Bobbi", "Pandachuck");
         addProvider1.execute(provider1);
 
         // Create an account for the second test provider
         // NOTE: Creating accounts is covered in another use case
         DataManager.addUsers addProvider2 = new DataManager.addUsers(context);
-        User provider2 = new User("bidTestProvider2", "friday@hotmail.com", "9805567812", "Rebecca", "Black");
+        User provider2 = new User("bidTestProvider2", "test","friday@hotmail.com", "9805567812", "Rebecca", "Black");
         addProvider2.execute(provider2);
 
         // Create sample tests to bid on
@@ -166,6 +166,7 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Login as the first test provider
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider1");
+        solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
         solo.sleep(2000);
         solo.clickOnButton("Sign In");
 
@@ -230,6 +231,7 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider2");
+        solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
         solo.sleep(2000);
         solo.clickOnButton("Sign In");
 
@@ -292,6 +294,7 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestRequester");
+        solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
         solo.sleep(2000);
         solo.clickOnButton("Sign In");
 
@@ -354,6 +357,7 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider2");
+        solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
         solo.sleep(2000);
         solo.clickOnButton("Sign In");
 

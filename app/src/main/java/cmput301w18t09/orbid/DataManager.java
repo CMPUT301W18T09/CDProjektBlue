@@ -21,6 +21,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -398,7 +399,9 @@ public class DataManager {
             ArrayList<User> users = passed[0];
 
             for (User user: users){
-                user.setPassword(encrpytion(user.getPassword()));
+                if (!StringUtils.isNumeric(user.getPassword())){
+                    user.setPassword(encrpytion(user.getPassword()));
+                }
                 try {
                     DocumentResult result = client.execute(new Index.Builder(user).index("cmput301w18t09").type("user").id(user.getID()).build());
 
@@ -748,17 +751,6 @@ public class DataManager {
         }
         System.out.println(result.size());
         return !result.isEmpty();
-       /* // ICMP
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-
-        return false;*/
     }
 
     public static String encrpytion(String pass){
