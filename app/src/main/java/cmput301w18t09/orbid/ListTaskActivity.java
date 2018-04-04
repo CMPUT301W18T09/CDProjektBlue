@@ -327,6 +327,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     intent.putExtra("isAssigned", 1);
                 } else {
                     intent.putExtra("isAssigned", 2);
+                    intent.putExtra("cameFromCompletedRequest", true);
                 }
 
                 // Pass the task to be viewed in case we are offline
@@ -344,6 +345,10 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             // Pass the task to be viewed in case we are offline
             String backupTask = (new Gson().toJson(taskList.get(position)));
             intent.putExtra("backupTask", backupTask);
+
+            if (currentPage == 2) {
+                intent.putExtra("cameFromCompletedBid", true);
+            }
 
             this.startActivity(intent);
         }

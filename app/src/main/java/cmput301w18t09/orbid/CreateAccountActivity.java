@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -98,6 +100,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Ensure password has at least one character
+        if (StringUtils.isNumeric(password)) {
+            Toast.makeText(this, "Password must contain at least one character", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // If the user name was taken, tell the user
         if (!returnUsers.isEmpty()) {
             Toast.makeText(this, "That user name already exists.", Toast.LENGTH_SHORT).show();

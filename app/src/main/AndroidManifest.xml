@@ -49,11 +49,11 @@
             android:screenOrientation="portrait"
             android:name=".RecentListingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
-
         <activity
             android:screenOrientation="portrait"
             android:name=".ListTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ListReviewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
@@ -72,6 +72,9 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".AddEditTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddReviewActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:screenOrientation="portrait"
