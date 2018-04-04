@@ -473,7 +473,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     }
 
     /**
-     * Handles when a task in My Bidded Tasks is tapped
+     * Handles when a bid in My Bidded Tasks is tapped
      *
      * @param view The current activity view
      * @param position The index of the bid tapped
@@ -509,12 +509,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Bid> temp = new ArrayList<>();
-                temp.add(bid);
+                int index = task.getBidList().indexOf(bid);
                 // Accept the bid in the task class
-                task.acceptBid(task.getBidList().indexOf(bid));
-                // Set the tasks bidList to only the accepted bid
-                task.setBidList(temp);
+                task.acceptBid(index);
                 // Update the Task in data manager
                 update();
                 dialog.dismiss();

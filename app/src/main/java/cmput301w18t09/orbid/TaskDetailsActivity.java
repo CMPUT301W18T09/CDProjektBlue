@@ -151,7 +151,7 @@ public class TaskDetailsActivity extends NavigationActivity{
      */
     private void isAssignedTask() {
 //        int b = task.getAcceptedBid();
-        bid = task.getBidList().get(0);
+        bid = task.getBidList().get(task.getAcceptedBid());
         textLowestBid = findViewById(R.id.details_lowest_bid);
 
         // Show the buttons if the task is Assigned, only if the network is available
@@ -167,7 +167,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
-        textLowestBid.setText("Bid price: $" + String.format("%.2f", bid.getPrice()));
+        textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
         title.setText(bid.getProvider());
         description.setText(bid.getDescription());
         setTitleListener();
@@ -283,18 +283,23 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Remove the previously accepted bid
         ArrayList<Bid> temp = new ArrayList<>();
+        temp = task.getBidList();
+        temp.remove(task.getAcceptedBid());
         task.setBidList(temp);
         task.acceptBid(-1);
-        task.setStatus(Task.TaskStatus.REQUESTED);
-
+        if(temp.size() == 0) {
+            task.setStatus(Task.TaskStatus.REQUESTED);
+        } else {
+            task.setStatus(Task.TaskStatus.BIDDED);
+        }
         // Alter the task in the backup list to match the status of the reposted task
-        ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        /*ListIterator<Task> it = DataManager.backupTasks.listIterator();
         while (it.hasNext()) {
             if (it.next().getID().equals(task.getID())) {
                 it.set(task);
                 break;
             }
-        }
+        }*/
 
         save();
         finish();
