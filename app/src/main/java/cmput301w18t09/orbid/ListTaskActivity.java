@@ -83,6 +83,12 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         startActivity(addTask);
     }
 
+    /**
+     * Sets the refresh button visibility to false (index 0) and the add button to visible (index 1)
+     *
+     * @param menu The menu and it's items
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
@@ -100,6 +106,12 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         return true;
     }
 
+    /**
+     * Sets what to do when an options button is pressed.
+     *
+     * @param item the item that was pressed
+     * @return super call to onOptionsItemSelected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
