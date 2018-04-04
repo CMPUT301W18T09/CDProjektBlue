@@ -23,6 +23,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPhoneNumber;
     private EditText etFirstName;
+    private EditText etPassword;
     private EditText etLastName;
     private Button btnCreateAccount;
 
@@ -42,6 +43,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         etPhoneNumber = findViewById(R.id.edit_profile_etPhoneNumber);
         etFirstName = findViewById(R.id.edit_profile_etFirstName);
         etLastName = findViewById(R.id.edit_profile_etLastName);
+        etPassword = findViewById(R.id.edit_profile_etPassword);
 
         // Assign on click listener to create account button
         btnCreateAccount = findViewById(R.id.create_account_btnCreate);
@@ -74,6 +76,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
+        String password = etPassword.getText().toString();
 
         // Ensure username is not yet taken
         queryParameters.add("username");
@@ -85,72 +88,72 @@ public class CreateAccountActivity extends AppCompatActivity {
         catch (Exception e) {
             Log.e("Error", "Failed to get ArrayList intended as return from getUsers");
             e.printStackTrace();
-            Toast.makeText(this, "Error checking uniqueness of username", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error checking uniqueness of username", Toast.LENGTH_SHORT).show();
             return;
         }
 
+
+        // Check if the PW length is 0 or > 30
+        if (password.length() == 0  || password.length() > 30) {
+            Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // If the user name was taken, tell the user
         if (!returnUsers.isEmpty()) {
-            Toast.makeText(this, "That user name already exists.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "That user name already exists.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check username length is not zero
         if (username.length() == 0) {
-            Toast.makeText(this, "Username cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Username cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check username length does not exceed the maximum
         if (username.length() > 15) {
-            Toast.makeText(this, "Username cannot exceed 15 characters", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Username cannot exceed 15 characters", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check first name length is not zero
         if (firstName.length() == 0) {
-            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "First name cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check last name length is not zero
         if (lastName.length() == 0) {
-            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Last name cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check e-mail length is not zero
         if (email.length() == 0) {
-            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "E-mail cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check e-mail format is acceptable
         if (email.indexOf('@') == -1 || email.indexOf('@') == 0 || email.indexOf('@') == email.length() - 1) {
-            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Correct e-mail format: example@example.com", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check phone number is not empty
-        if (phoneNumber.length() == 0) {
-            Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // Check phone number does not exceed 10 digits
-        if (phoneNumber.length() > 10) {
-            Toast.makeText(this, "Phone number cannot exceed 10 digits", Toast.LENGTH_LONG).show();
+        if (phoneNumber.length() != 10) {
+            Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check phone number format is acceptable
         if (!containsOnlyNumbers(phoneNumber)) {
-            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Phone number may contain only digits", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Add the new user to the server
-        user = new User(username, email, phoneNumber, firstName, lastName);
+        user = new User(username, password, email, phoneNumber, firstName, lastName);
         addUsers.execute(user);
 
         // If all goes well, then re-open the login activity

@@ -55,7 +55,7 @@ import io.searchbox.core.SearchResult;
 public class DataManager {
 
     private static JestDroidClient client;
-    public static ArrayList<Task> backupTasks;
+    public static ArrayList<Task> backupTasks = new ArrayList<>();
     private static ArrayList<Task> cachedTasks;
     private static final String tasksFile = "taskList.sav";
     private static Context context;
@@ -223,7 +223,7 @@ public class DataManager {
      */
     public static class getUsers extends AsyncTask<ArrayList<String>, Void, ArrayList<User>>{
 
-        public getUsers(Activity cont){
+        public getUsers(Context cont){
             if (context == null){
                 context = cont;
             }
@@ -264,7 +264,6 @@ public class DataManager {
             }
             catch (Exception e){
                 Log.e("Error", "Failed to communicate to elastic search server");
-                e.printStackTrace();
             }
 
             return users;
@@ -399,6 +398,7 @@ public class DataManager {
             ArrayList<User> users = passed[0];
 
             for (User user: users){
+                user.setPassword(encrpytion(user.getPassword()));
                 try {
                     DocumentResult result = client.execute(new Index.Builder(user).index("cmput301w18t09").type("user").id(user.getID()).build());
 
@@ -539,7 +539,7 @@ public class DataManager {
          */
         Runnable timerRunnable = new Runnable() {
             public void run() {
-                if(shouldContinue && isNetworkAvailable()) {
+                if(shouldContinue && isNetworkAvailable(context)) {
                     timerHandler.postDelayed(this, 10000);
                     sendNotification();
                 }
@@ -653,9 +653,7 @@ public class DataManager {
             client = (JestDroidClient) factory.getObject();
 
             cachedTasks = new ArrayList<>();
-        }
-
-        if (cachedTasks.isEmpty()){
+        } else if (cachedTasks.isEmpty()){
             loadFromFile();
         }
     }
@@ -730,15 +728,27 @@ public class DataManager {
 
     /**
      * Tests if the device has an available internet connection by pinging a server
-     *
-     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
-     * Taken from user Levit on March 19, 2018
-     *
      * @return True if the device has internet connection, false otherwise
      */
-    public static boolean isNetworkAvailable() {
-
-        // ICMP
+    public static boolean isNetworkAvailable(Context context, String...username) {
+        verifySettings();
+        //David modified the next line to change the returned query size, hopefully this doesn't break anything else
+        getUsers getUsers = new getUsers(context);
+        ArrayList<String> query = new ArrayList<>();
+        query.add("username");
+        if(username.length > 0) {
+            query.add(username[0]);
+        } else {
+            query.add(NavigationActivity.thisUser);
+        }
+        ArrayList<User> result = new ArrayList<>();
+        try{
+            result = getUsers.execute(query).get();
+        }catch (Exception e){
+        }
+        System.out.println(result.size());
+        return !result.isEmpty();
+       /* // ICMP
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
@@ -748,7 +758,7 @@ public class DataManager {
         catch (IOException e)          { e.printStackTrace(); }
         catch (InterruptedException e) { e.printStackTrace(); }
 
-        return false;
+        return false;*/
     }
 
     public static String encrpytion(String pass){

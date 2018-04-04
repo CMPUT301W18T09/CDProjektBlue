@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -70,6 +71,17 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Find the recent listing tasks from DM
         getTaskDetails();
+
+        // Check for errors to avoid app crashes
+        if(task == null) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        } else if (isBid == 1 && task.getAcceptedBid() == -1) {
+            Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Set the tasks values
         setTaskValues();
@@ -138,8 +150,8 @@ public class TaskDetailsActivity extends NavigationActivity{
      * it needs to make these changes.
      */
     private void isAssignedTask() {
-        int b = task.getAcceptedBid();
-        bid = task.getBidList().get(b);
+//        int b = task.getAcceptedBid();
+        bid = task.getBidList().get(0);
         textLowestBid = findViewById(R.id.details_lowest_bid);
 
         // Show the buttons if the task is Assigned, only if the network is available
@@ -236,8 +248,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void fulfilled(View view) {
 
         // Don't allow the user to set tasks to complete when offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot set tasks to complete when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -264,8 +276,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void repost(View view) {
 
         // Don't allow user to repost tasks when offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Cannot repost tasks when offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -294,8 +306,8 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void openUserInfo(String username) {
 
         // Inform the user if they attempt to get user information while offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -326,7 +338,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     public void setBid(TextView text_lowest_bid) {
         Bid lowest_bid = null;
         if (task == null) {
-            Log.i("MSG", "task is null here");
+            Log.i("MSG", "task isa null here");
         }
 
         // Display your bid price
@@ -389,22 +401,20 @@ public class TaskDetailsActivity extends NavigationActivity{
             taskList = getTasks.get();
 
             // If there is no network available, fetch the backup task
-            if (!DataManager.isNetworkAvailable()) {
+            if (!DataManager.isNetworkAvailable(this )) {
                 task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
             }
             else {
                 if (taskList.size() > 0) {
                     task = taskList.get(0);
-                } else {
-                    Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_LONG).show();
-                    // TODO: This doesn't prevent null pointer exception when the program continues, must resolve
                 }
             }
-          
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
+
+
 }
