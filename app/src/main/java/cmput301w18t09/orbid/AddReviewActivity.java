@@ -125,7 +125,8 @@ public class AddReviewActivity extends NavigationActivity {
         updateTask();
 
         Toast.makeText(this, "Review added", Toast.LENGTH_LONG).show();
-        return;
+        finish();
+        //return;
 
     }
 
