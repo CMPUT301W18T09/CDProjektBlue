@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
-    android:background="@color/colorTheme">
+    tools:context="cmput301w18t09.orbid.EditProfileActivity"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <EditText
         android:id="@+id/edit_profile_etFirstName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/edit_profile_tvUsername"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
+        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:hint="@string/first_name"
+        android:text="@string/first_name"
         android:inputType="textPersonName"
-        android:textColor="@android:color/black" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etLastName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/edit_profile_etFirstName"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
-        android:hint="@string/last_name"
+        android:text="@string/last_name"
         android:inputType="textPersonName"
-        android:textColor="@android:color/black" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_profile_etFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etEmail"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/edit_profile_etLastName"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
-        android:hint="@string/email"
+        android:text="@string/email"
         android:inputType="textEmailAddress"
-        android:textColor="@android:color/black" />
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
 
     <EditText
         android:id="@+id/edit_profile_etPhoneNumber"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/edit_profile_etEmail"
         android:layout_marginTop="30dp"
-        android:background="@drawable/new_button_background"
         android:ems="10"
         android:gravity="center"
-        android:hint="@string/phone_number"
+        android:text="@string/phone_number"
         android:inputType="textPersonName|phone"
-        android:textColor="@android:color/black" />
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
 
 
     <Button
@@ -72,18 +80,43 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/new_button_background"
         android:textAllCaps="false"
-        android:text="Save" />
+        android:text="Save"
+        android:textColor="@color/colorTheme"/>
 
     <TextView
         android:id="@+id/edit_profile_tvUsername"
-        android:layout_width="275dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
         android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="30sp" />
+        android:hint="@string/first_name"
+        android:inputType="textPersonName"
+        android:text="Username"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edit_profile_etPassword"
+        android:layout_below="@+id/edit_profile_etPhoneNumber"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="New Password"
+        android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColorHint="#fcfcf9"
+        android:textColor="#fcfcf9"/>
 
 
 </RelativeLayout>

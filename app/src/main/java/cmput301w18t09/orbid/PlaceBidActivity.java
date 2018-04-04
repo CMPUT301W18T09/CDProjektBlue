@@ -75,8 +75,12 @@ public class PlaceBidActivity extends TaskDetailsActivity {
     public void makeBid(View view) {
 
         // Inform the user if they attempt to make a bid offline
-        if (!DataManager.isNetworkAvailable()) {
-            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_LONG).show();
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "Bids cannot be placed while offline", Toast.LENGTH_SHORT).show();
+            return;
+        } else if(task == null) {
+            Toast.makeText(context, "This task no longer exists", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
@@ -87,28 +91,32 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
         } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
-            ArrayList<Bid> temp = task.getBidList();
-            // Check if the user had a previous bid and delete it if so
-            for(Bid b: temp) {
-                if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
-                    task.removeBid(b);
+            Double price = Double.parseDouble(etPrice.getText().toString());
+            if(price > 1000000) {
+                Toast.makeText(this, "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
+            } else {
+                ArrayList<Bid> temp = task.getBidList();
+                // Check if the user had a previous bid and delete it if so
+                for(Bid b: temp) {
+                    if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                        task.removeBid(b);
+                    }
                 }
-            }
+                // Add the new bid to the bid list
+                Bid bid = new Bid(this.thisUser, price, etDescription.getText().toString());
+                task.addBid(bid);
+                task.setStatus(Task.TaskStatus.BIDDED);
+                // Notify the Task that the requester needs to receive a notification
+                if (!task.getShouldNotify()) {
+                    task.setShouldNotify(true);
+                }
+                DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
+                updateTasks.execute(taskList);
 
-            // Add the new bid to the bid list
-            Bid bid = new Bid(this.thisUser, Double.parseDouble(etPrice.getText().toString()), etDescription.getText().toString());
-            task.addBid(bid);
-            task.setStatus(Task.TaskStatus.BIDDED);
-            // Notify the Task that the requester needs to receive a notification
-            if(!task.getShouldNotify()) {
-                task.setShouldNotify(true);
+                finish();
             }
-            DataManager.updateTasks updateTasks = new DataManager.updateTasks(this);
-            updateTasks.execute(taskList);
-
-            finish();
         } else {
-            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
         }
 
     }

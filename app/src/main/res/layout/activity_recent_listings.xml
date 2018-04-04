@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.RecentListingsActivity"
+    android:focusableInTouchMode="true"
     android:background="@color/colorTheme">
 
     <SearchView
@@ -13,11 +14,12 @@
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:queryHint="@string/search"
+        android:iconifiedByDefault="false"
         android:background="@drawable/rounded_search_view"
         />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView_reviews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

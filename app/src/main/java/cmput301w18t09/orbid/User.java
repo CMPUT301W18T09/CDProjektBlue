@@ -18,8 +18,9 @@ public class User {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    @JestId
+    private String password;
 
+    @JestId
     private String id;
     private ArrayList<Review> reviewList;
 
@@ -28,14 +29,16 @@ public class User {
      * User class constructor
      *
      * @param username The username belonging to the user
+     * @param password The password belonging to the user
      * @param email The e-mail belonging to the user
      * @param phoneNumber The phone number belonging to the user
      * @param firstName The first name of the user
      * @param lastName The last name of the user
      */
-    public User(String username, String email, String phoneNumber, String firstName, String lastName) {
+    public User(String username, String password, String email, String phoneNumber, String firstName, String lastName) {
         this.username = username;
         this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +61,24 @@ public class User {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * Gets the password belonging to the user
+     *
+     * @return The password belonging to the user
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets the password belonging to the user
+     *
+     * @param password The username belonging to the user
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**
