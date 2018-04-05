@@ -337,25 +337,38 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else {
 
-            if (!etLocation.getText().toString().isEmpty()) {
-                // Check users manually entered location
-                String locationString = etLocation.getText().toString();
-                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
-                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
-                task.setLocation(latLng);
-            } else {
-                // If no manual address set current location
-                try {
-                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
-                    Log.i("GEO", "Location set");
-                } catch(Exception e) {
-                    Log.e("LatLng", "Could not get location");
-                }
-            }
+//            if (!etLocation.getText().toString().isEmpty()) {
+//                // Check users manually entered location
+//                String locationString = etLocation.getText().toString();
+//                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
+//                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
+//                task.setLocation(latLng);
+//            } else {
+//                // If no manual address set current location
+//                try {
+//                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+//                    Log.i("GEO", "Location set");
+//                } catch(Exception e) {
+//                    Log.e("LatLng", "Could not get location");
+//                }
+//            }
 
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
-          // Save the new task to the DM
+            // Add the human readable location to the task if we have an internet connection
+            if (etLocation.getText().length() > 0 && DataManager.isNetworkAvailable(this)) {
+                String locationString = etLocation.getText().toString();
+                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
+                task.setStringLocation(locationString);
+                task.setLocation(latLng);
+            }
+            // Else, we still add the task but do not include a location
+            else if (etLocation.getText().length() > 0 && !DataManager.isNetworkAvailable(this)){
+                Toast.makeText(this, "Task added, but no location recorded due to failed network connection", Toast.LENGTH_SHORT).show();
+            }
+
+
+            // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
                 DataManager.addTasks object = new DataManager.addTasks(this);
@@ -483,28 +496,30 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
                 etStatus.setText("Status: Bidded");
             }
-            LatLng location = task.getLocation();
+            //LatLng location = task.getLocation();
 
-            // TODO: We need to save the human readable address in the Task object so we do not
-            // TODO: have to make a server request when offline. Performing the below code while
-            // TODO: offline results in an ~10 second wait time before the timeout occurs.
-            if (location != null && DataManager.isNetworkAvailable(this)) {
-                String geoResult = MapActivity.getAddress(location, getResources());
-                etLocation.setText(geoResult);
 
-            } else {
-                Log.i("GEO", "Location is null");
+
+            if (task.getStringLocation() == null) {
+                etLocation.setText("No Location Specified");
             }
+            else {
+                etLocation.setText(task.getStringLocation());
+            }
+
+//            if (location != null && DataManager.isNetworkAvailable(this)) {
+//                String geoResult = MapActivity.getAddress(location, getResources());
+//                etLocation.setText(geoResult);
+//
+//            } else {
+//                Log.i("GEO", "Location is null");
+//            }
 
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

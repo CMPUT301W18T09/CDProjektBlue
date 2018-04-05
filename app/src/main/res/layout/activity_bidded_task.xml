@@ -91,7 +91,6 @@
             android:id="@+id/details_task_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:backgroundTint="#fcfcf9"
             android:ems="10"
             android:gravity="top|left"
@@ -153,6 +152,47 @@
             android:text="I can work any time of any day. I have all of the necessary tools and skills and am a really hard worker. I have many years of experience doing this job. I am a world class babysitter and you need me so bad."
             android:textAlignment="center"
             android:textColor="#fcfcf9" />
+
+        <LinearLayout
+            android:id="@+id/btnLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/DeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/new_button_background"
+
+                android:text="Delete"
+                android:textColor="@color/colorTheme" />
+
+            <Button
+                android:id="@+id/SavePostTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/new_button_background"
+
+                android:text="Save"
+                android:textColor="@color/colorTheme" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author Aidan Kosik, Chady Haidar, Zach Redfern
  */
-public class TaskDetailsActivity extends NavigationActivity{
+public class TaskDetailsActivity extends NavigationActivity {
 
     public Task task;
     public Bid bid;
@@ -46,12 +46,22 @@ public class TaskDetailsActivity extends NavigationActivity{
     private DrawerLayout mDrawerLayout;
     protected boolean mine = false;
     private String id;
+
     private TextView textLowestBid;
-    private EditText usernameBtn;
-    private EditText bid_username;
-    private EditText bid_title;
-    private EditText bid_description;
-    private TextView description;
+
+
+    private EditText bidUsername;
+    private EditText bidPrice;
+    private EditText bidDescription;
+
+    private EditText title;
+    private EditText description;
+    private EditText lowestBid;
+    private EditText location;
+    private EditText username;
+    private EditText status;
+
+
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -66,24 +76,10 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Set the attributes that are passed through with the intent
         setIntentArgs();
 
+
+
         // Find the recent listing tasks from DM
         getTaskDetails();
-
-        // Layout the XML that goes to the corresponding child that is being inflated
-        // Then setup the generic parts.
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        if (isAssigned == 0) {
-            inflater.inflate(R.layout.activity_new_task_details, frameLayout);
-            // Setting up the stack view for the images when you add a Task
-            initStackView();
-        }
-        else {
-            inflater.inflate(R.layout.activity_bidded_task, frameLayout);
-            bid_username = findViewById(R.id.assignedBidUser);
-            bid_title = findViewById(R.id.assignedBidTitle);
-            bid_description = findViewById(R.id.assignedBidDescription);
-        }
 
         // Check for errors to avoid app crashes
         if(task == null) {
@@ -96,24 +92,89 @@ public class TaskDetailsActivity extends NavigationActivity{
             return;
         }
 
+        // Layout the XML that goes to the corresponding child that is being inflated
+        // Then setup the generic parts.
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+
+        if (isAssigned == 0) {
+            inflater.inflate(R.layout.activity_new_task_details, frameLayout);
+            initStackView();
+        } else {
+            inflater.inflate(R.layout.activity_bidded_task, frameLayout);
+
+            bidUsername = findViewById(R.id.assignedBidUser);
+            bidPrice = findViewById(R.id.assignedBidTitle);
+            bidDescription = findViewById(R.id.assignedBidDescription);
+
+            bid = task.getBidList().get(task.getAcceptedBid());
+            bidPrice.setText(Double.toString(bid.getPrice()));
+            bidDescription.setText(bid.getDescription());
+            bidUsername.setText(bid.getProvider());
+        }
+        frameLayout.requestFocus();
+
+        title = findViewById(R.id.details_task_title1);
+        description = findViewById(R.id.details_task_description);
+        lowestBid = findViewById(R.id.details_lowest_bid);
+        location = findViewById(R.id.details_location);
+        username = findViewById(R.id.usernameButton);
+        status = findViewById(R.id.details_task_status);
+
+        title.setText(task.getTitle());
+        description.setText(task.getDescription());
+        username.setText(task.getRequester());
+
+        // Status
+        if (task.getStatus() == Task.TaskStatus.REQUESTED) {
+            status.setText("Status: Requested");
+        }
+        else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
+            status.setText("Status: Bidded");
+        }
+        else if (task.getStatus() == Task.TaskStatus.ASSIGNED) {
+            status.setText("Status: Assigned");
+        }
+        else if (task.getStatus() == Task.TaskStatus.COMPLETED) {
+            status.setText("Status: Completed");
+        }
+
+        // Lowest bid
+        if (task.getLowestBid() != -1) {
+            lowestBid.setText("Lowest Bid: " + Double.toString(task.getLowestBid()));
+        }
+        else {
+            lowestBid.setText("Lowest Bid: N/A");
+        }
+
+        // Location
+        if (task.getStringLocation() == null) {
+            location.setText("No Location Specified");
+        }
+        else {
+            location.setText(task.getStringLocation());
+        }
+
+
+
         // Set the tasks values
-        setTaskValues();
+        //setTaskValues();
 
-        // Set the username button
-        usernameBtn = findViewById(R.id.usernameButton);
-        usernameBtn.setText(task.getRequester());
+//        // Set the username button
+//        usernameBtn = findViewById(R.id.usernameButton);
+//        usernameBtn.setText(task.getRequester());
 
 
-        // Setting up the assigned bid layout
-        // 1 means assigned, 2 means completed, 0 is for requested
-        if(isAssigned == 1 || isAssigned == 2) {
-            isAssignedTask();
-        }
+//        // Setting up the assigned bid layout
+//        // 1 means assigned, 2 means completed, 0 is for requested
+//        if(isAssigned == 1 || isAssigned == 2) {
+//            isAssignedTask();
+//        }
 
-        // Check to see if this task is owned by the user opening it
-        if (task.getRequester().equals(this.thisUser)) {
-            mine = true;
-        }
+//        // Check to see if this task is owned by the user opening it
+//        if (task.getRequester().equals(this.thisUser)) {
+//            mine = true;
+//        }
     }
 
     /**
@@ -167,12 +228,12 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
 
         // Set necessary elements to visible
-        bid_username.setVisibility(View.VISIBLE);
+        bidUsername.setVisibility(View.VISIBLE);
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
         textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
-        bid_username.setText(bid.getProvider());
+        bidUsername.setText(bid.getProvider());
         description.setText(bid.getDescription());
     }
 
@@ -393,8 +454,8 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
             // Set your bid price, username, and description
             text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
-            bid_username.setVisibility(View.VISIBLE);
-            bid_username.setText(bid.getProvider());
+            bidUsername.setVisibility(View.VISIBLE);
+            bidUsername.setText(bid.getProvider());
             description.setVisibility(View.VISIBLE);
             description.setText(bid.getDescription());
         } else {

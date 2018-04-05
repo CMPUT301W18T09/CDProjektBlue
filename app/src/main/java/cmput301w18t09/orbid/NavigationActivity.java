@@ -84,12 +84,12 @@ public class NavigationActivity extends AppCompatActivity
         TextView username = secondary.findViewById(R.id.usernameTextView);
         username.setText(thisUser);
         // Use actual ID of layout to inflate it
-        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
-        if (callerLayoutID != 0) {
-            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-            inflater.inflate(callerLayoutID, frameLayout);
-        }
+//        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
+//        if (callerLayoutID != 0) {
+//            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+//            inflater.inflate(callerLayoutID, frameLayout);
+//        }
         notificationChecker = new DataManager.NotificationChecker(this);
 
 
