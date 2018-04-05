@@ -351,10 +351,12 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
                 .build();
         GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, address).await();
         com.google.maps.model.LatLng latLng = new com.google.maps.model.LatLng();
-        if (results[0] != null) {
-            double lat = results[0].geometry.location.lat;
-            double lng = results[0].geometry.location.lng;
-            latLng = new com.google.maps.model.LatLng(lat, lng);
+        if (results.length > 0) {
+            if (results[0] != null) {
+                double lat = results[0].geometry.location.lat;
+                double lng = results[0].geometry.location.lng;
+                latLng = new com.google.maps.model.LatLng(lat, lng);
+            }
         }
         return latLng;
     }

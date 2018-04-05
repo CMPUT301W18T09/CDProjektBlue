@@ -272,7 +272,7 @@ public class TaskDetailsActivity extends NavigationActivity {
     private void setTaskValues() {
 
         // Find the text views in the layout
-        TextView task_title = frameLayout.findViewById(R.id.details_task_title);
+        TextView task_title = findViewById(R.id.details_task_title);
         TextView task_description = findViewById(R.id.details_task_description);
         TextView text_task_status = findViewById(R.id.details_task_status);
 
