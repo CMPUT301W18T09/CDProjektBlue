@@ -54,6 +54,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private EditText etTitle;
     private EditText etPrice;
     private EditText etLocation;
+    private EditText etStatus;
     private Context context = this;
     private static final int SELECT_PICTURE = 1;
     private static final int DELETE_PICTURE = 3;
@@ -85,13 +86,30 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Inflate the layout ID that was received
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        inflater.inflate(R.layout.activity_add_edit_task, frameLayout);
+
+        if (isAdd == 0 || isAdd == 1) {
+            inflater.inflate(R.layout.activity_new_add_edit_task, frameLayout);
+            etTitle = findViewById(R.id.EditTaskTitle);
+            etDescription = findViewById(R.id.EditTaskComment);
+            etPrice = findViewById(R.id.EditPrice);
+            etLocation = findViewById(R.id.etLocation);
+            etStatus = findViewById(R.id.etStatus);
+        }
+        else if (isAdd == 3) {
+            inflater.inflate(R.layout.activity_new_bidlist_activity, frameLayout);
+            etTitle = findViewById(R.id.etTitle);
+            etDescription = findViewById(R.id.etComment);
+            etPrice = findViewById(R.id.etPrice);
+            etLocation = findViewById(R.id.etLocation);
+            etStatus = findViewById(R.id.etStatus);
+        }
         frameLayout.requestFocus();
 
-        etTitle = findViewById(R.id.EditTaskTitle);
-        etDescription = findViewById(R.id.EditTaskComment);
-        etPrice = findViewById(R.id.EditPrice);
-        etLocation = findViewById(R.id.EditTaskLocation);
+//        etTitle = findViewById(R.id.EditTaskTitle);
+//        etDescription = findViewById(R.id.EditTaskComment);
+//        etPrice = findViewById(R.id.EditPrice);
+//        etLocation = findViewById(R.id.etLocation);
+//        etStatus = findViewById(R.id.etStatus);
 
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
@@ -169,10 +187,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private void activityTypeInit() {
 
         // Get the task title and comment Edit Texts
-        Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
-        Button delete = (Button) findViewById(R.id.DeleteButton);
+        Button btnSavePost;
+        Button delete;
 
         if (isAdd == 1) {
+            btnSavePost = findViewById(R.id.SavePostTaskButton);
+            delete = findViewById(R.id.DeleteButton);
             btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
@@ -181,8 +201,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 setAfterLocationValues();
             }
         } else if (isAdd == 3) {
-            etPrice.setVisibility(View.GONE);
-            btnSavePost.setVisibility(View.GONE);
+
+            //etPrice.setVisibility(View.GONE);
+            //btnSavePost.setVisibility(View.GONE);
             // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
@@ -192,11 +213,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
-            etTitle.setEnabled(false);
-            etDescription.setEnabled(false);
-            etPrice.setEnabled(false);
+            return;
+//            etTitle.setEnabled(false);
+//            etDescription.setEnabled(false);
+//            etPrice.setEnabled(false);
+
         } else {
             // Show the price and bid list if you're only editing a task
+            btnSavePost = findViewById(R.id.SavePostTaskButton);
             btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Save");
         }
@@ -204,7 +228,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
-        etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
+        //etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
     }
 
     /**
@@ -226,11 +250,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             String location = getIntent().getStringExtra("location");
             etLocation.setText(location);
         }
-        if (getIntent().getStringExtra("price") != null) {
-            String price = getIntent().getStringExtra("price");
-            etPrice.setText(price);
-            task.setPrice(Double.parseDouble(price));
-        }
+
+        // TODO: REMOVE?
+//        if (getIntent().getStringExtra("price") != null) {
+//            String price = getIntent().getStringExtra("price");
+//            etPrice.setText(price);
+//            task.setPrice(Double.parseDouble(price));
+//        }
     }
 
     /**
@@ -324,8 +350,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() < 1) {
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
-        } else if(task.getPrice() == 0) {
-            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
+            // TODO: REMOVE
+//        } else if(task.getPrice() == 0) {
+//            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
         } else {
 
             if (!etLocation.getText().toString().isEmpty()) {
@@ -442,17 +469,38 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                     }
                 }
 
-                etPrice.setText(Double.toString(task.getPrice()));
-                etTitle.setText(task.getTitle());
-                etDescription.setText(task.getDescription());
+
+
             } else {
                 changeTask = taskList.get(0);
             }
 
 
-            etPrice.setText(Double.toString(task.getPrice()));
+            // Find the lowest bid
+            double lowest = 1000000;
+            boolean lowestChanged = false;
+            ArrayList<Bid> bidList = task.getBidList();
+            for (int i = 0; i < bidList.size(); ++i) {
+                if (bidList.get(i).getPrice() < lowest) {
+                    lowestChanged = true;
+                    lowest = bidList.get(i).getPrice();
+                }
+            }
+            if (lowestChanged) {
+                etPrice.setText("Lowest Bid: " + Double.toString(lowest));
+            }
+            else {
+                etPrice.setText("Lowest Bid: N/A");
+            }
+
             etTitle.setText(task.getTitle());
             etDescription.setText(task.getDescription());
+            if (task.getStatus() == Task.TaskStatus.REQUESTED) {
+                etStatus.setText("Status: Requested");
+            }
+            else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
+                etStatus.setText("Status: Bidded");
+            }
             LatLng location = task.getLocation();
 
             // TODO: We need to save the human readable address in the Task object so we do not
@@ -567,7 +615,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                         e.printStackTrace();
                     }
                     // Check if the image is too large
-                    if(dataSize > 65536) {
+                    if(dataSize > 65536*4) {
                         Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                     } else {
                         task.addPhoto(bitmap);
@@ -735,12 +783,14 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 String r = s.toString();
                 task.setDescription(r);
             }
-            if(view.getId() == R.id.EditPrice) {
-                String r = s.toString();
-                if(!r.isEmpty()) {
-                    task.setPrice(Double.parseDouble(r));
-                }
-            }
+
+            // TODO: REMOVE?
+//            if(view.getId() == R.id.EditPrice) {
+//                String r = s.toString();
+//                if(!r.isEmpty()) {
+//                    task.setPrice(Double.parseDouble(r));
+//                }
+//            }
         }
     }
 }

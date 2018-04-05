@@ -748,6 +748,7 @@ public class DataManager {
         try{
             result = getUsers.execute(query).get();
         }catch (Exception e){
+
         }
         System.out.println(result.size());
         return !result.isEmpty();
