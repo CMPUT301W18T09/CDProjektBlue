@@ -347,25 +347,38 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else {
 
-            if (!etLocation.getText().toString().isEmpty()) {
-                // Check users manually entered location
-                String locationString = etLocation.getText().toString();
-                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
-                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
-                task.setLocation(latLng);
-            } else {
-                // If no manual address set current location
-                try {
-                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
-                    Log.i("GEO", "Location set");
-                } catch(Exception e) {
-                    Log.e("LatLng", "Could not get location");
-                }
-            }
+//            if (!etLocation.getText().toString().isEmpty()) {
+//                // Check users manually entered location
+//                String locationString = etLocation.getText().toString();
+//                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
+//                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
+//                task.setLocation(latLng);
+//            } else {
+//                // If no manual address set current location
+//                try {
+//                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
+//                    Log.i("GEO", "Location set");
+//                } catch(Exception e) {
+//                    Log.e("LatLng", "Could not get location");
+//                }
+//            }
 
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
-          // Save the new task to the DM
+            // Add the human readable location to the task if we have an internet connection
+            if (etLocation.getText().length() > 0 && DataManager.isNetworkAvailable(this)) {
+                String locationString = etLocation.getText().toString();
+                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
+                task.setStringLocation(locationString);
+                task.setLocation(latLng);
+            }
+            // Else, we still add the task but do not include a location
+            else if (etLocation.getText().length() > 0 && !DataManager.isNetworkAvailable(this)){
+                Toast.makeText(this, "Task added, but no location recorded due to failed network connection", Toast.LENGTH_SHORT).show();
+            }
+
+
+            // Save the new task to the DM
             Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
             if (btnSavePost.getText().equals("Post")) {
                 DataManager.addTasks object = new DataManager.addTasks(this);
@@ -445,96 +458,96 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         getTasks.execute(query);
         try {
             taskList = getTasks.get();
-            if(!checkChanged) {
-                // If there is no network available, fetch the backup task
-                if (!DataManager.isNetworkAvailable(this)) {
-                    task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
-                } else {
-                    if (taskList.size() > 0) {
-                        task = taskList.get(0);
-                    } else {
-                        Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, ListTaskActivity.class);
-                        intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-                        intent.putExtra("isMyBids", 0);
-                        this.startActivity(intent);
-                    }
-                }
-
-
-
-            } else {
-                changeTask = taskList.get(0);
-            }
-
-
-            // Find the lowest bid
-            double lowest = 1000000;
-            boolean lowestChanged = false;
-            ArrayList<Bid> bidList = task.getBidList();
-            for (int i = 0; i < bidList.size(); ++i) {
-                if (bidList.get(i).getPrice() < lowest) {
-                    lowestChanged = true;
-                    lowest = bidList.get(i).getPrice();
-                }
-            }
-            if (lowestChanged) {
-                etPrice.setText("Lowest Bid: " + Double.toString(lowest));
-            }
-            else {
-                etPrice.setText("Lowest Bid: N/A");
-            }
-
-            etTitle.setText(task.getTitle());
-            etDescription.setText(task.getDescription());
-            if (task.getStatus() == Task.TaskStatus.REQUESTED) {
-                etStatus.setText("Status: Requested");
-            }
-            else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
-                etStatus.setText("Status: Bidded");
-            }
-            LatLng location = task.getLocation();
-
-            // TODO: We need to save the human readable address in the Task object so we do not
-            // TODO: have to make a server request when offline. Performing the below code while
-            // TODO: offline results in an ~10 second wait time before the timeout occurs.
-            if (location != null && DataManager.isNetworkAvailable(this)) {
-                if (!fromMap) {
-                    Log.e("GEO", "FROM MAP IS FALSE");
-                    String geoResult = MapActivity.getAddress(location, getResources());
-                    etLocation.setText(geoResult);
-                } else {
-                    if (getIntent().getStringExtra("location") != null) {
-                        String fromLocation = getIntent().getStringExtra("location");
-                        etLocation.setText(fromLocation);
-                        try {
-                            task.setLocation(MapActivity.fromAddress(fromLocation, getResources()));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ApiException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-            } else {
-                Log.i("GEO", "Location is null");
-            }
-
         } catch (InterruptedException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (ExecutionException e) {
             Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+
+        if(!checkChanged) {
+            // If there is no network available, fetch the backup task
+            if (!DataManager.isNetworkAvailable(this)) {
+                task = new Gson().fromJson(getIntent().getStringExtra("backupTask"), Task.class);
+            } else {
+                if (taskList.size() > 0) {
+                    task = taskList.get(0);
+                } else {
+                    Toast.makeText(context, "There was an error. This task may no longer exist.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, ListTaskActivity.class);
+                    intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                    intent.putExtra("isMyBids", 0);
+                    this.startActivity(intent);
+                }
+            }
+
+
+
+        } else {
+            changeTask = taskList.get(0);
+        }
+
+
+        // Find the lowest bid
+        double lowest = 1000000;
+        boolean lowestChanged = false;
+        ArrayList<Bid> bidList = task.getBidList();
+        for (int i = 0; i < bidList.size(); ++i) {
+            if (bidList.get(i).getPrice() < lowest) {
+                lowestChanged = true;
+                lowest = bidList.get(i).getPrice();
+            }
+        }
+        if (lowestChanged) {
+            etPrice.setText("Lowest Bid: " + Double.toString(lowest));
+        }
+        else {
+            etPrice.setText("Lowest Bid: N/A");
+        }
+
+        etTitle.setText(task.getTitle());
+        etDescription.setText(task.getDescription());
+        if (task.getStatus() == Task.TaskStatus.REQUESTED) {
+            etStatus.setText("Status: Requested");
+        }
+        else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
+            etStatus.setText("Status: Bidded");
+        }
+        //LatLng location = task.getLocation();
+
+        // TODO: We need to save the human readable address in the Task object so we do not
+        // TODO: have to make a server request when offline. Performing the below code while
+        // TODO: offline results in an ~10 second wait time before the timeout occurs.
+        if (location != null && DataManager.isNetworkAvailable(this)) {
+            if (!fromMap) {
+                Log.e("GEO", "FROM MAP IS FALSE");
+                String geoResult = MapActivity.getAddress(location, getResources());
+                etLocation.setText(geoResult);
+            } else {
+                if (getIntent().getStringExtra("location") != null) {
+                    String fromLocation = getIntent().getStringExtra("location");
+                    etLocation.setText(fromLocation);
+                    try {
+                        task.setLocation(MapActivity.fromAddress(fromLocation, getResources()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if (task.getStringLocation() == null) {
+            etLocation.setText("No Location Specified");
+        }
+        else {
+            etLocation.setText(task.getStringLocation());
         }
     }
+
 
     /**
      * Post/Edit button is pressed

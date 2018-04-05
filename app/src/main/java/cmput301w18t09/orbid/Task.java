@@ -29,6 +29,7 @@ public class Task {
     private TaskStatus status;
     private int acceptedBid;
     private LatLng location;
+    private String stringLocation;
     private ArrayList<Bid> bidList;
     private Boolean shouldNotify = false;
     private ArrayList<byte[]> photoList;
@@ -333,7 +334,37 @@ public class Task {
      */
     public Boolean getIsReviewedByProvider() { return this.isReviewedByProvider; }
 
+    public void setStringLocation(String location) {
+        this.stringLocation = location;
+    }
 
+    public String getStringLocation() {
+        return this.stringLocation;
+    }
+
+    /**
+     * Gets the lowest bid price in the bid list. Returns -1 if the bid list was empty
+     *
+     * @return The lowest bid price in the bid list
+     */
+    public double getLowestBid() {
+
+        double lowest = 1000000;
+        boolean lowestChanged = false;
+        for (int i = 0; i < bidList.size(); ++i) {
+            if (bidList.get(i).getPrice() < lowest) {
+                lowestChanged = true;
+                lowest = bidList.get(i).getPrice();
+            }
+        }
+
+        if (lowestChanged) {
+            return lowest;
+        }
+        else {
+            return -1.0;
+        }
+    }
 
     /**
      * Compares two tasks to see if they are equals. Only works for tasks that have not yet
