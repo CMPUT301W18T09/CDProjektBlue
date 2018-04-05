@@ -111,6 +111,12 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         }
     }
 
+
+    /**
+     * Opens a dialog to confirm if the chosen location is right.
+     * If the user chooses yes the location is set as the temporary location
+     * and sent back to the addEditActivity with the new location.
+     */
     private void changeLocation() {
         Bundle bundle = getArguments();
 
@@ -148,6 +154,10 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         });
     }
 
+    /**
+     * Creates the intent and puts all the extra information into it before
+     * returning to the AddEditActivity to continue creating a task.
+     */
     private void openAddActivity() {
         Bundle bundle = getArguments();
         Log.i("MAP", "openAdd");
@@ -183,6 +193,12 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         startActivity(intent);
     }
 
+
+    /**
+     * Creates and sets the extra information for the intent before
+     * sending it back to the AddEditActivity to continue editing or save
+     * the task.
+     */
     private void openEditActivty() {
         Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
         Log.i("MAP", "openEdit");
@@ -205,16 +221,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         intent.putExtra("_id", getArguments().getString("_id"));
         getActivity().finish();
         startActivity(intent);
-    }
-
-    private void locationSet(LatLng latLng) {
-        com.google.maps.model.LatLng loc = new com.google.maps.model.LatLng(latLng.latitude, latLng.longitude);
-        if (thisTask != null) {
-            thisTask.setLocation(loc);
-        } else {
-            Log.e("GEO", "The task was null and location could not be set.");
-        }
-
     }
 
     /**
@@ -291,12 +297,11 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     }
 
     /**
-     * opens the recent listings activity in list view mode.
+     * Finds the location of the user when there is a connection.
+     * Sets it to the static variable of the user's location
+     * in the navigation activity.
+     * @param bundle
      */
-    private void openRecentListingsActivity() {
-        // Todo
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Location location = LocationServices.FusedLocationApi.getLastLocation(
@@ -309,11 +314,19 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         }
     }
 
+    /**
+     * When the connetion is suspended we try to reconnect to the client.
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
         googleApiClient.connect();
     }
 
+    /**
+     * Report the error when unable to connect to the client.
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e("MAP", "There was an error connecting: " + connectionResult);
@@ -345,6 +358,15 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         return "";
     }
 
+    /**
+     * Uses Google's API for geocoding to convert a string address to a LatLng location.
+     * @param address
+     * @param resources
+     * @return
+     * @throws InterruptedException
+     * @throws ApiException
+     * @throws IOException
+     */
     public static com.google.maps.model.LatLng fromAddress(String address, Resources resources) throws InterruptedException, ApiException, IOException {
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
                 .apiKey(resources.getString(R.string.google_maps_key))
@@ -361,23 +383,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         return latLng;
     }
 
-    private void update() {
-        ArrayList<Task> n = new ArrayList<>();
-        n.add(thisTask);
-        try {
-            Log.i("GEO", getAddress(thisTask.getLocation(), getResources()));
-            Log.i("GEO", thisTask.getID());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        DataManager.updateTasks object = new DataManager.updateTasks(getContext());
-        object.execute(n);
-    }
 
     private void getThisTask(String id) {
         // Get the task using the query

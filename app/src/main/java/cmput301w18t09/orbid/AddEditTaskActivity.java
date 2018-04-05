@@ -516,9 +516,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
         LatLng location = task.getLocation();
 
-        // TODO: We need to save the human readable address in the Task object so we do not
-        // TODO: have to make a server request when offline. Performing the below code while
-        // TODO: offline results in an ~10 second wait time before the timeout occurs.
         if (location != null && DataManager.isNetworkAvailable(this)) {
             if (!fromMap) {
                 Log.e("GEO", "FROM MAP IS FALSE");

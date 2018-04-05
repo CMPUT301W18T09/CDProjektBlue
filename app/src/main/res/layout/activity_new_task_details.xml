@@ -46,7 +46,8 @@
             android:textColor="#fcfcf9"
             android:backgroundTint="#fcfcf9"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:editable="false"
+            android:inputType="none"
             android:text="14 1510 Parkland Drive"
             android:textAlignment="center" />
 
@@ -64,7 +65,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:editable="false"
+                android:inputType="none"
                 android:text="Requested"
                 android:textAlignment="center"
                 android:textColor="#fcfcf9" />
@@ -78,7 +80,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:editable="false"
+                android:inputType="none"
                 android:text="Lowest Bid: $42"
                 android:textAlignment="center"
                 android:textColor="#fcfcf9" />
@@ -94,7 +97,8 @@
             android:backgroundTint="#fcfcf9"
             android:textAlignment="center"
             android:maxLines="1"
-            android:inputType="text"
+            android:editable="false"
+            android:inputType="none"
             android:text="Name" />
 
         <EditText
@@ -105,7 +109,8 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="top|left"
-            android:inputType="text|textMultiLine|textCapSentences"
+            android:editable="false"
+            android:inputType="none"
             android:maxLength="300"
             android:text="I'm going out of town and will not have to be in touch and I not have to go back and I have a great time and place and we will have a good time for you and I have a good time for you and I'm​I have to go to the gym and then I will be there in a few minutes late but I don't know if you want to go to"
             android:textColor="#fcfcf9" />
