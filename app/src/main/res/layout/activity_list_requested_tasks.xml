@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cmput301w18t09.orbid.ListTaskActivity"
-    android:background="@color/colorTheme"
+    android:background="@drawable/linear_layout_back"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
