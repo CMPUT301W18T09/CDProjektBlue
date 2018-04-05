@@ -92,7 +92,18 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         etDescription = findViewById(R.id.EditTaskComment);
         etPrice = findViewById(R.id.EditPrice);
         etLocation = findViewById(R.id.EditTaskLocation);
+        // Initiate Location Client
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
+            checkLocationPermission();
+        }
+    }
 
+    /**
+     * Loads the task details after the onCreate
+     */
+    @Override
+    public void onResume(){
+        super.onResume();
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
             load(false);
@@ -105,16 +116,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
         // Load the proper views
         activityTypeInit();
-
         // Initiate the stack view
         stackViewInit();
-
-        // Initiate Location Client
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
-            checkLocationPermission();
-        }
-
-
     }
 
     /**

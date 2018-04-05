@@ -65,13 +65,18 @@ public class TaskDetailsActivity extends NavigationActivity{
         inflater.inflate(R.layout.activity_task_details, frameLayout);
         title = findViewById(R.id.assignedBidTitle);
         description = findViewById(R.id.assignedBidDescription);
+        // Gets the attributes that are passed through with the intent
+        getIntentArgs();
+    }
 
-        // Set the attributes that are passed through with the intent
-        setIntentArgs();
-
+    /**
+     * Loads the task the user clicked on
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
         // Find the recent listing tasks from DM
         getTaskDetails();
-
         // Check for errors to avoid app crashes
         if(task == null) {
             Toast.makeText(context, "This no longer exists", Toast.LENGTH_SHORT).show();
@@ -85,7 +90,6 @@ public class TaskDetailsActivity extends NavigationActivity{
 
         // Set the tasks values
         setTaskValues();
-
         // Set the username button
         Button usernameBtn = (Button) findViewById(R.id.usernameButton);
         usernameBtn.setText("Poster: " + task.getRequester());
@@ -96,16 +100,13 @@ public class TaskDetailsActivity extends NavigationActivity{
                 openUserInfo(task.getRequester());
             }
         });
-
         // Setting up the assigned bid layout
         // 1 means assigned, 2 means completed, 0 is for recent listings
         if(isAssigned == 1 || isAssigned == 2) {
             isAssignedTask();
         }
-
         // Setting up the stack view for the images when you add a Task
         initStackView();
-
         // Check to see if this task is owned by the user opening it
         if (task.getRequester().equals(this.thisUser)) {
             mine = true;
@@ -188,7 +189,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     /**
      * Get the arguments that were passed with the intent.
      */
-    private void setIntentArgs() {
+    private void getIntentArgs() {
 
         // Use the id of the task to get it from the Data Manager
         try {

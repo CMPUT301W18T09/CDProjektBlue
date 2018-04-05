@@ -92,7 +92,14 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                 return false;
             }
         });
+    }
 
+    /**
+     * Loads and displays the recent tasks after the onCreate
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
         // Fill taskList with all tasks if the network is available, otherwise report
         // to the user that that functionality is not available offline
         if (DataManager.isNetworkAvailable(this )) {
@@ -102,7 +109,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_SHORT).show();
         }
 
-
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_reviews);
@@ -111,8 +117,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
     }
-
-
     /**
      * Sets the refresh (index 0) button to visible and the add (index 1) button to invisible
      *

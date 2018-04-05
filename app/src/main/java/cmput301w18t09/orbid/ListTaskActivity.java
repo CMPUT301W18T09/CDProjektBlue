@@ -64,7 +64,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
 
         // Selection for either a list of Tasks you Bid on,
         // Or a list of tasks you requested
-
         if(isMyBids==1) {
             maxPages=2;
         } else {
