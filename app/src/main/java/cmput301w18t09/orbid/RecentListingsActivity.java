@@ -1,10 +1,16 @@
 package cmput301w18t09.orbid;
 
 
+import android.*;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +46,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private Switch tbtnToggle;
     private DrawerLayout mDrawerLayout;
     private SearchView searchView;
+    private boolean permissionsGranted = false;
 
     /**
      * Sets the switch for list view and map view in the toolbar, creates onClick
@@ -55,6 +62,10 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(layoutID, frameLayout);
 
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
+            permissionsGranted = checkLocationPermission();
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         tbtnToggle = new Switch(getBaseContext());
         tbtnToggle.setTextOn("List");
@@ -64,7 +75,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-                    openMapActivity();
+                    if (!permissionsGranted) {
+                        permissionsGranted = checkLocationPermission();
+                        tbtnToggle.setChecked(true);
+                    } else {
+                        openMapActivity();
+                    }
                 }
                 else {
                     Intent intent = new Intent(getBaseContext(), RecentListingsActivity.class);
@@ -288,5 +304,22 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     public ArrayList<Task> getTaskList() {
         return this.taskList;
+    }
+
+    /**
+     * Checks if the user has given the app permissions to access location services.
+     * If not, it prompts the user to allow them.
+     */
+    private boolean checkLocationPermission() {
+        Context context = getBaseContext();
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+        } else if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
     }
 }
