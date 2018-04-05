@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+
+    <EditText
+        android:id="@+id/et_bidprice"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#fcfcf9"
+        android:hint="Bid price"
+        android:textColorHint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9" />
+
+    <EditText
+        android:id="@+id/et_biddescription"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_below="@+id/et_bidprice"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Add description"
+        android:gravity="top|left"
+        android:inputType="text|textMultiLine|textCapSentences"
+        android:maxLength="300"
+        android:textColorHint="#fcfcf9"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Place Bid"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:ems="10"
+        android:gravity="center"
+        android:backgroundTint="#fcfcf9"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
+
+    <Button
+        android:id="@+id/bt_cancel"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/new_button_background"
+        android:textColor="@color/colorTheme"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:text="@string/cancel" />
+
+    <Button
+        android:id="@+id/bt_bid"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/colorTheme"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/new_button_background"
+        android:text="@string/bid" />
+</RelativeLayout>
