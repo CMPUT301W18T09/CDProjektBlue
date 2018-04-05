@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:background="@android:color/transparent"
         android:hint="Write a review"
         android:textColorHint="#fcfcf9"
@@ -63,38 +63,24 @@
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/review"
-        android:layout_marginTop="50dp"
-        android:text="@string/add_button" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/add_button"
+        android:background="@drawable/new_button_background"
+        android:textAllCaps="false"
+        android:textColor="@color/colorTheme"/>
 
     <RatingBar
         android:id="@+id/ratingBar2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_type"
+        android:layout_below="@+id/reviewee_name"
         android:layout_marginTop="15dp"
         android:isIndicator="false"
         android:layout_centerHorizontal="true" />
 
-    <Spinner
-        android:id="@+id/user_type"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reviewee_name"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/title"
-        android:layout_toRightOf="@+id/title" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reviewee_name"
-        android:layout_marginTop="15dp"
-        android:layout_alignEnd="@+id/submit_button"
-        android:layout_alignRight="@+id/submit_button"
-        android:text="Were they a requester or provider?"
-        android:backgroundTint="#fcfcf9"
-        android:textColor="#fcfcf9" />
 
 
 </RelativeLayout>
