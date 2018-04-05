@@ -58,7 +58,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private GoogleApiClient googleApiClient;
     private Location myLocation = null;
     private int isAdd;
-    private Task task;
+    private Task thisTask;
     private LatLng chosenLocation;
 
 
@@ -94,6 +94,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         // Get the bundle from the previous activity
         Bundle bundle = getArguments();
         String came_from = bundle.getString("came_from");
+        String id = getArguments().getString("_id");
+        getThisTask(id);
 
         // If we came from recent_listings
         if (came_from.equals("recent_listings")) {
@@ -105,7 +107,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         } else if (came_from.equals("edit_task")) {
             changeLocation();
         } else {
-            String id = getArguments().getString("_id");
             displaySingleListing(id);
         }
     }
@@ -125,9 +126,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (isAdd != 1) {
-                                locationSet(latLng);
-                                update();
-                                openEditActivty();
+                                    chosenLocation = latLng;
+                                    openEditActivty();
                                 } else {
                                     chosenLocation = latLng;
                                     openAddActivity();
@@ -186,7 +186,22 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private void openEditActivty() {
         Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
         Log.i("MAP", "openEdit");
+        com.google.maps.model.LatLng newLoc = new com.google.maps.model.LatLng(chosenLocation.latitude, chosenLocation.longitude);
+        String stringLocation = null;
+        try {
+            stringLocation = getAddress(newLoc, getResources());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (stringLocation != null) {
+            intent.putExtra("location", stringLocation);
+        }
         intent.putExtra("isAdd", 0);
+        intent.putExtra("from_map", "true");
         intent.putExtra("_id", getArguments().getString("_id"));
         getActivity().finish();
         startActivity(intent);
@@ -194,8 +209,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
 
     private void locationSet(LatLng latLng) {
         com.google.maps.model.LatLng loc = new com.google.maps.model.LatLng(latLng.latitude, latLng.longitude);
-        if (task != null) {
-            task.setLocation(loc);
+        if (thisTask != null) {
+            thisTask.setLocation(loc);
         } else {
             Log.e("GEO", "The task was null and location could not be set.");
         }
@@ -270,33 +285,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      */
     private void displaySingleListing(String id) {
         // Todo
-        // Get the task using the query
-        ArrayList<String> query = new ArrayList<>();
-        query.add("_id");
-        query.add(id);
-
-        DataManager.getTasks getTasks = new DataManager.getTasks(getActivity());
-        getTasks.execute(new ArrayList<String>());
-        try {
-            taskList = getTasks.get();
-            try {
-                task = taskList.get(0);
-            } catch (Error e) {
-                Log.e("GEO", "Task list didn't have anything a index 0.");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        // Place all of the markers on the map and center on Task
-        for (Task task : taskList) {
-            if (task.getLocation() != null) {
-                LatLng latLng = new LatLng(task.getLocation().lat, task.getLocation().lng);
-                mMap.addMarker(new MarkerOptions().position(latLng).title(task.getTitle()).snippet(task.getID()));
-            }
-        }
+       getThisTask(id);
+       LatLng loc = new LatLng(thisTask.getLocation().lat, thisTask.getLocation().lng);
+        mMap.addMarker(new MarkerOptions().position(loc).title(thisTask.getTitle()).snippet(thisTask.getID()));
     }
 
     /**
@@ -344,10 +335,14 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         GeocodingResult[] results = GeocodingApi.reverseGeocode(geoApiContext, location).await();
         String address = "No Address";
         // Set the address from the results if it did not return null
-        if (results[0] != null) {
-            address = results[0].formattedAddress;
+        if (results.length > 0) {
+            if (results[0] != null) {
+                address = results[0].formattedAddress;
+            }
+            return address;
         }
-        return address;
+        Log.e("GEO", "There was no location.");
+        return "";
     }
 
     public static com.google.maps.model.LatLng fromAddress(String address, Resources resources) throws InterruptedException, ApiException, IOException {
@@ -366,9 +361,41 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
 
     private void update() {
         ArrayList<Task> n = new ArrayList<>();
-        n.add(task);
+        n.add(thisTask);
+        try {
+            Log.i("GEO", getAddress(thisTask.getLocation(), getResources()));
+            Log.i("GEO", thisTask.getID());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         DataManager.updateTasks object = new DataManager.updateTasks(getContext());
         object.execute(n);
+    }
+
+    private void getThisTask(String id) {
+        // Get the task using the query
+        ArrayList<String> query = new ArrayList<>();
+        query.add("_id");
+        query.add(id);
+
+        DataManager.getTasks getTasks = new DataManager.getTasks(getActivity());
+        getTasks.execute(new ArrayList<String>());
+        try {
+            taskList = getTasks.get();
+            try {
+                thisTask = taskList.get(0);
+            } catch (Error e) {
+                Log.e("GEO", "Task list didn't have anything a index 0.");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

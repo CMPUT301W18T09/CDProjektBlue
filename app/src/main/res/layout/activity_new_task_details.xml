@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
     android:background="@drawable/linear_layout_back"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">

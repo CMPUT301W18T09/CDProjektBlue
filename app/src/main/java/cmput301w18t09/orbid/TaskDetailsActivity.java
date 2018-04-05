@@ -49,6 +49,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private TextView textLowestBid;
     private EditText usernameBtn;
     private EditText bid_username;
+    private FrameLayout frameLayout;
     private EditText bid_title;
     private EditText bid_description;
     private TextView description;
@@ -69,10 +70,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Find the recent listing tasks from DM
         getTaskDetails();
 
+
         // Layout the XML that goes to the corresponding child that is being inflated
         // Then setup the generic parts.
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+        frameLayout = findViewById(R.id.navigation_content_frame);
         if (isAssigned == 0) {
             inflater.inflate(R.layout.activity_new_task_details, frameLayout);
             // Setting up the stack view for the images when you add a Task
@@ -211,7 +213,7 @@ public class TaskDetailsActivity extends NavigationActivity{
     private void setTaskValues() {
 
         // Find the text views in the layout
-        TextView task_title = findViewById(R.id.details_task_title);
+        TextView task_title = frameLayout.findViewById(R.id.details_task_title);
         TextView task_description = findViewById(R.id.details_task_description);
         TextView text_task_status = findViewById(R.id.details_task_status);
 

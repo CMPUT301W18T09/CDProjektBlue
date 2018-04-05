@@ -48,6 +48,7 @@ public class NavigationActivity extends AppCompatActivity
     public static String thisUser;
     private GoogleApiClient googleApiClient;
     public static Location thisLocation;
+    protected DrawerLayout mDrawerLayout;
     private DataManager.NotificationChecker notificationChecker;
 
     /**
@@ -69,6 +70,7 @@ public class NavigationActivity extends AppCompatActivity
         }
 
         // Instantiate the view elements
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

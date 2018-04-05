@@ -154,9 +154,17 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             bundle.putString("came_from", "edit_task");
             bundle.putInt("isAdd", 0);
             bundle.putString("_id", task.getID());
+            try {
+                Log.i("GEO", "ID before: " + id + "and location" + MapActivity.getAddress(task.getLocation(), getResources()));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ApiException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mapActivity.setArguments(bundle);
             fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
-            finish();
         }
         // If we are adding a task
         else {
@@ -196,7 +204,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             btnSavePost.setText("Post");
             task = new Task(this.thisUser, "", "", 0, Task.TaskStatus.REQUESTED);
             delete.setVisibility(View.GONE);
-            if (fromMap) {
+            if (fromMap && isAdd == 1) {
                 setAfterLocationValues();
             }
         } else if (isAdd == 3) {
@@ -491,8 +499,25 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             // TODO: have to make a server request when offline. Performing the below code while
             // TODO: offline results in an ~10 second wait time before the timeout occurs.
             if (location != null && DataManager.isNetworkAvailable(this)) {
-                String geoResult = MapActivity.getAddress(location, getResources());
-                etLocation.setText(geoResult);
+                if (!fromMap) {
+                    Log.e("GEO", "FROM MAP IS FALSE");
+                    String geoResult = MapActivity.getAddress(location, getResources());
+                    etLocation.setText(geoResult);
+                } else {
+                    if (getIntent().getStringExtra("location") != null) {
+                        String fromLocation = getIntent().getStringExtra("location");
+                        etLocation.setText(fromLocation);
+                        try {
+                            task.setLocation(MapActivity.fromAddress(fromLocation, getResources()));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
             } else {
                 Log.i("GEO", "Location is null");
