@@ -549,11 +549,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 }
             }
         }
-        if (task.getStringLocation() == null) {
-            etLocation.setText("No Location Specified");
-        }
-        else {
-            etLocation.setText(task.getStringLocation());
+        if (!fromMap) {
+            if (task.getStringLocation() == null) {
+                etLocation.setText("No Location Specified");
+            } else {
+                etLocation.setText(task.getStringLocation());
+            }
         }
     }
 
