@@ -4,6 +4,7 @@ package cmput301w18t09.orbid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<Task> taskList = new ArrayList<>();
     private int currentPage=0;
     private RecyclerView recyclerView;
@@ -48,6 +50,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private int maxPages;
     private Task.TaskStatus taskStatus;
     private int shouldWait = 1;
+    private Boolean isRefreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,8 +191,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * Initializes the recycler view with the task list
      */
     private void initRecyclerView() {
-        // Setup the card view to show tasks
 
+        // Setup the card view to show tasks
         filterList();
         Log.i("LENGTH", Integer.toString(taskList.size()));
         Log.i("PAGE", Integer.toString(currentPage));
@@ -200,6 +203,28 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
         taskAdapter.notifyDataSetChanged();
+        if(isRefreshing) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            isRefreshing = false;
+        }
+
+
+    }
+
+    private void initRefreshLayout() {
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefreshing = true;
+                changeLayout();
+            }
+        });
     }
 
     /**
@@ -274,6 +299,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             shouldWait = 1;
         }
         changeLayout();
+        initRefreshLayout();
     }
 
     /**
