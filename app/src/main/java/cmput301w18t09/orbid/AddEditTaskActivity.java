@@ -105,12 +105,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
         frameLayout.requestFocus();
 
-//        etTitle = findViewById(R.id.EditTaskTitle);
-//        etDescription = findViewById(R.id.EditTaskComment);
-//        etPrice = findViewById(R.id.EditPrice);
-//        etLocation = findViewById(R.id.etLocation);
-//        etStatus = findViewById(R.id.etStatus);
-
         // Load the Task and User if it's not adding a new task
         if (isAdd != 1) {
             load(false);
@@ -125,7 +119,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         activityTypeInit();
 
         // Initiate the stack view
-        stackViewInit();
+        if (isAdd == 1 || isAdd == 0) {
+            stackViewInit();
+        }
+
 
         // Initiate Location Client
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
@@ -202,9 +199,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
         } else if (isAdd == 3) {
 
-            //etPrice.setVisibility(View.GONE);
-            //btnSavePost.setVisibility(View.GONE);
-            // Initiate the recycler view for bids
             bidList = task.getBidList();
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.BidListEdit);
             recyclerView.setVisibility(View.VISIBLE);
@@ -214,9 +208,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             recyclerView.setAdapter(bidAdapter);
             recyclerView.setHasFixedSize(true);
             return;
-//            etTitle.setEnabled(false);
-//            etDescription.setEnabled(false);
-//            etPrice.setEnabled(false);
 
         } else {
             // Show the price and bid list if you're only editing a task
@@ -251,12 +242,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etLocation.setText(location);
         }
 
-        // TODO: REMOVE?
-//        if (getIntent().getStringExtra("price") != null) {
-//            String price = getIntent().getStringExtra("price");
-//            etPrice.setText(price);
-//            task.setPrice(Double.parseDouble(price));
-//        }
     }
 
     /**
@@ -350,9 +335,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(context, "Description cannot be longer than 300 characters.", Toast.LENGTH_SHORT).show();
         } else if (task.getDescription().length() < 1) {
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
-            // TODO: REMOVE
-//        } else if(task.getPrice() == 0) {
-//            Toast.makeText(context, "Please enter a price above $0.", Toast.LENGTH_SHORT).show();
         } else {
 
             if (!etLocation.getText().toString().isEmpty()) {
@@ -784,13 +766,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 task.setDescription(r);
             }
 
-            // TODO: REMOVE?
-//            if(view.getId() == R.id.EditPrice) {
-//                String r = s.toString();
-//                if(!r.isEmpty()) {
-//                    task.setPrice(Double.parseDouble(r));
-//                }
-//            }
         }
     }
 }
