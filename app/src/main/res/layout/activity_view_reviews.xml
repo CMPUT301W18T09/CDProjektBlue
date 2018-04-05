@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorTheme">
+    tools:context="cmput301w18t09.orbid.ListReviewActivity"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
 
     <android.support.v7.widget.RecyclerView
@@ -24,9 +27,12 @@
         android:gravity="center"
         android:layout_marginTop="50dp"
         android:text="@string/reviews"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"/>
 
     <TextView
         android:id="@+id/review_username"
@@ -36,7 +42,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:text="username"
-        android:textColor="@android:color/black"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
         android:textSize="18sp" />
 
 
