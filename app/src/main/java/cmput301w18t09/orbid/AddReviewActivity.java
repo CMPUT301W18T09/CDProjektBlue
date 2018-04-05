@@ -83,8 +83,8 @@ public class AddReviewActivity extends NavigationActivity {
             Toast.makeText(this, "Must provide a description", Toast.LENGTH_LONG).show();
             return;
         }
-        else if (etReview.getText().toString().length() > 140) {
-            Toast.makeText(this, "Rating must be 140 characters or less", Toast.LENGTH_LONG).show();
+        else if (etReview.getText().toString().length() > 300) {
+            Toast.makeText(this, "Review must be 300 characters or less", Toast.LENGTH_LONG).show();
             return;
         }
 
