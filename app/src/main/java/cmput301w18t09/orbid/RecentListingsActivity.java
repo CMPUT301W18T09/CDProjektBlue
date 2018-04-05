@@ -273,8 +273,8 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * a bid on a task.
      */
     public void openPlaceBidActivity(int position) {
-        Intent intent = new Intent(this, PlaceBidActivity.class);
-        intent.putExtra("layout_id", R.layout.activity_place_bid);
+        Intent intent = new Intent(this, TaskDetailsActivity.class);
+        intent.putExtra("layout_id", R.layout.activity_new_task_details);
         intent.putExtra("_id", taskList.get(position).getID());
         this.startActivity(intent);
     }

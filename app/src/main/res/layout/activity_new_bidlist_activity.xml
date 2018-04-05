@@ -94,49 +94,9 @@
             android:id="@+id/BidListEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp" />
-
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:id="@+id/buttonLayout"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_below="@id/BidListEdit"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btnBack"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginLeft="4dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/new_button_background"-->
-            <!--android:text="Back"-->
-            <!--android:textColor="@color/colorTheme" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btnDelete"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_marginLeft="4dp"-->
-            <!--android:layout_marginRight="4dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/new_button_background"-->
-            <!--android:text="Bid"-->
-            <!--android:textColor="@color/colorTheme" />-->
-    <!--</LinearLayout>-->
-
-
 
 </RelativeLayout>
 
