@@ -53,9 +53,9 @@
             android:backgroundTint="#fcfcf9"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Looking for a babysitter"
             android:textAlignment="center"
-            android:textColor="#fcfcf9" />
+            android:textColor="#fcfcf9"
+            android:hint="Task Title"/>
 
         <EditText
             android:id="@+id/etLocation"
@@ -63,11 +63,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/etTitle"
             android:backgroundTint="#fcfcf9"
+            android:editable="false"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="14 1510 Parkland Drive"
+            android:onClick="onClickLocation"
+            android:hint="Location"
             android:textAlignment="center"
-            android:textColor="#fcfcf9" />
+            android:textColor="#fcfcf9"
+            android:textSize="17dp" />
 
         <LinearLayout
             android:id="@+id/horizontalLayout"
@@ -80,14 +82,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/etLocation"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Requested"
                 android:textAlignment="center"
-                android:textColor="#fcfcf9" />
+                android:textColor="#fcfcf9"
+                android:text="Status: Requested"
+                android:editable="false" />
 
             <EditText
                 android:id="@+id/EditPrice"
@@ -98,10 +100,10 @@
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Lowest Bid: $42"
+                android:editable="false"
                 android:textAlignment="center"
-                android:textColor="#fcfcf9" />
+                android:textColor="#fcfcf9"
+                android:text="Lowest Bid: N/A"/>
         </LinearLayout>
 
         <EditText
@@ -114,8 +116,8 @@
             android:gravity="top|left"
             android:inputType="text|textMultiLine|textCapSentences"
             android:maxLength="300"
-            android:text="I have a couple kids who I need someone to watch twice a week."
-            android:textColor="#fcfcf9" />
+            android:textColor="#fcfcf9"
+            android:hint="Description"/>
 
     </LinearLayout>
 
@@ -139,7 +141,8 @@
             android:layout_marginLeft="4dp"
             android:layout_weight="1"
             android:background="@drawable/new_button_background"
-            android:text="Back"
+            android:onClick="deleteButton"
+            android:text="Delete"
             android:textColor="@color/colorTheme" />
 
         <Button
@@ -153,8 +156,22 @@
             android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:background="@drawable/new_button_background"
+            android:onClick="postEditTask"
             android:text="Save"
             android:textColor="@color/colorTheme" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanelAdd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
