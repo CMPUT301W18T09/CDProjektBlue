@@ -83,7 +83,7 @@
             android:inputType="text"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="Name"
+            android:text="Requestor Username"
             android:textAlignment="center"
             android:textColor="#fcfcf9" />
 
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
+            android:backgroundTint="#fcfcf9"
             android:ems="10"
             android:gravity="top|left"
             android:inputType="text|textMultiLine|textCapSentences"
@@ -147,8 +147,8 @@
             android:id="@+id/assignedBidDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#fcfcf9"
             android:ems="10"
+            android:background="@android:color/transparent"
             android:inputType="text|textMultiLine|textCapSentences"
             android:text="I can work any time of any day. I have all of the necessary tools and skills and am a really hard worker. I have many years of experience doing this job. I am a world class babysitter and you need me so bad."
             android:textAlignment="center"
