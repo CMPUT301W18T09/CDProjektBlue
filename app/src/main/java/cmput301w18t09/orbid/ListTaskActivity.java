@@ -319,7 +319,9 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             if (currentPage == 1) {
                 // is on my bidded tasks so should open as edit
                 Intent intent = new Intent(this, AddEditTaskActivity.class);
-                intent.putExtra("addedit_layout_id", R.layout.activity_add_edit_task);
+
+
+                intent.putExtra("addedit_layout_id", R.layout.activity_new_add_edit_task);
                 intent.putExtra("_id", taskList.get(position).getID());
                 intent.putExtra("isAdd", 3);
 
