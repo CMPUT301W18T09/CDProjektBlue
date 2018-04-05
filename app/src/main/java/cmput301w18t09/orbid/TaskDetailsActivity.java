@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.StackView;
 import android.widget.TextView;
@@ -62,15 +63,18 @@ public class TaskDetailsActivity extends NavigationActivity{
         // Then setup the generic parts.
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        inflater.inflate(R.layout.activity_task_details, frameLayout);
-        title = findViewById(R.id.assignedBidTitle);
-        description = findViewById(R.id.assignedBidDescription);
+        inflater.inflate(R.layout.activity_new_task_details, frameLayout);
 
         // Set the attributes that are passed through with the intent
         setIntentArgs();
 
         // Find the recent listing tasks from DM
         getTaskDetails();
+
+        if (isAssigned == 0) {
+            title = findViewById(R.id.assignedBidTitle);
+            description = findViewById(R.id.assignedBidDescription);
+        }
 
         // Check for errors to avoid app crashes
         if(task == null) {
@@ -87,8 +91,9 @@ public class TaskDetailsActivity extends NavigationActivity{
         setTaskValues();
 
         // Set the username button
-        Button usernameBtn = (Button) findViewById(R.id.usernameButton);
+        EditText usernameBtn = (EditText) findViewById(R.id.usernameButton);
         usernameBtn.setText("Poster: " + task.getRequester());
+        usernameBtn.setEnabled(false);
 
         usernameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,19 +175,14 @@ public class TaskDetailsActivity extends NavigationActivity{
         textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
         title.setText(bid.getProvider());
         description.setText(bid.getDescription());
-        setTitleListener();
     }
 
     /**
      * Setup the onClick listener for username tap
      */
-    private void setTitleListener() {
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserInfo(bid.getProvider());
-            }
-        });
+    public void setTitleListener(View view) {
+        openUserInfo(bid.getProvider());
+
     }
 
     /**
@@ -395,7 +395,6 @@ public class TaskDetailsActivity extends NavigationActivity{
             title.setText(bid.getProvider());
             description.setVisibility(View.VISIBLE);
             description.setText(bid.getDescription());
-            setTitleListener();
         } else {
             // Check if the task is completed
             if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
