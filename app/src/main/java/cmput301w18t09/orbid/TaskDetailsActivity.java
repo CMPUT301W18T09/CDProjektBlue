@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.StackView;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -45,7 +48,10 @@ public class TaskDetailsActivity extends NavigationActivity{
     protected boolean mine = false;
     private String id;
     private TextView textLowestBid;
-    private Button title;
+    private EditText usernameBtn;
+    private EditText bid_username;
+    private EditText bid_title;
+    private EditText bid_description;
     private TextView description;
 
     /**
@@ -58,19 +64,27 @@ public class TaskDetailsActivity extends NavigationActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Layout the XML that goes to the corresponding child that is being inflated
-        // Then setup the generic parts.
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-        inflater.inflate(R.layout.activity_task_details, frameLayout);
-        title = findViewById(R.id.assignedBidTitle);
-        description = findViewById(R.id.assignedBidDescription);
-
         // Set the attributes that are passed through with the intent
         setIntentArgs();
 
         // Find the recent listing tasks from DM
         getTaskDetails();
+
+        // Layout the XML that goes to the corresponding child that is being inflated
+        // Then setup the generic parts.
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
+        if (isAssigned == 0) {
+            inflater.inflate(R.layout.activity_new_task_details, frameLayout);
+            // Setting up the stack view for the images when you add a Task
+            initStackView();
+        }
+        else {
+            inflater.inflate(R.layout.activity_bidded_task, frameLayout);
+            bid_username = findViewById(R.id.assignedBidUser);
+            bid_title = findViewById(R.id.assignedBidTitle);
+            bid_description = findViewById(R.id.assignedBidDescription);
+        }
 
         // Check for errors to avoid app crashes
         if(task == null) {
@@ -87,24 +101,15 @@ public class TaskDetailsActivity extends NavigationActivity{
         setTaskValues();
 
         // Set the username button
-        Button usernameBtn = (Button) findViewById(R.id.usernameButton);
-        usernameBtn.setText("Poster: " + task.getRequester());
+        usernameBtn = findViewById(R.id.usernameButton);
+        usernameBtn.setText(task.getRequester());
 
-        usernameBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserInfo(task.getRequester());
-            }
-        });
 
         // Setting up the assigned bid layout
-        // 1 means assigned, 2 means completed, 0 is for recent listings
+        // 1 means assigned, 2 means completed, 0 is for requested
         if(isAssigned == 1 || isAssigned == 2) {
             isAssignedTask();
         }
-
-        // Setting up the stack view for the images when you add a Task
-        initStackView();
 
         // Check to see if this task is owned by the user opening it
         if (task.getRequester().equals(this.thisUser)) {
@@ -163,26 +168,21 @@ public class TaskDetailsActivity extends NavigationActivity{
         }
 
         // Set necessary elements to visible
-        title.setVisibility(View.VISIBLE);
+        bid_username.setVisibility(View.VISIBLE);
         description.setVisibility(View.VISIBLE);
 
         // Set the text to the items
         textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
-        title.setText(bid.getProvider());
+        bid_username.setText(bid.getProvider());
         description.setText(bid.getDescription());
-        setTitleListener();
     }
 
     /**
      * Setup the onClick listener for username tap
      */
-    private void setTitleListener() {
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserInfo(bid.getProvider());
-            }
-        });
+    public void setTitleListener(View view) {
+        openUserInfo(bid.getProvider());
+
     }
 
     /**
@@ -220,8 +220,11 @@ public class TaskDetailsActivity extends NavigationActivity{
         task_title.setText(task.getTitle());
         task_description.setText(task.getDescription());
         text_task_status.setText(task.getStatus().toString());
-        // Set the bid
-        setBid((TextView) findViewById(R.id.details_lowest_bid));
+
+        if (isAssigned != 0) {
+            // Set the bid
+            setBid((TextView) findViewById(R.id.details_lowest_bid));
+        }
     }
 
     /**
@@ -391,11 +394,10 @@ public class TaskDetailsActivity extends NavigationActivity{
             }
             // Set your bid price, username, and description
             text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
-            title.setVisibility(View.VISIBLE);
-            title.setText(bid.getProvider());
+            bid_username.setVisibility(View.VISIBLE);
+            bid_username.setText(bid.getProvider());
             description.setVisibility(View.VISIBLE);
             description.setText(bid.getDescription());
-            setTitleListener();
         } else {
             // Check if the task is completed
             if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {

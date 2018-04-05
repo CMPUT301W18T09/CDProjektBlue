@@ -96,7 +96,6 @@
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:background="@android:color/transparent"/>
-
     </LinearLayout>
 
 </RelativeLayout>
