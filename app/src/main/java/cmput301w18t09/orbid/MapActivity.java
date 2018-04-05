@@ -233,10 +233,12 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         for (Task task : taskList) {
             if (task.getLocation() != null) {
                 Log.i("MAP", "Location " + task.getTitle() + " is " + task.getLocation().toString());
-                if (withinDistance(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude(),
-                        task.getLocation().lat, task.getLocation().lng)) {
-                    LatLng latLng = new LatLng(task.getLocation().lat, task.getLocation().lng);
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(task.getTitle()).snippet(task.getID()));
+                if (NavigationActivity.thisLocation != null) {
+                    if (withinDistance(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude(),
+                            task.getLocation().lat, task.getLocation().lng)) {
+                        LatLng latLng = new LatLng(task.getLocation().lat, task.getLocation().lng);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(task.getTitle()).snippet(task.getID()));
+                    }
                 }
             }
         }

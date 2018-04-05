@@ -5,24 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cmput301w18t09.orbid.AddEditTaskActivity"
+    tools:context="cmput301w18t09.orbid.TaskDetailsActivity"
     android:background="@drawable/linear_layout_back"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <StackView
-            android:id="@+id/ImageStack"
-            android:layout_width="300dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorTheme" />
-
 
         <EditText
             android:id="@+id/details_task_title"
@@ -41,12 +33,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/details_task_title"
-            android:textColor="#fcfcf9"
             android:backgroundTint="#fcfcf9"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="14 1510 Parkland Drive"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="#fcfcf9" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,21 +78,21 @@
             android:id="@+id/usernameButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="30"
-            android:textColor="#fcfcf9"
-            android:ems="10"
             android:backgroundTint="#fcfcf9"
-            android:textAlignment="center"
-            android:maxLines="1"
+            android:ems="10"
             android:inputType="text"
-            android:text="Name" />
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="Requestor Username"
+            android:textAlignment="center"
+            android:textColor="#fcfcf9" />
 
         <EditText
             android:id="@+id/details_task_description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
+            android:backgroundTint="#fcfcf9"
             android:ems="10"
             android:gravity="top|left"
             android:inputType="text|textMultiLine|textCapSentences"
@@ -111,28 +103,56 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:id="@+id/BidLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true">
+        android:layout_below="@+id/mainLayout"
+        android:layout_above="@+id/linearLayout"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnBid"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/assignedBidTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#fcfcf9"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Bid Price"
+                android:textAlignment="center"
+                android:textColor="#fcfcf9" />
+
+            <EditText
+                android:id="@+id/assignedBidUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#fcfcf9"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Bidder's Username"
+                android:onClick="setTitleListener"
+                android:textAlignment="center"
+                android:textColor="#fcfcf9" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/assignedBidDescription"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/new_button_background"
-            android:text="Bid"
-            android:textColor="@color/colorTheme" />
+            android:ems="10"
+            android:background="@android:color/transparent"
+            android:inputType="text|textMultiLine|textCapSentences"
+            android:text="I can work any time of any day. I have all of the necessary tools and skills and am a really hard worker. I have many years of experience doing this job. I am a world class babysitter and you need me so bad."
+            android:textAlignment="center"
+            android:textColor="#fcfcf9" />
     </LinearLayout>
 
 </RelativeLayout>
