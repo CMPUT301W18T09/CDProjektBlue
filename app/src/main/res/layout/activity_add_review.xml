@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorTheme">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cmput301w18t09.orbid.AddReviewActivity"
+    android:background="@drawable/linear_layout_back"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
 
     <EditText
         android:id="@+id/review"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
         android:layout_below="@id/ratingBar2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="Write a review"
+        android:textColorHint="#fcfcf9"
+        android:gravity="top|left"
+        android:inputType="text|textMultiLine|textCapSentences"
+        android:maxLength="300"
         android:ems="10"
-        android:inputType="textMultiLine"
-        android:textColor="@android:color/black" />
+        android:textAlignment="center"
+        android:textColor="#fcfcf9" />
 
     <TextView
         android:id="@+id/title"
@@ -27,7 +36,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:text="Add review"
-        android:textColor="@android:color/black"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -39,7 +51,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="Username"
-        android:textColor="@android:color/black"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:textAlignment="center"
+        android:textColor="#fcfcf9"
         android:textSize="24sp" />
 
     <Button
@@ -78,7 +93,8 @@
         android:layout_alignEnd="@+id/submit_button"
         android:layout_alignRight="@+id/submit_button"
         android:text="Were they a requester or provider?"
-        android:textColor="@android:color/black" />
+        android:backgroundTint="#fcfcf9"
+        android:textColor="#fcfcf9" />
 
 
 </RelativeLayout>
