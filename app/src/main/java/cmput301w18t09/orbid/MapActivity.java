@@ -1,6 +1,7 @@
 package cmput301w18t09.orbid;
 
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -178,6 +179,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         if (bundle.getString("price") != null) {
             intent.putExtra("price", bundle.getString("price"));
         }
+        getActivity().finish();
         startActivity(intent);
     }
 
@@ -186,6 +188,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         Log.i("MAP", "openEdit");
         intent.putExtra("isAdd", 0);
         intent.putExtra("_id", getArguments().getString("_id"));
+        getActivity().finish();
         startActivity(intent);
     }
 
