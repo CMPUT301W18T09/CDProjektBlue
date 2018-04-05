@@ -87,6 +87,11 @@ public class PlaceBidActivity extends TaskDetailsActivity {
         Log.i("BID", "title is empty: " + etPrice.getText().toString());
         Log.i("BID", "description is empty: " + etDescription.getText().toString());
 
+        if (etDescription.getText().length() > 300) {
+            Toast.makeText(this, "Bid description cannot exceed 300 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Let the user know this task has been completed and bidding is closed.
         if(task.getStatus() == Task.TaskStatus.COMPLETED){
             Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_SHORT).show();
