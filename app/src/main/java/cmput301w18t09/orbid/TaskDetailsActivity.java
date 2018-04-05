@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -87,7 +86,7 @@ public class TaskDetailsActivity extends NavigationActivity{
         setTaskValues();
 
         // Set the username button
-        Button usernameBtn = (Button) findViewById(R.id.usernameButton);
+        Button usernameBtn = (Button) findViewById(R.id.tv_username);
         usernameBtn.setText("Poster: " + task.getRequester());
 
         usernameBtn.setOnClickListener(new View.OnClickListener() {
