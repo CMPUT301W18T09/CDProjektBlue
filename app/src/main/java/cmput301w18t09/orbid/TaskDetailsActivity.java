@@ -98,7 +98,7 @@ public class TaskDetailsActivity extends NavigationActivity {
             inflater.inflate(R.layout.activity_new_task_details, frameLayout);
             initStackView();
 
-            if (task.getRequester().equals(LoginActivity.getCurrentUsername())) {
+            if (task.getRequester().toLowerCase().equals(LoginActivity.getCurrentUsername().toLowerCase())) {
                 Button btnBid = findViewById(R.id.btnBid);
                 btnBid.setVisibility(View.GONE);
             }

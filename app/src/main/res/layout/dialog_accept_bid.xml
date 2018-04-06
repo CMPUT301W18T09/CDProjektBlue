@@ -44,16 +44,15 @@
         android:id="@+id/btnDecline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btnAccept"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/tv_username"
+        android:layout_alignBaseline="@+id/btnAccept"
+        android:layout_alignBottom="@+id/btnAccept"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/btnAccept"
+        android:layout_weight="1"
         android:background="@drawable/new_button_background"
-        android:textAllCaps="false"
         android:text="@string/decline"
-        android:textColor="@color/colorTheme"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"/>
+        android:textAllCaps="false"
+        android:textColor="@color/colorTheme" />
 
     <Button
         android:id="@+id/btnCancel"
@@ -61,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnDecline"
         android:layout_alignBottom="@+id/btnDecline"
-        android:layout_marginLeft="280dp"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/btnDecline"
         android:layout_weight="1"
         android:background="@drawable/new_button_background"
         android:text="@string/cancel"
