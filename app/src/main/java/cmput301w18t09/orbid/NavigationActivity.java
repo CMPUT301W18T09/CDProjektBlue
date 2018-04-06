@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +51,8 @@ public class NavigationActivity extends AppCompatActivity
     public static Location thisLocation;
     protected DrawerLayout mDrawerLayout;
     private DataManager.NotificationChecker notificationChecker;
+    private int id;
+    private Context context = this;
 
     /**
      * Method is ran when the navigation activity is first created to instantiate its elements.
@@ -155,44 +158,49 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
+
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.nav_recent_listings) {
-            notificationChecker.setShouldContinue(false);
-            Intent intent = new Intent(this, RecentListingsActivity.class);
-            intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
-            this.startActivity(intent);
-        } else if (id == R.id.nav_my_tasks) {
-            notificationChecker.setShouldContinue(false);
-            Intent intent = new Intent( this, ListTaskActivity.class);
-            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-            intent.putExtra("isMyBids",0);
-            intent.putExtra("shouldWait",0);
-            this.startActivity(intent);
-
-        } else if (id == R.id.nav_manage) { // TODO: Change name of nav_manage to represent requested tasks
-            notificationChecker.setShouldContinue(false);
-            Intent intent = new Intent( this, ListTaskActivity.class);
-            intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
-            intent.putExtra("isMyBids",1);
-            intent.putExtra("shouldWait",0);
-            this.startActivity(intent);
-
-        } else if (id == R.id.nav_edit_profile) {
-            notificationChecker.setShouldContinue(false);
-            Intent intent = new Intent(this, EditProfileActivity.class);
-            intent.putExtra("edit_profile_layout_id", R.layout.activity_edit_profile);
-            this.startActivity(intent);
-
-        } else if (id == R.id.nav_logout) {
-            notificationChecker.setShouldContinue(false);
-            Intent intent = new Intent(this, LoginActivity.class);
-            this.startActivity(intent);
-            finish();
-        }
-
+        id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (id == R.id.nav_recent_listings) {
+                    notificationChecker.setShouldContinue(false);
+                    Intent intent = new Intent(context, RecentListingsActivity.class);
+                    intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+                    context.startActivity(intent);
+                } else if (id == R.id.nav_my_tasks) {
+                    notificationChecker.setShouldContinue(false);
+                    Intent intent = new Intent( context, ListTaskActivity.class);
+                    intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                    intent.putExtra("isMyBids",0);
+                    intent.putExtra("shouldWait",0);
+                    context.startActivity(intent);
+
+                } else if (id == R.id.nav_manage) { // TODO: Change name of nav_manage to represent requested tasks
+                    notificationChecker.setShouldContinue(false);
+                    Intent intent = new Intent( context, ListTaskActivity.class);
+                    intent.putExtra("tasks_layout_id", R.layout.activity_list_requested_tasks);
+                    intent.putExtra("isMyBids",1);
+                    intent.putExtra("shouldWait",0);
+                    context.startActivity(intent);
+
+                } else if (id == R.id.nav_edit_profile) {
+                    notificationChecker.setShouldContinue(false);
+                    Intent intent = new Intent(context, EditProfileActivity.class);
+                    intent.putExtra("edit_profile_layout_id", R.layout.activity_edit_profile);
+                    context.startActivity(intent);
+
+                } else if (id == R.id.nav_logout) {
+                    notificationChecker.setShouldContinue(false);
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                    finish();
+                }
+            }
+        }, 330);
         return true;
     }
 

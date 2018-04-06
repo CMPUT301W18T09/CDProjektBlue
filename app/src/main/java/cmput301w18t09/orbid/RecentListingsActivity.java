@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +48,9 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private DrawerLayout mDrawerLayout;
     private SearchView searchView;
     private boolean permissionsGranted = false;
+    private boolean isRefreshing = false;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     /**
      * Sets the switch for list view and map view in the toolbar, creates onClick
@@ -126,6 +130,28 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
+        initRefreshLayout();
+    }
+
+    /**
+     * Initializes the refresh swipe down
+     */
+    private void initRefreshLayout() {
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getListings();
+                taskListAdapter.setTaskList(taskList);
+                taskListAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 
@@ -138,28 +164,11 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.navigation, menu);
-        menu.getItem(0).setVisible(true);
+        menu.getItem(0).setVisible(false);
         menu.getItem(1).setVisible(false);
         return true;
     }
 
-    /**
-     * Function for when an options item is selected.
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.MenuItem_RefreshButton) {
-            getListings();
-            taskListAdapter.setTaskList(taskList);
-            taskListAdapter.notifyDataSetChanged();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Gets all of the tasks that are requested or bidded and stores

@@ -17,16 +17,25 @@
         android:iconifiedByDefault="false"
         android:background="@drawable/rounded_search_view"
         />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView_reviews"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_below="@id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/search_view"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            android:layout_below="@+id/search_view"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
 
 </RelativeLayout>
