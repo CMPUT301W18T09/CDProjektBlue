@@ -519,6 +519,7 @@ public class DataManager {
         private NotificationManagerCompat notificationManager;
         private NotificationManager manager;
         private Boolean shouldContinue = true;
+        private String username;
         private static final String NOTIFICATION_CHANNEL_ID = "4031";
         private String channelName = "Channel";
 
@@ -526,6 +527,7 @@ public class DataManager {
 
         public NotificationChecker(Context context) {
             this.context = context;
+            this.username = LoginActivity.getCurrentUsername();
             notificationInit();
             timerRunnable.run();
         }
@@ -568,7 +570,7 @@ public class DataManager {
             notificationManager = NotificationManagerCompat.from(context);
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             // Create the intent that brings the user to the login page
-            Intent intent = new Intent(context, LoginActivity.class);
+            Intent intent = new Intent(context, ListTaskActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             // Setup the notification with the proper settings
@@ -641,6 +643,10 @@ public class DataManager {
                 // Clear the taskList
                 taskList.removeAll(taskList);
             }
+        }
+
+        public void cancelNotifs() {
+            notificationManager.cancelAll();
         }
     }
 

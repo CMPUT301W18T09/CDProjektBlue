@@ -194,6 +194,7 @@ public class NavigationActivity extends AppCompatActivity
                     context.startActivity(intent);
 
                 } else if (id == R.id.nav_logout) {
+                    notificationChecker.cancelNotifs();
                     notificationChecker.setShouldContinue(false);
                     Intent intent = new Intent(context, LoginActivity.class);
                     context.startActivity(intent);
