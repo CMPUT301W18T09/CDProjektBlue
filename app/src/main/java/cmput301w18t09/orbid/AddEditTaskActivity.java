@@ -326,8 +326,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     @SuppressLint("MissingPermission")
     private void save() throws InterruptedException, ApiException, IOException {
 
-        findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
-
         // Add location to the task
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
@@ -346,10 +344,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else if (task.getDescription().length() < 1) {
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else {
-
-
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
-
             // Add the human readable location to the task if we have an internet connection
             if (etLocation.getText().length() > 0 && DataManager.isNetworkAvailable(this)) {
                 String locationString = etLocation.getText().toString();
