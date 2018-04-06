@@ -347,21 +347,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             Toast.makeText(context, "Please fill in all the fields.", Toast.LENGTH_SHORT).show();
         } else {
 
-//            if (!etLocation.getText().toString().isEmpty()) {
-//                // Check users manually entered location
-//                String locationString = etLocation.getText().toString();
-//                LatLng latLng = MapActivity.fromAddress(locationString, getResources());
-//                Log.i("GEO", "Manually entered latlng: " + latLng.toString());
-//                task.setLocation(latLng);
-//            } else {
-//                // If no manual address set current location
-//                try {
-//                    task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
-//                    Log.i("GEO", "Location set");
-//                } catch(Exception e) {
-//                    Log.e("LatLng", "Could not get location");
-//                }
-//            }
 
             findViewById(R.id.loadingPanelAdd).setVisibility(View.VISIBLE);
 
@@ -489,18 +474,9 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         }
 
 
-        // Find the lowest bid
-        double lowest = 1000000;
-        boolean lowestChanged = false;
-        ArrayList<Bid> bidList = task.getBidList();
-        for (int i = 0; i < bidList.size(); ++i) {
-            if (bidList.get(i).getPrice() < lowest) {
-                lowestChanged = true;
-                lowest = bidList.get(i).getPrice();
-            }
-        }
-        if (lowestChanged) {
-            etPrice.setText("Lowest Bid: " + Double.toString(lowest));
+        // Set the lowest bid in the view, if there is one
+        if (task.getLowestBid() != -1) {
+            etPrice.setText("Lowest Bid: $" + Double.toString(task.getLowestBid()));
         }
         else {
             etPrice.setText("Lowest Bid: N/A");

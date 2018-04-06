@@ -26,14 +26,14 @@
 
 
         <EditText
-            android:id="@+id/details_task_title1"
+            android:id="@+id/details_task_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="#fcfcf9"
+            android:editable="false"
             android:ems="10"
             android:inputType="none"
-            android:editable="false"
             android:text=""
             android:textAlignment="center"
             android:textColor="#fcfcf9" />
@@ -43,12 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/details_task_title"
-            android:textColor="#fcfcf9"
             android:backgroundTint="#fcfcf9"
+            android:editable="false"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="none"
             android:text="14 1510 Parkland Drive"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="?attr/colorControlActivated"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +66,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:editable="false"
+                android:inputType="none"
                 android:text="Requested"
                 android:textAlignment="center"
                 android:textColor="#fcfcf9" />
@@ -78,7 +81,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:editable="false"
+                android:inputType="none"
                 android:text="Lowest Bid: $42"
                 android:textAlignment="center"
                 android:textColor="#fcfcf9" />
@@ -88,14 +92,17 @@
             android:id="@+id/usernameButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="30"
-            android:textColor="#fcfcf9"
-            android:ems="10"
             android:backgroundTint="#fcfcf9"
-            android:textAlignment="center"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="none"
+            android:maxLength="30"
             android:maxLines="1"
-            android:inputType="text"
-            android:text="Name" />
+            android:onClick="openRequesterInfo"
+            android:text="Name"
+            android:textAlignment="center"
+            android:textColor="?attr/colorControlActivated"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/details_task_description"
@@ -105,7 +112,8 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="top|left"
-            android:inputType="text|textMultiLine|textCapSentences"
+            android:editable="false"
+            android:inputType="none"
             android:maxLength="300"
             android:text="I'm going out of town and will not have to be in touch and I not have to go back and I have a great time and place and we will have a good time for you and I have a good time for you and I'm​I have to go to the gym and then I will be there in a few minutes late but I don't know if you want to go to"
             android:textColor="#fcfcf9" />

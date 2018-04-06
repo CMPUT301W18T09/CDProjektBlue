@@ -265,6 +265,7 @@ public class DataManager {
             }
             catch (Exception e){
                 Log.e("Error", "Failed to communicate to elastic search server");
+                e.printStackTrace();
             }
 
             return users;

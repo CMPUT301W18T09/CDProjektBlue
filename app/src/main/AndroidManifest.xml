@@ -87,10 +87,6 @@
             android:screenOrientation="portrait"
             android:name=".TaskDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:screenOrientation="portrait"
-            android:name=".PlaceBidActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FullScreenImageActivity"/>
     </application>
 

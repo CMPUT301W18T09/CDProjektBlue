@@ -77,8 +77,6 @@ public class TaskDetailsActivity extends NavigationActivity {
         // Set the attributes that are passed through with the intent
         setIntentArgs();
 
-
-
         // Find the recent listing tasks from DM
         getTaskDetails();
 
@@ -94,13 +92,17 @@ public class TaskDetailsActivity extends NavigationActivity {
         }
 
         // Layout the XML that goes to the corresponding child that is being inflated
-        // Then setup the generic parts.
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-
-        if (isAssigned == 0) {
+        if (isAssigned == 0 && isBid != 1) {
             inflater.inflate(R.layout.activity_new_task_details, frameLayout);
             initStackView();
+
+            if (task.getRequester().equals(LoginActivity.getCurrentUsername())) {
+                Button btnBid = findViewById(R.id.btnBid);
+                btnBid.setVisibility(View.GONE);
+            }
+
         } else {
             inflater.inflate(R.layout.activity_bidded_task, frameLayout);
 
@@ -109,13 +111,26 @@ public class TaskDetailsActivity extends NavigationActivity {
             bidDescription = findViewById(R.id.assignedBidDescription);
 
             bid = task.getBidList().get(task.getAcceptedBid());
-            bidPrice.setText(Double.toString(bid.getPrice()));
+            bidPrice.setText("Bid: $" +  Double.toString(bid.getPrice()));
             bidDescription.setText(bid.getDescription());
-            bidUsername.setText(bid.getProvider());
+            bidUsername.setText("Provider: " + bid.getProvider());
         }
         frameLayout.requestFocus();
 
-        title = findViewById(R.id.details_task_title1);
+        // Set the add review functionality
+        boolean cameFromCompletedBid = getIntent().getBooleanExtra("cameFromCompletedBid", false);
+        boolean cameFromCompletedRequest = getIntent().getBooleanExtra("cameFromCompletedRequest", false);
+        if (cameFromCompletedBid || cameFromCompletedRequest) {
+            setButtonFunctionality();
+        }
+        else if (isBid == 1) {
+            Button btnRepost = findViewById(R.id.DeleteButton);
+            Button btnReview = findViewById(R.id.SavePostTaskButton);
+            btnRepost.setVisibility(View.GONE);
+            btnReview.setVisibility(View.GONE);
+        }
+
+        title = findViewById(R.id.details_task_title);
         description = findViewById(R.id.details_task_description);
         lowestBid = findViewById(R.id.details_lowest_bid);
         location = findViewById(R.id.details_location);
@@ -124,9 +139,9 @@ public class TaskDetailsActivity extends NavigationActivity {
 
         title.setText(task.getTitle());
         description.setText(task.getDescription());
-        username.setText(task.getRequester());
+        username.setText("Requested By: " + task.getRequester());
 
-        // Status
+        // Set the status text
         if (task.getStatus() == Task.TaskStatus.REQUESTED) {
             status.setText("Status: Requested");
         }
@@ -140,15 +155,15 @@ public class TaskDetailsActivity extends NavigationActivity {
             status.setText("Status: Completed");
         }
 
-        // Lowest bid
+        // Set the lowest bid text
         if (task.getLowestBid() != -1) {
-            lowestBid.setText("Lowest Bid: " + Double.toString(task.getLowestBid()));
+            lowestBid.setText("Lowest Bid: $" + String.format("%.2f", task.getLowestBid()));
         }
         else {
             lowestBid.setText("Lowest Bid: N/A");
         }
 
-        // Location
+        // Set the location text
         if (task.getStringLocation() == null) {
             location.setText("No Location Specified");
         }
@@ -157,25 +172,76 @@ public class TaskDetailsActivity extends NavigationActivity {
         }
 
 
+    }
 
-        // Set the tasks values
-        //setTaskValues();
+    /**
+     *
+     */
+    private void setButtonFunctionality() {
 
-//        // Set the username button
-//        usernameBtn = findViewById(R.id.usernameButton);
-//        usernameBtn.setText(task.getRequester());
+        Button btnRepost = findViewById(R.id.DeleteButton);
+        btnRepost.setVisibility(View.GONE);
 
+        Button btnReview = this.findViewById(R.id.SavePostTaskButton);
 
-//        // Setting up the assigned bid layout
-//        // 1 means assigned, 2 means completed, 0 is for requested
-//        if(isAssigned == 1 || isAssigned == 2) {
-//            isAssignedTask();
-//        }
+        // Check if the requester can be reviewed
+        if (getIntent().getBooleanExtra("cameFromCompletedBid", false)) {
 
-//        // Check to see if this task is owned by the user opening it
-//        if (task.getRequester().equals(this.thisUser)) {
-//            mine = true;
-//        }
+            getTaskDetails();
+
+            if (task.getIsReviewedByProvider()) {
+                btnReview.setVisibility(View.GONE);
+            }
+            else {
+                btnReview.setText("Add Review For " + task.getRequester());
+                btnReview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), AddReviewActivity.class);
+                        intent.putExtra("reviewType", "Requester");
+                        intent.putExtra("taskID", task.getID());
+                        intent.putExtra("reviewee", task.getRequester());
+                        startActivityForResult(intent, 1);
+                    }
+                });
+            }
+
+        }
+        // Else check if the provider can be reviewed
+        else if (getIntent().getBooleanExtra("cameFromCompletedRequest", false)) {
+
+            getTaskDetails();
+
+            if (task.getIsReviewedByRequester()) {
+                btnReview.setVisibility(View.GONE);
+            }
+            else {
+                btnReview.setText("Add Review For " + bid.getProvider());
+                btnReview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), AddReviewActivity.class);
+                        intent.putExtra("reviewType", "Provider");
+                        intent.putExtra("taskID", task.getID());
+                        intent.putExtra("reviewee", bid.getProvider());
+                        startActivityForResult(intent, 1);
+                    }
+                });
+            }
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If we came back from setting a review successfully, disable the choice to add another
+        if (resultCode == RESULT_OK) {
+            Button btnReview = findViewById(R.id.SavePostTaskButton);
+            btnReview.setVisibility(View.GONE);
+        }
+
     }
 
     /**
@@ -212,39 +278,27 @@ public class TaskDetailsActivity extends NavigationActivity {
     }
 
     /**
-     * If the task that is being viewed is completed or is assigned
-     * it needs to make these changes.
+     *
      */
-    private void isAssignedTask() {
-//        int b = task.getAcceptedBid();
-        bid = task.getBidList().get(task.getAcceptedBid());
-        textLowestBid = findViewById(R.id.details_lowest_bid);
-
-        // Show the buttons if the task is Assigned, only if the network is available
-        if (isAssigned == 1) {
-            Button fulfilledBtn = (Button) findViewById(R.id.fulfilledButton);
-            Button repostBtn = (Button) findViewById(R.id.repostButton);
-            fulfilledBtn.setVisibility(View.VISIBLE);
-            repostBtn.setVisibility(View.VISIBLE);
-        }
-
-        // Set necessary elements to visible
-        bidUsername.setVisibility(View.VISIBLE);
-        description.setVisibility(View.VISIBLE);
-
-        // Set the text to the items
-        textLowestBid.setText("Bid price:\n$" + String.format("%.2f", bid.getPrice()));
-        bidUsername.setText(bid.getProvider());
-        description.setText(bid.getDescription());
+    public void openRequesterInfo(View view) {
+        openUserInfo(task.getRequester());
     }
 
     /**
-     * Setup the onClick listener for username tap
+     *
      */
-    public void setTitleListener(View view) {
+    public void openProviderInfo(View view) {
         openUserInfo(bid.getProvider());
-
     }
+
+
+//    /**
+//     * Setup the onClick listener for username tap
+//     */
+//    public void setTitleListener(View view) {
+//        openUserInfo(bid.getProvider());
+//
+//    }
 
     /**
      * Get the arguments that were passed with the intent.
@@ -264,27 +318,6 @@ public class TaskDetailsActivity extends NavigationActivity {
         try {
             isBid = getIntent().getIntExtra("isBid", 0);
         } catch(Error e) {
-        }
-    }
-
-    /**
-     * Find and then set the text for each of the text views.
-     */
-    private void setTaskValues() {
-
-        // Find the text views in the layout
-        TextView task_title = findViewById(R.id.details_task_title);
-        TextView task_description = findViewById(R.id.details_task_description);
-        TextView text_task_status = findViewById(R.id.details_task_status);
-
-        // Set the task title and description
-        task_title.setText(task.getTitle());
-        task_description.setText(task.getDescription());
-        text_task_status.setText(task.getStatus().toString());
-
-        if (isAssigned != 0) {
-            // Set the bid
-            setBid((TextView) findViewById(R.id.details_lowest_bid));
         }
     }
 
@@ -356,14 +389,15 @@ public class TaskDetailsActivity extends NavigationActivity {
         } else {
             task.setStatus(Task.TaskStatus.BIDDED);
         }
+
         // Alter the task in the backup list to match the status of the reposted task
-        /*ListIterator<Task> it = DataManager.backupTasks.listIterator();
+        ListIterator<Task> it = DataManager.backupTasks.listIterator();
         while (it.hasNext()) {
             if (it.next().getID().equals(task.getID())) {
                 it.set(task);
                 break;
             }
-        }*/
+        }
 
         save();
         finish();
@@ -469,38 +503,7 @@ public class TaskDetailsActivity extends NavigationActivity {
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
 
-        // Let the dialog know if the user being clicked can be reviewed
-        if (getIntent().getBooleanExtra("cameFromCompletedBid", false)) {
 
-            getTaskDetails();
-
-            if (task.getIsReviewedByProvider() == false) {
-                bundle.putBoolean("canReview", true);
-                bundle.putString("reviewType", "Requester");
-                bundle.putString("taskID", task.getID());
-            }
-            else {
-                bundle.putBoolean("canReview", false);
-            }
-
-        }
-        else if (getIntent().getBooleanExtra("cameFromCompletedRequest", false)) {
-
-            getTaskDetails();
-
-            if (task.getIsReviewedByRequester() == false) {
-                bundle.putBoolean("canReview", true);
-                bundle.putString("reviewType", "Provider");
-                bundle.putString("taskID", task.getID());
-            }
-            else {
-                bundle.putBoolean("canReview", false);
-            }
-
-        }
-        else {
-            bundle.putBoolean("canReview", false);
-        }
 
         UserProfileDialog dialog = new UserProfileDialog();
         dialog.setArguments(bundle);
@@ -518,66 +521,68 @@ public class TaskDetailsActivity extends NavigationActivity {
         object.execute(n);
     }
 
-    /**
-     * Find the lowest bid on the displayed task and then display its amount
-     * in the text view, or display your bid
-     *
-     * @param text_lowest_bid The textview for the lowest bid
-     */
-    public void setBid(TextView text_lowest_bid) {
-        Bid lowest_bid = null;
-        if (task == null) {
-            Log.i("MSG", "task isa null here");
-        }
-
-        // Display your bid price
-        if (isBid == 1) {
-            ArrayList<Bid> temp;
-            temp = task.getBidList();
-            for (Bid b : temp) {
-                if (b.getProvider().toLowerCase().equals(thisUser.toLowerCase())) {
-                    bid = b;
-                }
-            }
-            // Set your bid price, username, and description
-            text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
-            bidUsername.setVisibility(View.VISIBLE);
-            bidUsername.setText(bid.getProvider());
-            description.setVisibility(View.VISIBLE);
-            description.setText(bid.getDescription());
-        } else {
-            // Check if the task is completed
-            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
-                text_lowest_bid.setText("TASK FULFILLED");
-            } else {
-                if (task.getBidList().size() == 0) {
-                    text_lowest_bid.setText("Price:\n$" + String.format("%.2f", task.getPrice()));
-                } else {
-                    // Find the lowest bid to display
-                    for (Bid bid : task.getBidList()) {
-                        if (lowest_bid != null) {
-                            if (bid.getPrice() < lowest_bid.getPrice()) {
-                                lowest_bid = bid;
-                            }
-                        } else {
-                            lowest_bid = bid;
-                        }
-                    }
-                    if (lowest_bid != null) {
-                        text_lowest_bid.setText("Lowest Bid:\n$" + String.format("%.2f", lowest_bid.getPrice()));
-                    }
-                }
-            }
-        }
-    }
+//    /**
+//     * Find the lowest bid on the displayed task and then display its amount
+//     * in the text view, or display your bid
+//     *
+//     * @param text_lowest_bid The textview for the lowest bid
+//     */
+//    public void setBid(TextView text_lowest_bid) {
+//        Bid lowest_bid = null;
+//        if (task == null) {
+//            Log.i("MSG", "task isa null here");
+//        }
+//
+//        // Display your bid price
+//        if (isBid == 1) {
+//            ArrayList<Bid> temp;
+//            temp = task.getBidList();
+//            for (Bid b : temp) {
+//                if (b.getProvider().toLowerCase().equals(thisUser.toLowerCase())) {
+//                    bid = b;
+//                }
+//            }
+//            // Set your bid price, username, and description
+//            text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
+//            bidUsername.setVisibility(View.VISIBLE);
+//            bidUsername.setText(bid.getProvider());
+//            description.setVisibility(View.VISIBLE);
+//            description.setText(bid.getDescription());
+//        } else {
+//            // Check if the task is completed
+//            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
+//                text_lowest_bid.setText("TASK FULFILLED");
+//            } else {
+//                if (task.getBidList().size() == 0) {
+//                    text_lowest_bid.setText("Price:\n$" + String.format("%.2f", task.getPrice()));
+//                } else {
+//                    // Find the lowest bid to display
+//                    for (Bid bid : task.getBidList()) {
+//                        if (lowest_bid != null) {
+//                            if (bid.getPrice() < lowest_bid.getPrice()) {
+//                                lowest_bid = bid;
+//                            }
+//                        } else {
+//                            lowest_bid = bid;
+//                        }
+//                    }
+//                    if (lowest_bid != null) {
+//                        text_lowest_bid.setText("Lowest Bid:\n$" + String.format("%.2f", lowest_bid.getPrice()));
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Gets the details of the task being loaded from the DM and then
      * stores them in taskList.
      */
     protected void getTaskDetails() {
+
         // Use the id of the task to get it from the Data Manager
         id = getIntent().getStringExtra("_id");
+
         // Get the task that was clicked
         ArrayList<String> query = new ArrayList<>();
         query.add("and");
