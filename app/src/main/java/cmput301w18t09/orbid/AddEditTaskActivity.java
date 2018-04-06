@@ -514,11 +514,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
             etStatus.setText("Status: Bidded");
         }
-        LatLng location = task.getLocation();
 
-        // TODO: We need to save the human readable address in the Task object so we do not
-        // TODO: have to make a server request when offline. Performing the below code while
-        // TODO: offline results in an ~10 second wait time before the timeout occurs.
+        LatLng location = task.getLocation();
         if (location != null && DataManager.isNetworkAvailable(this)) {
             if (!fromMap) {
                 Log.e("GEO", "FROM MAP IS FALSE");

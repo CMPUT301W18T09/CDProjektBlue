@@ -133,6 +133,7 @@
             android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:background="@drawable/new_button_background"
+            android:onClick="openBidDialog"
             android:text="Bid"
             android:textColor="@color/colorTheme" />
     </LinearLayout>

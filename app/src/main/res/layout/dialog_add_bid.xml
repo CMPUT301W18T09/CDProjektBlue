@@ -20,7 +20,6 @@
         android:layout_marginTop="10dp"
         android:backgroundTint="#fcfcf9"
         android:hint="Bid price"
-        android:textColorHint="#fcfcf9"
         android:textAlignment="center"
         android:textColor="#fcfcf9" />
 
@@ -35,7 +34,7 @@
         android:gravity="top|left"
         android:inputType="text|textMultiLine|textCapSentences"
         android:maxLength="300"
-        android:textColorHint="#fcfcf9"
+        android:textColor="#fcfcf9"
         android:backgroundTint="#fcfcf9"
         android:textAlignment="center"
         />
@@ -55,30 +54,35 @@
         android:backgroundTint="#fcfcf9"
         android:textAlignment="center"
         android:textColor="#fcfcf9"/>
-
-    <Button
-        android:id="@+id/bt_cancel"
-        android:layout_width="180dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@id/et_biddescription">
+        <Button
+            android:id="@+id/bt_cancel"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
 
-        android:layout_marginLeft="5dp"
-        android:background="@drawable/new_button_background"
-        android:textColor="@color/colorTheme"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:text="@string/cancel" />
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/new_button_background"
+            android:textColor="@color/colorTheme"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:text="@string/cancel" />
 
-    <Button
-        android:id="@+id/bt_bid"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="5dp"
-        android:textColor="@color/colorTheme"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/new_button_background"
-        android:text="@string/bid" />
+        <Button
+            android:id="@+id/bt_bid"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="12dp"
+            android:textColor="@color/colorTheme"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/new_button_background"
+            android:text="@string/bid" />
+    </LinearLayout>
 </RelativeLayout>

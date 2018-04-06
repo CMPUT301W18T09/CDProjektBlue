@@ -1,5 +1,6 @@
 package cmput301w18t09.orbid;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -366,6 +367,92 @@ public class TaskDetailsActivity extends NavigationActivity {
 
         save();
         finish();
+    }
+
+    public void openBidDialog(View view) {
+
+        //Inflate the dialog
+        LayoutInflater layoutInflater = this.getLayoutInflater();
+        final View dialog_view = layoutInflater.inflate(R.layout.dialog_add_bid, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailsActivity.this).setView(dialog_view);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+        final EditText etPrice = dialog_view.findViewById(R.id.et_bidprice);
+        final EditText etDescription = dialog_view.findViewById(R.id.et_biddescription);
+        final Button cancel = dialog_view.findViewById(R.id.bt_cancel);
+        final Button bid = dialog_view.findViewById(R.id.bt_bid);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        //
+        bid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Inform the user if they attempt to make a bid offline
+                if (!DataManager.isNetworkAvailable(getBaseContext() )) {
+                    Toast.makeText(getBaseContext(), "Bids cannot be placed while offline", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if(task == null) {
+                    Toast.makeText(context, "This task no longer exists", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+                Log.i("BID", "title is empty: " + etPrice.getText().toString());
+                Log.i("BID", "description is empty: " + etDescription.getText().toString());
+
+                if (description.getText().length() > 300) {
+                    Toast.makeText(getBaseContext(), "Bid description cannot exceed 300 characters", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Let the user know this task has been completed and bidding is closed.
+                if(task.getStatus() == Task.TaskStatus.COMPLETED){
+                    Toast.makeText(getBaseContext(), "This task has already been completed!", Toast.LENGTH_SHORT).show();
+                } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
+                    Double price = Double.parseDouble(etPrice.getText().toString());
+                    if(price > 1000000) {
+                        Toast.makeText(getBaseContext(), "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ArrayList<Bid> temp = task.getBidList();
+                        // Check if the user had a previous bid and delete it if so
+                        for(Bid b: temp) {
+                            if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
+                                task.removeBid(b);
+                            }
+                        }
+                        // Add the new bid to the bid list
+                        Bid bid = new Bid(LoginActivity.getCurrentUsername(), price, etDescription.getText().toString());
+                        task.addBid(bid);
+                        task.setStatus(Task.TaskStatus.BIDDED);
+                        // Notify the Task that the requester needs to receive a notification
+                        if (!task.getShouldNotify()) {
+                            task.setShouldNotify(true);
+                        }
+                        DataManager.updateTasks updateTasks = new DataManager.updateTasks(getBaseContext());
+                        updateTasks.execute(taskList);
+
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "You need to fill out both bid fields properly", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+
     }
 
     /**
