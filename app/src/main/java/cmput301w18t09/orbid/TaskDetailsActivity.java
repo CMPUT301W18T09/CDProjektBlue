@@ -111,7 +111,7 @@ public class TaskDetailsActivity extends NavigationActivity {
             bidDescription = findViewById(R.id.assignedBidDescription);
 
             bid = task.getBidList().get(task.getAcceptedBid());
-            bidPrice.setText("Bid: $" +  Double.toString(bid.getPrice()));
+            bidPrice.setText("Bid: $" + String.format("%.2f", bid.getPrice()));
             bidDescription.setText(bid.getDescription());
             bidUsername.setText("Provider: " + bid.getProvider());
         }
