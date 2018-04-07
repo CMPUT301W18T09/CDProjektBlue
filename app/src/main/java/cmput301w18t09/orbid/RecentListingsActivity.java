@@ -32,7 +32,6 @@ import java.util.ListIterator;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
-@SuppressWarnings("ALL")
 /**
  * The main screen of the application shown post-login. Displays a list of all tasks on the
  * server that have been requested or bidded on. Also features a search bar to filter results.
@@ -42,13 +41,9 @@ import java.util.concurrent.ExecutionException;
 public class RecentListingsActivity extends NavigationActivity implements ItemClickListener {
 
     private ArrayList<Task> taskList = new ArrayList<>();
-    private RecyclerView recyclerView;
     private TaskListAdapter taskListAdapter;
-    private Switch tbtnToggle;
-    private DrawerLayout mDrawerLayout;
     private SearchView searchView;
     private boolean permissionsGranted = false;
-    private boolean isRefreshing = false;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
 
@@ -60,7 +55,12 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        RecyclerView recyclerView;
+        Switch tbtnToggle;
+
         int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
@@ -96,7 +96,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
         toolbar.addView(tbtnToggle);
 
-
         searchView = findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -123,7 +122,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             Toast.makeText(this, "Recent listings cannot be fetched while offline", Toast.LENGTH_SHORT).show();
         }
 
-
         taskListAdapter = new TaskListAdapter(this, taskList, 0);
         taskListAdapter.setClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_reviews);
@@ -138,6 +136,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
      * Initializes the refresh swipe down
      */
     private void initRefreshLayout() {
+
         // SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -155,7 +154,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         });
     }
 
-
     /**
      * Sets the refresh (index 0) button to visible and the add (index 1) button to invisible
      *
@@ -169,7 +167,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         menu.getItem(1).setVisible(false);
         return true;
     }
-
 
     /**
      * Gets all of the tasks that are requested or bidded and stores
@@ -229,7 +226,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             // If there were no results, tell the user
             if (taskList.size() == 0 && type == 1) {
                 Toast.makeText(this, "Search returned no results", Toast.LENGTH_SHORT).show();
-                // TODO: Handle no tasks?
+                return;
             }
 
             // Remove results with status assigned or bidded
@@ -251,19 +248,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         }
 
         taskListAdapter.notifyDataSetChanged();
-    }
-
-
-    /**
-     * Parses a string of keywords and returns a result list of
-     * the matching tasks.
-     *
-     * @param string
-     * @return resultList
-     */
-    public ArrayList<Task> search(String string) {
-        ArrayList<Task> resultList = new ArrayList<Task>();
-        return resultList;
     }
 
     /**

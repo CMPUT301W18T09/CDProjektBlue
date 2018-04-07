@@ -44,7 +44,6 @@ import static java.lang.Math.acos;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-@SuppressWarnings("ALL")
 /**
  * Uses a google maps API to view some area/location of the planet
  *
@@ -54,13 +53,11 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
 
     private GoogleMap mMap;
     private ArrayList<Task> taskList = new ArrayList<>();
-    private ToggleButton tbtnToggle;
-    private GoogleApiClient googleApiClient;
     private Location myLocation = null;
     private int isAdd;
     private Task thisTask;
     private LatLng chosenLocation;
-
+    private GoogleApiClient googleApiClient;
 
     @Nullable
     @Override

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.ArrayList;
 
-
 /**
  * Binds the task view holder with the recycler view task list
  *
@@ -47,15 +46,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         holder.setClickListener(clickListener);
         Task task = taskList.get(position);
-        /*if (task.getPhotoList() != null) {
-            if (!task.getPhotoList().isEmpty()) {
-                Log.i("IMG", task.getPhotoList().get(0).toString());
-                holder.task_image.setImageBitmap();
-            }
-        }*/
         holder.taskTitle.setText(task.getTitle());
         holder.taskDescription.setText(task.getDescription());
-
     }
 
     @Override

@@ -27,7 +27,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText etFirstName;
     private EditText etPassword;
     private EditText etLastName;
-    private Button btnCreateAccount;
 
     /**
      * Method is ran when the create account activity is first created to instantiate its elements.
@@ -37,6 +36,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Button btnCreateAccount;
+
         setContentView(R.layout.activity_create_account);
 
         // Assign edit text boxes

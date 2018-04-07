@@ -1,6 +1,5 @@
 package cmput301w18t09.orbid;
 
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -52,7 +51,6 @@ import io.searchbox.core.SearchResult;
  * @see User
  * @see Task
  */
-
 public class DataManager {
 
     private static JestDroidClient client;

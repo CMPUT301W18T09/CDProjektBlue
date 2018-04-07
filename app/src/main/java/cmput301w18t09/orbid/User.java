@@ -24,7 +24,6 @@ public class User {
     private String id;
     private ArrayList<Review> reviewList;
 
-
     /**
      * User class constructor
      *

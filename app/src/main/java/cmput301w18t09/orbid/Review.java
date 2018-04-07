@@ -30,10 +30,20 @@ public class Review {
         this.submittingUser = submittingUser;
     }
 
+    /**
+     * Returns the user who submitted the review
+     *
+     * @return The user who submitted the review
+     */
     public String getSubmittingUser() {
         return submittingUser;
     }
 
+    /**
+     * Sets the user who is submitting the review
+     *
+     * @param submittingUser The user who is submitting the review
+     */
     public void setSubmittingUser(String submittingUser) {
         this.submittingUser = submittingUser;
     }

@@ -67,7 +67,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     private ArrayList<Bid> bidList = new ArrayList<Bid>();
     private Task task;
     private Task changeTask;
-    private DrawerLayout mDrawerLayout;
     private boolean permissionsGranted = true;
     private boolean fromMap = false;
 
@@ -89,6 +88,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
 
+        // Assign correct user interface elements according to context
         if (isAdd == 0 || isAdd == 1) {
             inflater.inflate(R.layout.activity_new_add_edit_task, frameLayout);
             etTitle = findViewById(R.id.EditTaskTitle);
@@ -125,13 +125,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             stackViewInit();
         }
 
-
         // Initiate Location Client
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M || permissionsGranted) {
             checkLocationPermission();
         }
-
-
     }
 
     /**
@@ -236,6 +233,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * so that they do not have to renter forms.
      */
     private void setAfterLocationValues() {
+
         if (getIntent().getStringExtra("title") != null) {
             String title = getIntent().getStringExtra("title");
             etTitle.setText(title);
@@ -250,7 +248,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             String location = getIntent().getStringExtra("location");
             etLocation.setText(location);
         }
-
     }
 
     /**
@@ -295,6 +292,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * If not, it prompts the user to allow them.
      */
     private void checkLocationPermission() {
+
         final Activity activity = this;
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -309,6 +307,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
@@ -404,7 +403,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                     break;
                 }
             }
-
         }
         else {
 
@@ -462,8 +460,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 }
             }
 
-
-
         } else {
             changeTask = taskList.get(0);
         }
@@ -486,6 +482,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             etStatus.setText("Status: Bidded");
         }
 
+        // Get the task locations details
         LatLng location = task.getLocation();
         if (location != null && DataManager.isNetworkAvailable(this)) {
             if (!fromMap) {
@@ -533,6 +530,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @param view The current activity view
      */
     public void postEditTask(View view) {
+
         // Check if the task has been bidded on if it is being editted
         if(isAdd == 0 && checkChanged()) {
             Toast.makeText(this, "Your task has been bidded on.", Toast.LENGTH_SHORT).show();
@@ -753,6 +751,5 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         UserProfileDialog dialog = new UserProfileDialog();
         dialog.setArguments(bundle);
         dialog.show(getFragmentManager(), "User Profile Dialog");
-
     }
 }

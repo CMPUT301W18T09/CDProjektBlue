@@ -311,33 +311,46 @@ public class Task {
     }
 
     /**
+     * True if the task interaction has been reviewed by the requester, false otherwise
      *
-     * @param b
+     * @param b True if the task interaction has been reviewed by the requester, false otherwise
      */
     public void setIsReviewedByRequester(Boolean b) { this.isReviewedByRequester = b; }
 
     /**
+     * True if the task interaction has been reviewed by the requester, false otherwise
      *
-     * @return
+     * @return True if the task interaction has been reviewed by the requester, false otherwise
      */
     public Boolean getIsReviewedByRequester() { return this.isReviewedByRequester; }
 
     /**
+     * True if the task interaction has been reviewed by the provider, false otherwise
      *
-     * @param b
+     * @param b True if the task interaction has been reviewed by the provider, false otherwise
      */
     public void setIsReviewedByProvider(Boolean b) { this.isReviewedByProvider = b; }
 
     /**
+     * True if the task interaction has been reviewed by the provider, false otherwise
      *
-     * @return
+     * @return True if the task interaction has been reviewed by the provider, false otherwise
      */
     public Boolean getIsReviewedByProvider() { return this.isReviewedByProvider; }
 
+    /**
+     * Sets the human readable address/location of the task
+     *
+     * @param location The human readable address/location of the task
+     */
     public void setStringLocation(String location) {
         this.stringLocation = location;
     }
 
+    /**
+     * Gets the human readable address/location of the task
+     * @return The human readable address/location of the task
+     */
     public String getStringLocation() {
         return this.stringLocation;
     }
@@ -389,5 +402,4 @@ public class Task {
         }
         return true;
     }
-
 }
