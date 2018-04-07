@@ -228,8 +228,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                taskAdapter.setTaskList(taskList);
-                taskAdapter.notifyDataSetChanged();
+                filterList();
+                initRecyclerView();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
