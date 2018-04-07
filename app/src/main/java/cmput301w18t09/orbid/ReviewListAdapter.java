@@ -39,7 +39,13 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
         holder.setClickListener(clickListener);
         Review review = reviewList.get(position);
-        holder.reviewType.setText(review.getType().toString());
+
+        if (review.getType() == Review.reviewType.PROVIDER_REVIEW) {
+            holder.reviewType.setText("As a Provider");
+        }
+        else if (review.getType() == Review.reviewType.REQUESTOR_REVIEW) {
+            holder.reviewType.setText("As a Requester");
+        }
         holder.reviewDescription.setText(review.getDescription());
         holder.reviewUsername.setText(review.getSubmittingUser());
         holder.reviewRating.setRating(review.getRating());

@@ -59,6 +59,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             Intent intent = new Intent(this, LoginActivity.class);
             this.startActivity(intent);
         }
+
         // Inflate the layout of the list task activity
         isMyBids = getIntent().getIntExtra("isMyBids", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
