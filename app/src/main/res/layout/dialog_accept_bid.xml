@@ -19,7 +19,7 @@
         android:gravity="center"
         android:text="Bidder's username"
         android:textAllCaps="false"
-        android:textColor="#fcfcf9"
+        android:textColor="#99ff00"
         android:textSize="18sp"
         android:textStyle="bold" />
 
