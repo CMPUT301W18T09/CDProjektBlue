@@ -1,6 +1,7 @@
 package cmput301w18t09.orbid;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -609,5 +610,13 @@ public class TaskDetailsActivity extends NavigationActivity {
         }
     }
 
+    public void onLocationClick(View view) {
+        MapActivity mapActivity = new MapActivity();
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("came_from", "single_listing");
+        mapActivity.setArguments(bundle);
+        fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
+    }
 
 }

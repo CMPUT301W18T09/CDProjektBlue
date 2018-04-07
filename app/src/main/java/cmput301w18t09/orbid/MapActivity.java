@@ -266,6 +266,12 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
                 }
             }
         }
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
+                .zoom(17)
+                .tilt(30)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     /**
@@ -281,7 +287,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         double d = acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2));
         double distance_km = 6371 * d;
         Log.i("Distance", "The distance is: " + d);
-        return distance_km <= 50;
+        return distance_km <= 5;
     }
 
     /**
@@ -291,9 +297,15 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
      */
     private void displaySingleListing(String id) {
         // Todo
-       getThisTask(id);
-       LatLng loc = new LatLng(thisTask.getLocation().lat, thisTask.getLocation().lng);
+        getThisTask(id);
+        LatLng loc = new LatLng(thisTask.getLocation().lat, thisTask.getLocation().lng);
         mMap.addMarker(new MarkerOptions().position(loc).title(thisTask.getTitle()).snippet(thisTask.getID()));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(loc)
+                .zoom(17)
+                .tilt(30)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     /**
