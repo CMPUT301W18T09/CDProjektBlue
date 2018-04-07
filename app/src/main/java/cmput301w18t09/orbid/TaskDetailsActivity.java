@@ -454,7 +454,7 @@ public class TaskDetailsActivity extends NavigationActivity {
                     Toast.makeText(getBaseContext(), "This task has already been completed!", Toast.LENGTH_SHORT).show();
                 } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
                     Double price = Double.parseDouble(etPrice.getText().toString());
-                    if(price > 1000000) {
+                    if(price > 99999) {
                         Toast.makeText(getBaseContext(), "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
                     } else {
                         ArrayList<Bid> temp = task.getBidList();
