@@ -49,7 +49,7 @@
             android:inputType="none"
             android:text="14 1510 Parkland Drive"
             android:textAlignment="center"
-            android:textColor="?attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -104,7 +104,7 @@
             android:onClick="openRequesterInfo"
             android:text="Name"
             android:textAlignment="center"
-            android:textColor="?attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <EditText
