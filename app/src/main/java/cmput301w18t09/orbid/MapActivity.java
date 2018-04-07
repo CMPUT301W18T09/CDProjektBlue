@@ -96,8 +96,10 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         String came_from = bundle.getString("came_from");
         String id = getArguments().getString("_id");
         isAdd = getArguments().getInt("isAdd");
-        if (isAdd != 1) {
-            getThisTask(id);
+        if (!came_from.equals("recent_listings")) {
+            if (isAdd != 1) {
+                getThisTask(id);
+            }
         }
 
         // If we came from recent_listings
@@ -123,12 +125,14 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private void changeLocation() {
         Bundle bundle = getArguments();
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
-                .zoom(17)
-                .tilt(30)
-                .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        if (NavigationActivity.thisLocation != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
+                    .zoom(17)
+                    .tilt(30)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
 
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -276,12 +280,14 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
                 }
             }
         }
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
-                .zoom(17)
-                .tilt(30)
-                .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        if (NavigationActivity.thisLocation != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
+                    .zoom(17)
+                    .tilt(30)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
     }
 
     /**

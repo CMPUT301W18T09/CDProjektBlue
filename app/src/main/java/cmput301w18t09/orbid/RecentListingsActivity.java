@@ -81,12 +81,13 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
                 if (!isChecked) {
                     if (!permissionsGranted) {
                         permissionsGranted = checkLocationPermission();
-                        tbtnToggle.setChecked(true);
-                    } else {
+                    }
+                    if (permissionsGranted){
                         openMapActivity();
                     }
                 }
                 else {
+                    finish();
                     Intent intent = new Intent(getBaseContext(), RecentListingsActivity.class);
                     intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
                     getBaseContext().startActivity(intent);
@@ -330,5 +331,20 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            finish();
+            Intent intent = new Intent(this, RecentListingsActivity.class);
+            intent.putExtra("recent_listings_layout_id", R.layout.activity_recent_listings);
+            startActivity(intent);
+        }
     }
 }
