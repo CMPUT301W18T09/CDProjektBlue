@@ -17,10 +17,10 @@ import android.widget.TextView;
 
 public class BidViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    private ItemClickListener clickListener;
     public TextView bidPrice;
     public TextView bidDescription;
     public TextView bidUsername;
-    private ItemClickListener clickListener;
 
     public BidViewHolder(View view, final Context context) {
         super(view);

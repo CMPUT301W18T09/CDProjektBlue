@@ -39,12 +39,12 @@ import java.util.concurrent.TimeUnit;
  * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
  *
  * @author Chady Haidar, Zach Redfern
+ * @see Task
  */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
-    private int currentPage=0;
-    private RecyclerView recyclerView;
+    private int currentPage = 0;
     private int isMyBids;
     private int maxPages;
     private Task.TaskStatus taskStatus;
@@ -78,8 +78,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             maxPages=3;
         }
     }
-
-
 
     /**
      * Opens the Add/Edit task activity when the button is pressed
@@ -208,7 +206,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * Initializes the recycler view with the task list
      */
     private void initRecyclerView() {
-        // Setup the card view to show tasks
+
+        RecyclerView recyclerView;
 
         filterList();
         Log.i("LENGTH", Integer.toString(taskList.size()));
@@ -391,6 +390,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         }
     }
 
+    /**
+     * Returns the list of tasks listed on the current page.
+     *
+     * @return List of tasks listed on the current page
+     */
     public ArrayList<Task> getTaskList() {
         return this.taskList;
     }

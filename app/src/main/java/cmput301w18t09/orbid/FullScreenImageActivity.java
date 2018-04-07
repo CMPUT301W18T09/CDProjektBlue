@@ -15,12 +15,13 @@ import android.widget.ImageView;
  */
 public class FullScreenImageActivity extends Activity {
 
-    private int isMyTask;
-    private Bitmap bitmap;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int isMyTask;
+        Bitmap bitmap;
+
         setContentView(R.layout.activity_full_screen_image);
 
         // Get and decode the bitmap image

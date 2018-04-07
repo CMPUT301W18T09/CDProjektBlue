@@ -14,20 +14,23 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- * Created by david on 28/03/18.
+ * Allows a user to see the list of reviews and ratings for any other user that has reviews.
+ *
+ * @author David Laycock
+ * @see Review
  */
-
 public class ListReviewActivity extends NavigationActivity implements ItemClickListener {
-
-    private ArrayList<Review> reviewList = new ArrayList<>();
-    private TextView tvUsername;
-    private String username;
-    private ReviewListAdapter reviewListAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ArrayList<Review> reviewList = new ArrayList<>();
+        TextView tvUsername;
+        String username;
+        ReviewListAdapter reviewListAdapter;
+        RecyclerView recyclerView;
+
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
         inflater.inflate(R.layout.activity_view_reviews, frameLayout);

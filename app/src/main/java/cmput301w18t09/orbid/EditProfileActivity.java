@@ -21,7 +21,6 @@ import java.util.ArrayList;
  */
 public class EditProfileActivity extends NavigationActivity {
 
-    private Button btnSave;
     private TextView tvUsername;
     private EditText etPhoneNumber;
     private EditText etFirstName;
@@ -84,6 +83,7 @@ public class EditProfileActivity extends NavigationActivity {
         etLastName.setText(currentUser.getLastName());
 
         // Assign on click listener to save profile button
+        Button btnSave;
         btnSave = findViewById(R.id.edit_profile_btnSave);
         btnSave.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
@@ -110,8 +110,6 @@ public class EditProfileActivity extends NavigationActivity {
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
         String password = etPassword.getText().toString();
-
-
 
         // Check if the PW length is 0 or > 30
         if (password.length() == 0  || password.length() > 30) {

@@ -21,7 +21,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by zachredfern on 2018-04-03.
+ * Allows a user to provide a review to some other user only after they have completed a task
+ * interaction with one another.
+ *
+ * @author Zach Redfern
+ * @see Review
  */
 public class AddReviewActivity extends NavigationActivity {
 
@@ -66,12 +70,11 @@ public class AddReviewActivity extends NavigationActivity {
                 addReview();
             }
         });
-
-
     }
 
     /**
-     *
+     * Takes the information input from the user interface and converts it to a review object to be
+     * added to a user, only after validating the input.
      */
     private void addReview() {
 
@@ -87,7 +90,6 @@ public class AddReviewActivity extends NavigationActivity {
             Toast.makeText(this, "Review must be 300 characters or less", Toast.LENGTH_LONG).show();
             return;
         }
-
 
         // Ensure we are still online
         Review review = new Review(ratingBar.getRating(), etReview.getText().toString(), type, reviewedBy);
@@ -127,15 +129,14 @@ public class AddReviewActivity extends NavigationActivity {
         Toast.makeText(this, "Review added", Toast.LENGTH_LONG).show();
         setResult(RESULT_OK);
         finish();
-        //return;
-
     }
 
     /**
-     *
+     * Changes a the task that was completed between two users to reflect that a review of a
+     * specific type was added. E.g., only one review for a provider may be added per each completed
+     * task.
      */
     private void updateTask() {
-
 
         // Get the task being reviewed
         DataManager.getTasks getTasks = new DataManager.getTasks(this);
@@ -166,10 +167,5 @@ public class AddReviewActivity extends NavigationActivity {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task);
         updateTasks.execute(tasks);
-
-        return;
     }
-
-
-
 }

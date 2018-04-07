@@ -16,13 +16,11 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     private ItemClickListener clickListener;
     private int type;
 
-
     public ReviewListAdapter(final Context context, ArrayList<Review> reviewList, int type) {
         this.context = context;
         this.reviewList = reviewList;
         this.type = type;
     }
-
 
     public void setClickListener(ItemClickListener clickListener) {
         this.clickListener = clickListener;
@@ -55,6 +53,4 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     public int getItemCount() {
         return reviewList.size();
     }
-
-    public void setReviewList(ArrayList<Review> reviewList) {this.reviewList = reviewList;}
 }

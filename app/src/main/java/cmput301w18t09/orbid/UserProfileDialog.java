@@ -55,25 +55,6 @@ public class UserProfileDialog extends DialogFragment {
                     }
                 });
 
-//        // Let the current user review only those individuals they have had a completed task interaction with
-//        if (args.getBoolean("canReview") && !username.equals(LoginActivity.getCurrentUsername())) {
-//            builder.setView(content).setPositiveButton("Add Review", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-//                    if (args.get("reviewType").equals("Requester")) {
-//                        intent.putExtra("reviewType", "Requester");
-//                    }
-//                    else if (args.get("reviewType").equals("Provider")) {
-//                        intent.putExtra("reviewType", "Provider");
-//                    }
-//                    intent.putExtra("taskID", args.get("taskID").toString());
-//                    intent.putExtra("reviewee", username);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-
         // Assign the layout's text views
         TextView tvfullname = content.findViewById(R.id.fullnameview);
         TextView tvemail = content.findViewById(R.id.emailview);
@@ -136,12 +117,9 @@ public class UserProfileDialog extends DialogFragment {
             });
         }
 
-
         final AlertDialog dialog = builder.create();
         dialog.show();
         return dialog;
     }
-
-
 }
 
