@@ -120,16 +120,21 @@ public class UserProfileDialog extends DialogFragment {
         rbRating.setRating(ave);
         rbRating.setIsIndicator(true);  //Stops user from changing value
 
-
-        rbRating.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent intent = new Intent(getActivity(), ListReviewActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-                return false;
-            }
-        });
+        if(revList.size()== 0){
+            rbRating.setVisibility(View.GONE);
+            content.findViewById(R.id.noReviewText).setVisibility(View.VISIBLE);
+        } else {
+            content.findViewById(R.id.noReviewText).setVisibility(View.GONE);
+            rbRating.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Intent intent = new Intent(getActivity(), ListReviewActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+        }
 
 
         final AlertDialog dialog = builder.create();
