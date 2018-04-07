@@ -95,7 +95,10 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         Bundle bundle = getArguments();
         String came_from = bundle.getString("came_from");
         String id = getArguments().getString("_id");
-        getThisTask(id);
+        isAdd = getArguments().getInt("isAdd");
+        if (isAdd != 1) {
+            getThisTask(id);
+        }
 
         // If we came from recent_listings
         if (came_from.equals("recent_listings")) {
@@ -120,7 +123,14 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
     private void changeLocation() {
         Bundle bundle = getArguments();
 
-        isAdd = getArguments().getInt("isAdd");
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
+                .zoom(17)
+                .tilt(30)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(final LatLng latLng) {
