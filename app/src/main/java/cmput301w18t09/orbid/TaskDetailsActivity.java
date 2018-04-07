@@ -445,12 +445,16 @@ public class TaskDetailsActivity extends NavigationActivity {
                     if(price > 99999) {
                         Toast.makeText(getBaseContext(), "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
                     } else {
-                        ArrayList<Bid> temp = task.getBidList();
+                        Bid tempBid = null;
                         // Check if the user had a previous bid and delete it if so
-                        for(Bid b: temp) {
+                        for(Bid b: task.getBidList()) {
                             if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
-                                task.removeBid(b);
+                                tempBid = b;
+                                break;
                             }
+                        }
+                        if(tempBid != null) {
+                            task.removeBid(tempBid);
                         }
                         // Add the new bid to the bid list
                         Bid bid = new Bid(LoginActivity.getCurrentUsername(), price, etDescription.getText().toString());
