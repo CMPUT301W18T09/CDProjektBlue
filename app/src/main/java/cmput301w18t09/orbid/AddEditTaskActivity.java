@@ -615,7 +615,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                         e.printStackTrace();
                     }
                     // Check if the image is too large
-                    if(dataSize > 65536*4) {
+                    if(dataSize > 65536) {
                         Toast.makeText(this, "Image size is too large", Toast.LENGTH_SHORT).show();
                     } else {
                         task.addPhoto(bitmap);
