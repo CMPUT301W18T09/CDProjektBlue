@@ -4,6 +4,7 @@ package cmput301w18t09.orbid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +49,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private int maxPages;
     private Task.TaskStatus taskStatus;
     private int shouldWait = 1;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             maxPages=3;
         }
     }
+
 
 
     /**
@@ -210,12 +213,27 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         Log.i("LENGTH", Integer.toString(taskList.size()));
         Log.i("PAGE", Integer.toString(currentPage));
         recyclerView = (RecyclerView) findViewById(R.id.RequestedTasks);
-        TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
+        final TaskListAdapter taskAdapter = new TaskListAdapter(this, taskList, 1);
         taskAdapter.setClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setHasFixedSize(true);
         taskAdapter.notifyDataSetChanged();
+
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                taskAdapter.setTaskList(taskList);
+                taskAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     /**
