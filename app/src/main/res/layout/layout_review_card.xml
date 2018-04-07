@@ -46,10 +46,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_below="@id/review_type"
                 android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="5dp"
                 android:text="review description"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:paddingRight="4dp"
+                android:paddingLeft="4dp"/>
 
             <RatingBar
                 android:id="@+id/ratingBar"

@@ -88,7 +88,8 @@
             android:editable="false"
             android:maxLength="300"
             android:text="I'm going out of town and will not have to be in touch and I not have to go back and I have a great time and place and we will have a good time for you and I have a good time for you and I'mI have to go to the gym and then I will be there in a few minutes late but I don't know if you want to go to"
-            android:textColor="#fcfcf9" />
+            android:textColor="#fcfcf9"
+            android:padding="5dp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/BidListEdit"

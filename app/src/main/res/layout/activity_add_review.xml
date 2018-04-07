@@ -80,7 +80,8 @@
         android:layout_below="@+id/reviewee_name"
         android:layout_marginTop="15dp"
         android:isIndicator="false"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:theme="@style/RatingBar"/>
 
 
 

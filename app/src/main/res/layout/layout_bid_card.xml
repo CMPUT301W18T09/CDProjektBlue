@@ -34,14 +34,22 @@
                 android:layout_alignParentTop="true"
                 android:textColor="#000000"
                 android:textStyle="bold|italic"
-                android:text="BID PROVIDER" />
+                android:text="BID PROVIDER"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/bid_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bid_username"
-                android:text="BID PRICE" />
+                android:text="BID PRICE"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"/>
 
             <TextView
                 android:id="@+id/bid_description"
@@ -49,7 +57,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bid_price"
                 android:layout_marginBottom="8dp"
-                android:text="BID DESCRIPTION"/>
+                android:text="BID DESCRIPTION"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"/>
         </RelativeLayout>
 
 
