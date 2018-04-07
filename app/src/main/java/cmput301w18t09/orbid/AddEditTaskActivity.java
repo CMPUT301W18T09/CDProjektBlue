@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.StackView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 import com.google.gson.Gson;
@@ -661,6 +662,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
                 .setTitle("Accept or Decline bid?")
                 .setView(dialog_view);
         final AlertDialog dialog = builder.create();
+        TextView bidUsername = dialog_view.findViewById(R.id.tv_username);
+        bidUsername.setText(bid.getProvider());
         dialog.show();
 
         Button btnAccept = dialog_view.findViewById(R.id.btnAccept);
