@@ -141,51 +141,54 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see MapActivity
      */
     public void onClickLocation(View view) {
+        if(!permissionsGranted) {
+            checkLocationPermission();
+        } else {
+            if (!DataManager.isNetworkAvailable(this)) {
+                Toast.makeText(this, "Cannot connect to Google Maps while offline.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        if (!DataManager.isNetworkAvailable(this)) {
-            Toast.makeText(this, "Cannot connect to Google Maps while offline.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // If we are not adding a task
-        if (isAdd != 1) {
-            MapActivity mapActivity = new MapActivity();
-            FragmentManager fm = getSupportFragmentManager();
-            Bundle bundle = new Bundle();
-            bundle.putString("came_from", "edit_task");
-            bundle.putInt("isAdd", 0);
-            bundle.putString("_id", task.getID());
-            try {
-                Log.i("GEO", "ID before: " + id + "and location" + MapActivity.getAddress(task.getLocation(), getResources()));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ApiException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            // If we are not adding a task
+            if (isAdd != 1) {
+                MapActivity mapActivity = new MapActivity();
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putString("came_from", "edit_task");
+                bundle.putInt("isAdd", 0);
+                bundle.putString("_id", task.getID());
+                try {
+                    Log.i("GEO", "ID before: " + id + "and location" + MapActivity.getAddress(task.getLocation(), getResources()));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mapActivity.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
             }
-            mapActivity.setArguments(bundle);
-            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
-        }
-        // If we are adding a task
-        else {
-            MapActivity mapActivity = new MapActivity();
-            FragmentManager fm = getSupportFragmentManager();
-            Bundle bundle = new Bundle();
-            bundle.putString("came_from", "add_task");
-            bundle.putInt("isAdd", 1);
-            // Bring all of the entered info with us so we can reload it when we come back
-            if (!etTitle.getText().toString().isEmpty()) {
-                bundle.putString("title", etTitle.getText().toString());
+            // If we are adding a task
+            else {
+                MapActivity mapActivity = new MapActivity();
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putString("came_from", "add_task");
+                bundle.putInt("isAdd", 1);
+                // Bring all of the entered info with us so we can reload it when we come back
+                if (!etTitle.getText().toString().isEmpty()) {
+                    bundle.putString("title", etTitle.getText().toString());
+                }
+                if (!etDescription.getText().toString().isEmpty()) {
+                    bundle.putString("description", etDescription.getText().toString());
+                }
+                if (!etPrice.getText().toString().isEmpty()) {
+                    bundle.putString("price", etPrice.getText().toString());
+                }
+                mapActivity.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
             }
-            if (!etDescription.getText().toString().isEmpty()) {
-                bundle.putString("description", etDescription.getText().toString());
-            }
-            if (!etPrice.getText().toString().isEmpty()) {
-                bundle.putString("price", etPrice.getText().toString());
-            }
-            mapActivity.setArguments(bundle);
-            fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
         }
     }
 
@@ -226,10 +229,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             btnSavePost.setVisibility(View.VISIBLE);
             btnSavePost.setText("Save");
         }
-
-        // Set the generic text watcher to save changes
-        etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
-        etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
     }
 
     /**
@@ -325,7 +324,8 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     @SuppressLint("MissingPermission")
     private void save() throws InterruptedException, ApiException, IOException {
-
+        task.setTitle(etTitle.getText().toString());
+        task.setDescription(etDescription.getText().toString());
         // Add location to the task
         try {
             task.setLocation(new LatLng(thisLocation.getLatitude(), thisLocation.getLongitude()));
@@ -755,66 +755,4 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         dialog.show(getFragmentManager(), "User Profile Dialog");
 
     }
-
-    /**
-     * Textwatcher code taken from https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android
-     * Textwatcher inner class to watch over text boxes
-     *
-     * @see TextWatcher
-     */
-    private class GenericTextWatcher implements TextWatcher {
-
-        private View view;
-
-        /**
-         * Constructor for the text watcher
-         *
-         * @param view
-         */
-        private GenericTextWatcher(View view) {
-            this.view = view;
-        }
-
-        /**
-         * Called after the text has been changed
-         *
-         * @param s
-         */
-        public void afterTextChanged(Editable s) {
-        }
-
-        /**
-         * Called Before the text is changed
-         *
-         * @param s
-         * @param start
-         * @param count
-         * @param after
-         */
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        /**
-         * Called when the text is being changed, makes sure all values being
-         * changed are legal, then saves them
-         *
-         * @param s
-         * @param start
-         * @param before
-         * @param count
-         */
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (view.getId() == R.id.EditTaskTitle) {
-                String r = s.toString();
-                task.setTitle(r);
-            }
-            if (view.getId() == R.id.EditTaskComment) {
-                String r = s.toString();
-                task.setDescription(r);
-            }
-
-        }
-    }
-
-
 }
