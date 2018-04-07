@@ -82,7 +82,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Check if the user had just come from setting their location
         if (getIntent().getStringExtra("from_map") != null) {
             fromMap = true;
-            Toast.makeText(this, "Task successfully posted", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Location successfully chosen", Toast.LENGTH_LONG).show();
         }
 
         // Inflate the layout ID that was received
