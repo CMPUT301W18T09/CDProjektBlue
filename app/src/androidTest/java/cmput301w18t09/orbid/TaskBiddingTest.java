@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -171,7 +172,7 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.clickOnButton("Sign In");
 
         // Assert that we have entered the recent listings activity
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
         RecentListingsActivity recentListingsActivity = (RecentListingsActivity) solo.getCurrentActivity();
         ArrayList<Task> taskList1 = recentListingsActivity.getTaskList();
@@ -191,28 +192,34 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         }
 
         // Click the first test task and place an initial bid on it
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.scrollDownRecyclerView(posTask1);
         solo.clickInRecyclerView(posTask1);
-        //solo.assertCurrentActivity("Wrong Activity", PlaceBidActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
         TextView title1 = (TextView) solo.getView(R.id.details_task_title);
         assertTrue(title1.getText().toString().equals("Mow My Lawn (Bid Test)"));
-        FrameLayout frameLayout1 = (FrameLayout) solo.getView(R.id.details_frame_layout);
-        solo.enterText((EditText) frameLayout1.findViewById(R.id.my_bid_amount), "59.99");
-        solo.enterText((EditText) frameLayout1.findViewById(R.id.my_bid_description), "I will do it!");
-        solo.sleep(2000);
+        //FrameLayout frameLayout1 = (FrameLayout) solo.getView(R.id.details_frame_layout);
         solo.clickOnButton("Bid");
+        solo.enterText((EditText) solo.getView(R.id.et_bidprice), "59.99");
+        solo.enterText((EditText) solo.getView(R.id.et_biddescription), "I will do it!");
+        solo.sleep(3000);
+        Button btnBid = (Button) solo.getView(R.id.bt_bid);
+        solo.clickOnView(btnBid);
+        //solo.clickOnButton(btnBid);
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         // View the tasks the provider has bid on
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        //solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("My Bids");
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
-        solo.sleep(2000);
+        solo.sleep(3000);
 
 
 
@@ -221,22 +228,23 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Logout and login as the second task provider
         solo.goBack();
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        solo.sleep(2000);
+        solo.clickOnText("Logout");
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider2");
         solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnButton("Sign In");
 
         // Assert that we have entered the recent listings activity
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
         RecentListingsActivity recentListingsActivity2 = (RecentListingsActivity) solo.getCurrentActivity();
         ArrayList<Task> taskList2 = recentListingsActivity2.getTaskList();
@@ -256,57 +264,63 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         }
 
         // Click the first test task and place an initial bid on it
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.scrollDownRecyclerView(posTask2);
         solo.clickInRecyclerView(posTask2);
-        //solo.assertCurrentActivity("Wrong Activity", PlaceBidActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
         TextView title2 = (TextView) solo.getView(R.id.details_task_title);
         assertTrue(title1.getText().toString().equals("Mow My Lawn (Bid Test)"));
-        FrameLayout frameLayout2 = (FrameLayout) solo.getView(R.id.details_frame_layout);
-        solo.enterText((EditText) frameLayout2.findViewById(R.id.my_bid_amount), "40.00");
-        solo.enterText((EditText) frameLayout2.findViewById(R.id.my_bid_description), "I have a GrassMaster6000!");
-        solo.sleep(2000);
+        //FrameLayout frameLayout2 = (FrameLayout) solo.getView(R.id.details_frame_layout);
         solo.clickOnButton("Bid");
+        solo.enterText((EditText) solo.getView(R.id.et_bidprice), "40.00");
+        solo.enterText((EditText) solo.getView(R.id.et_biddescription), "I have a GrassMaster6000!");
+        solo.sleep(3000);
+        btnBid = (Button) solo.getView(R.id.bt_bid);
+        solo.clickOnView(btnBid);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         // View the tasks the provider has bid on
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("My Bids");
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
-        solo.sleep(2000);
+        solo.sleep(3000);
 
 
 
         // Logout and log in as the requester
         solo.goBack();
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        solo.sleep(2000);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Logout");
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestRequester");
         solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnButton("Sign In");
 
         // View the tasks that the requester has bids on
         solo.assertCurrentActivity("WrongActivity", RecentListingsActivity.class);
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("My Listings");
         solo.assertCurrentActivity("WrongActivity", ListTaskActivity.class);
-        solo.clickOnImageButton(1);
+        solo.clickOnImageButton(2);
         solo.sleep(3000);
 
         // Get the position of the test task in the task list
@@ -321,25 +335,26 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         }
 
         // Click the test task in the recycler view to view the bids made on the test
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.scrollDownRecyclerView(pos);
         solo.clickInRecyclerView(pos);
+        //solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", AddEditTaskActivity.class);
-        solo.sleep(2000);
+        solo.sleep(3000);
 
         // Decline one of the bids, show it is no longer in the list of bids on that task
         solo.scrollDownRecyclerView(0);
         solo.clickInRecyclerView(0);
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnButton("Decline");
 
         // Accept one bid and show it as accepted
         solo.scrollDownRecyclerView(0);
         solo.clickInRecyclerView(0);
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnButton("Accept");
         solo.clickOnImageButton(1);
-        solo.sleep(2000);
+        solo.sleep(3000);
 
 
 
@@ -347,29 +362,31 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Logout and login as the second task provider
         solo.goBack();
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
-        solo.sleep(2000);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Logout");
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider2");
         solo.enterText((EditText) solo.getView(R.id.login_etPassword), "test");
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnButton("Sign In");
 
-        // View the tasks the provider has bid on
+        // View the tasks the provider has bid on and were accepted
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("My Bids");
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.clickOnImageButton(1);
         solo.sleep(3000);
 

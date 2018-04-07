@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
+    public RecyclerView recyclerView;
     private int currentPage = 0;
     private int isMyBids;
     private int maxPages;
@@ -206,8 +207,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * Initializes the recycler view with the task list
      */
     private void initRecyclerView() {
-
-        RecyclerView recyclerView;
 
         filterList();
         Log.i("LENGTH", Integer.toString(taskList.size()));
