@@ -419,6 +419,7 @@ public class TaskDetailsActivity extends NavigationActivity {
         final Button cancel = dialog_view.findViewById(R.id.bt_cancel);
         final Button bid = dialog_view.findViewById(R.id.bt_bid);
 
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

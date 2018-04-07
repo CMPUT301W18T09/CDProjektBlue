@@ -230,7 +230,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         // Set the generic text watcher to save changes
         etTitle.addTextChangedListener(new GenericTextWatcher(etTitle));
         etDescription.addTextChangedListener(new GenericTextWatcher(etDescription));
-        //etPrice.addTextChangedListener(new GenericTextWatcher(etPrice));
     }
 
     /**
@@ -666,6 +665,13 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         bidUsername.setText(bid.getProvider());
         dialog.show();
 
+        bidUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserInfo(bid.getProvider());
+            }
+        });
+
         Button btnAccept = dialog_view.findViewById(R.id.btnAccept);
         Button btnDecline = dialog_view.findViewById(R.id.btnDecline);
         Button btnCancel = dialog_view.findViewById(R.id.btnCancel);
@@ -728,6 +734,26 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
         } else {
             return false;
         }
+    }
+
+    /**
+     * Opens the user info dialog when pressed
+     */
+    public void openUserInfo(String username) {
+
+        // Inform the user if they attempt to get user information while offline
+        if (!DataManager.isNetworkAvailable(this )) {
+            Toast.makeText(this, "User information cannot be fetched while offline", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+
+        UserProfileDialog dialog = new UserProfileDialog();
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), "User Profile Dialog");
+
     }
 
     /**
