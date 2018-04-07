@@ -44,7 +44,7 @@ public class TaskDetailsTest extends ActivityInstrumentationTestCase2 {
         assertTrue(solo.waitForText("Task details test", 1, 3000));
         //solo.clickOnText("Task details test");
         solo.clickInRecyclerView(0);
-        solo.assertCurrentActivity("Wrong Activity", PlaceBidActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
 
         assertTrue(solo.waitForText("Task details test"));
 
