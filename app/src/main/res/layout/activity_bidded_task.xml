@@ -40,7 +40,7 @@
             android:inputType="none"
             android:text="14 1510 Parkland Drive"
             android:textAlignment="center"
-            android:textColor="?android:attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -94,7 +94,7 @@
             android:onClick="openRequesterInfo"
             android:text="Requestor Username"
             android:textAlignment="center"
-            android:textColor="?android:attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <EditText
@@ -153,7 +153,7 @@
                 android:onClick="openProviderInfo"
                 android:text="Bidder's Username"
                 android:textAlignment="center"
-                android:textColor="?android:attr/colorControlActivated"
+                android:textColor="#99ff00"
                 android:textStyle="bold" />
 
         </LinearLayout>
