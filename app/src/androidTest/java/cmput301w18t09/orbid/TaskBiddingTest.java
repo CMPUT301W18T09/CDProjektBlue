@@ -114,26 +114,43 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         DataManager.deleteUsers delRequester = new DataManager.deleteUsers(context);
         queryList.clear();
         queryList = findUserID("bidTestRequester");
-        delRequester.execute(queryList);
+        if (!queryList.get(0).toString().equals("username")) {
+            Log.e("found", queryList.get(0).toString());
+            delRequester.execute(queryList);
+        }
+
+        solo.sleep(1000);
 
         // Delete the first test provider if their account already exists
         DataManager.deleteUsers delProvider1 = new DataManager.deleteUsers(context);
         queryList.clear();
-        queryList = findUserID("bitTestProvider1");
-        delProvider1.execute(queryList);
+        queryList = findUserID("bidTestProvider1");
+        if (!queryList.get(0).toString().equals("username")) {
+            Log.e("found", queryList.get(0).toString());
+            delProvider1.execute(queryList);
+        }
+
+        solo.sleep(1000);
 
         // Delete the second test provider if their account already exists
         DataManager.deleteUsers delProvider2 = new DataManager.deleteUsers(context);
         queryList.clear();
-        queryList = findUserID("bitTestProvider2");
-        delProvider2.execute(queryList);
+        queryList = findUserID("bidTestProvider2");
+        if (!queryList.get(0).toString().equals("username")) {
+            Log.e("found", queryList.get(0).toString() );
+            delProvider2.execute(queryList);
+        }
+
+        solo.sleep(1000);
+
 
         // Delete test task 1 if it already exists
         DataManager.deleteTasks delTask1 = new DataManager.deleteTasks(context);
         queryList.clear();
         queryList = findTaskID("Mow My Lawn (Bid Test)");
-        Log.e("Mow My Lawn ID2", queryList.get(0).toString());
         delTask1.execute(queryList);
+
+        solo.sleep(1000);
 
         // Create an account for the test requester
         // NOTE: Creating accounts is covered in another use case
@@ -180,7 +197,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Get the position of the test tasks in the task list
         int posTask1 = -1;
         for (int i = 0; i < taskList1.size(); ++i) {
-            Log.e("Task", taskList1.get(i).getTitle());
             if (taskList1.get(i).getTitle().equals("Mow My Lawn (Bid Test)")) {
                 posTask1 = i;
             }
@@ -198,24 +214,17 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
         TextView title1 = (TextView) solo.getView(R.id.details_task_title);
         assertTrue(title1.getText().toString().equals("Mow My Lawn (Bid Test)"));
-        //FrameLayout frameLayout1 = (FrameLayout) solo.getView(R.id.details_frame_layout);
         solo.clickOnButton("Bid");
         solo.enterText((EditText) solo.getView(R.id.et_bidprice), "59.99");
         solo.enterText((EditText) solo.getView(R.id.et_biddescription), "I will do it!");
         solo.sleep(3000);
         Button btnBid = (Button) solo.getView(R.id.bt_bid);
         solo.clickOnView(btnBid);
-        //solo.clickOnButton(btnBid);
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         // View the tasks the provider has bid on
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        //solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("My Bids");
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
@@ -229,13 +238,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.goBack();
         solo.clickOnImageButton(0);
         solo.clickOnText("Logout");
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "bidTestProvider2");
@@ -252,7 +254,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Get the position of the test tasks in the task list
         int posTask2 = -1;
         for (int i = 0; i < taskList2.size(); ++i) {
-            Log.e("Task", taskList2.get(i).getTitle());
             if (taskList2.get(i).getTitle().equals("Mow My Lawn (Bid Test)")) {
                 posTask2 = i;
             }
@@ -270,22 +271,17 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
         TextView title2 = (TextView) solo.getView(R.id.details_task_title);
         assertTrue(title1.getText().toString().equals("Mow My Lawn (Bid Test)"));
-        //FrameLayout frameLayout2 = (FrameLayout) solo.getView(R.id.details_frame_layout);
         solo.clickOnButton("Bid");
         solo.enterText((EditText) solo.getView(R.id.et_bidprice), "40.00");
         solo.enterText((EditText) solo.getView(R.id.et_biddescription), "I have a GrassMaster6000!");
         solo.sleep(3000);
         btnBid = (Button) solo.getView(R.id.bt_bid);
         solo.clickOnView(btnBid);
+        solo.sleep(2000);
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         // View the tasks the provider has bid on
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("My Bids");
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
@@ -296,13 +292,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Logout and log in as the requester
         solo.goBack();
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("Logout");
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
@@ -314,10 +303,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // View the tasks that the requester has bids on
         solo.assertCurrentActivity("WrongActivity", RecentListingsActivity.class);
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("My Listings");
         solo.assertCurrentActivity("WrongActivity", ListTaskActivity.class);
         solo.clickOnImageButton(2);
@@ -328,7 +313,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         ArrayList<Task> taskList3 = taskListActivity.getTaskList();
         int pos = -1;
         for (int i = 0; i < taskList3.size(); ++i) {
-            Log.e("Task", taskList3.get(i).getTitle());
             if (taskList3.get(i).getTitle().equals("Mow My Lawn (Bid Test)")) {
                 pos = i;
             }
@@ -362,13 +346,6 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
         // Logout and login as the second task provider
         solo.goBack();
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("Logout");
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
@@ -379,40 +356,26 @@ public class TaskBiddingTest extends ActivityInstrumentationTestCase2{
 
         // View the tasks the provider has bid on and were accepted
         solo.clickOnImageButton(0);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        //solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-//        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         solo.clickOnText("My Bids");
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
         solo.sleep(3000);
         solo.clickOnImageButton(1);
         solo.sleep(3000);
 
-        // Delete the test requester if their account already exists
-        DataManager.deleteUsers delRequester2 = new DataManager.deleteUsers(context);
+        DataManager.deleteUsers delUsers = new DataManager.deleteUsers(context);
         queryList.clear();
-        queryList = findUserID("bidTestRequester");
-        delRequester2.execute(queryList);
+        queryList.add(requester.getID());
+        queryList.add(provider1.getID());
+        queryList.add(provider2.getID());
+        delUsers.execute(queryList);
 
-        // Delete the first test provider if their account already exists
-        DataManager.deleteUsers delProvider3 = new DataManager.deleteUsers(context);
-        queryList.clear();
-        queryList = findUserID("bitTestProvider1");
-        delProvider3.execute(queryList);
 
-        // Delete the second test provider if their account already exists
-        DataManager.deleteUsers delProvider4 = new DataManager.deleteUsers(context);
-        queryList.clear();
-        queryList = findUserID("bitTestProvider2");
-        delProvider4.execute(queryList);
+        solo.sleep(1000);
 
         // Delete test task 1 if it already exists
         DataManager.deleteTasks delTask4 = new DataManager.deleteTasks(context);
         queryList.clear();
         queryList = findTaskID("Mow My Lawn (Bid Test)");
-        Log.e("Mow My Lawn ID2", queryList.get(0).toString());
         delTask4.execute(queryList);
     }
 }
