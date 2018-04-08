@@ -190,7 +190,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assignements");
+                    getSupportActionBar().setTitle("My Assignments");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
