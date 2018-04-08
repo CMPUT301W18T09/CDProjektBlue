@@ -323,7 +323,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
         double d = acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2));
         double distance_km = 6371 * d;
         Log.i("Distance", "The distance is: " + d);
-        return distance_km <= 5;
+        return d <= 5;
     }
 
     /**
