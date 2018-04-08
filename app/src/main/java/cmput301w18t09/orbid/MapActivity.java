@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -281,13 +284,33 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleA
             }
         }
         if (NavigationActivity.thisLocation != null) {
+
+            Circle circle = mMap.addCircle(new CircleOptions().center(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude())).radius(5000).strokeColor(Color.BLUE));
+            circle.setVisible(true);
+
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(NavigationActivity.thisLocation.getLatitude(), NavigationActivity.thisLocation.getLongitude()))
-                    .zoom(17)
+                    .zoom(getZoomLevel(circle))
                     .tilt(30)
                     .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
+    }
+
+
+    /**
+     * https://stackoverflow.com/questions/12503681/android-mapview-zoom-to-a-radius
+     * @param circle
+     * @return
+     */
+    public int getZoomLevel(Circle circle) {
+        int zoomLevel = 0;
+        if (circle != null){
+            double radius = circle.getRadius();
+            double scale = radius / 500;
+            zoomLevel =(int) (16 - Math.log(scale) / Math.log(2));
+        }
+        return zoomLevel;
     }
 
     /**
