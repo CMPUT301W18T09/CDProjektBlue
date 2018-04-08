@@ -4,6 +4,7 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.RatingBar;
 
 import com.robotium.solo.Solo;
 
@@ -94,7 +95,7 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
             delReviewer.execute(queryList);
         }
 
-        solo.sleep(1000);
+        solo.sleep(1500);
 
         // Delete the first test provider if their account already exists
         DataManager.deleteUsers delReviewee = new DataManager.deleteUsers(context);
@@ -105,8 +106,17 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
             delReviewee.execute(queryList);
         }
 
-        solo.sleep(1000);
+        solo.sleep(1500);
 
+        // Delete test task 1 if it already exists
+        DataManager.deleteTasks delTask1 = new DataManager.deleteTasks(context);
+        queryList.clear();
+        queryList = findTaskID("Cat Declawing");
+        if (!queryList.get(0).toString().equals("or")) {
+            delTask1.execute(queryList);
+        }
+
+        solo.sleep(1500);
 
 
         // Create an account for the test requester
@@ -168,7 +178,18 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnText("Add Review");
 
 
+        // Add a review
+        RatingBar ratingBar = (RatingBar) solo.getView(R.id.ratingBar2);
+        ratingBar.setRating(5.0f);
+        solo.enterText((EditText) solo.getView(R.id.review), "A skilled veterinarian who got the job done quick.");
+        solo.sleep(3000);
 
+        solo.clickOnText("Add");
+        solo.sleep(1000);
+
+        // See the review for that individual
+        solo.waitForText("testReviewee");
+        solo.clickOnText("testReviewee");
 
 
         DataManager.deleteTasks deleteTasks = new DataManager.deleteTasks(solo.getCurrentActivity().getBaseContext());
@@ -184,8 +205,6 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         ID.add(reviewer.getID());
         ID.add(reviewee.getID());
         deleteUsers.execute(ID);
-
-
 
     }
 }

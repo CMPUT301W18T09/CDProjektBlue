@@ -132,8 +132,6 @@ public class SearchTest extends ActivityInstrumentationTestCase2 {
 
         solo.sleep(1500);
 
-        assertTrue(Boolean.FALSE);
-
 
 
         // Create new mocks
