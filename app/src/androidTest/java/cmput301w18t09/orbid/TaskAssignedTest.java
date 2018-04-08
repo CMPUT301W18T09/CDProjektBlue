@@ -99,12 +99,12 @@ public class TaskAssignedTest extends ActivityInstrumentationTestCase2 {
      */
     public void testDisplayAssingedBids(){
         // Create a test user
-        User testProvider = new User("zach36", "test", "test@provider.com", "1234567890", "test", "provider");
+        User testRequester = new User("testCeeg", "test", "test@provider.com", "1234567890", "test", "requester");
         DataManager.addUsers addUsers = new DataManager.addUsers(solo.getCurrentActivity().getBaseContext());
-        addUsers.execute(testProvider);
+        addUsers.execute(testRequester);
 
         // Create a new task and accept a bid on it
-        Task task = new Task("ceeg", "Clean my carpet.", "Clean My Carpet", 99.99, Task.TaskStatus.REQUESTED);
+        Task task = new Task("testCeeg", "Clean my carpet.", "Clean My Carpet", 99.99, Task.TaskStatus.REQUESTED);
         Bid bid = new Bid("Zach36", 90.00, "I have all the right tools.");
         task.addBid(bid);
         task.acceptBid(0);
@@ -113,13 +113,12 @@ public class TaskAssignedTest extends ActivityInstrumentationTestCase2 {
 
         // Login
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText(0, "zach36");
+        solo.enterText(0, "testCeeg");
         solo.enterText(1, "test");
         solo.clickOnText("Sign In");
 
         solo.waitForActivity(RecentListingsActivity.class);
         solo.clickOnImageButton(0);
-        NavigationActivity.thisUser = "ceeg";
         solo.clickOnText("My Listings");
 
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
@@ -165,7 +164,7 @@ public class TaskAssignedTest extends ActivityInstrumentationTestCase2 {
         // Delete test user
         DataManager.deleteUsers deleteUsers = new DataManager.deleteUsers(solo.getCurrentActivity().getBaseContext());
         ID.clear();
-        ID.add(testProvider.getID());
+        ID.add(testRequester.getID());
         deleteUsers.execute(ID);
     }
 }
