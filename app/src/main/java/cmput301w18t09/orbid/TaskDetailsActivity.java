@@ -442,8 +442,12 @@ public class TaskDetailsActivity extends NavigationActivity {
                     Toast.makeText(getBaseContext(), "This task has already been completed!", Toast.LENGTH_SHORT).show();
                 } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
                     Double price = Double.parseDouble(etPrice.getText().toString());
+                    getTaskDetails();
                     if(price > 99999) {
                         Toast.makeText(getBaseContext(), "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
+                    } else if(task.getStatus()!= Task.TaskStatus.REQUESTED && task.getStatus() != Task.TaskStatus.BIDDED) {
+                        Toast.makeText(getBaseContext(), "This task is no longer available to bid on.", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
                         Bid tempBid = null;
                         // Check if the user had a previous bid and delete it if so
