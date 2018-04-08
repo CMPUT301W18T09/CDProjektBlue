@@ -39,12 +39,13 @@ import java.util.concurrent.TimeUnit;
  * Organized by: My Open Bids, My Assigned Bids, and My Completed Bids
  *
  * @author Chady Haidar, Zach Redfern
+ * @see Task
  */
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
-    private int currentPage=0;
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
+    private int currentPage = 0;
     private int isMyBids;
     private int maxPages;
     private Task.TaskStatus taskStatus;
@@ -59,6 +60,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             Intent intent = new Intent(this, LoginActivity.class);
             this.startActivity(intent);
         }
+
         // Inflate the layout of the list task activity
         isMyBids = getIntent().getIntExtra("isMyBids", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -77,8 +79,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
             maxPages=3;
         }
     }
-
-
 
     /**
      * Opens the Add/Edit task activity when the button is pressed
@@ -190,7 +190,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assignements");
+                    getSupportActionBar().setTitle("My Assignments");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
@@ -207,7 +207,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * Initializes the recycler view with the task list
      */
     private void initRecyclerView() {
-        // Setup the card view to show tasks
 
         filterList();
         Log.i("LENGTH", Integer.toString(taskList.size()));
@@ -229,8 +228,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                taskAdapter.setTaskList(taskList);
-                taskAdapter.notifyDataSetChanged();
+                filterList();
+                initRecyclerView();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -390,6 +389,11 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         }
     }
 
+    /**
+     * Returns the list of tasks listed on the current page.
+     *
+     * @return List of tasks listed on the current page
+     */
     public ArrayList<Task> getTaskList() {
         return this.taskList;
     }

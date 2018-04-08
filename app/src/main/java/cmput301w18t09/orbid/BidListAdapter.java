@@ -49,5 +49,4 @@ public class BidListAdapter extends RecyclerView.Adapter<BidViewHolder> {
     public int getItemCount() {
         return bidList.size();
     }
-
 }

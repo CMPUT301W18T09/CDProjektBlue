@@ -55,25 +55,6 @@ public class UserProfileDialog extends DialogFragment {
                     }
                 });
 
-//        // Let the current user review only those individuals they have had a completed task interaction with
-//        if (args.getBoolean("canReview") && !username.equals(LoginActivity.getCurrentUsername())) {
-//            builder.setView(content).setPositiveButton("Add Review", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-//                    if (args.get("reviewType").equals("Requester")) {
-//                        intent.putExtra("reviewType", "Requester");
-//                    }
-//                    else if (args.get("reviewType").equals("Provider")) {
-//                        intent.putExtra("reviewType", "Provider");
-//                    }
-//                    intent.putExtra("taskID", args.get("taskID").toString());
-//                    intent.putExtra("reviewee", username);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-
         // Assign the layout's text views
         TextView tvfullname = content.findViewById(R.id.fullnameview);
         TextView tvemail = content.findViewById(R.id.emailview);
@@ -120,23 +101,25 @@ public class UserProfileDialog extends DialogFragment {
         rbRating.setRating(ave);
         rbRating.setIsIndicator(true);  //Stops user from changing value
 
-
-        rbRating.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent intent = new Intent(getActivity(), ListReviewActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-                return false;
-            }
-        });
-
+        if(revList.size()== 0){
+            rbRating.setVisibility(View.GONE);
+            content.findViewById(R.id.noReviewText).setVisibility(View.VISIBLE);
+        } else {
+            content.findViewById(R.id.noReviewText).setVisibility(View.GONE);
+            rbRating.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Intent intent = new Intent(getActivity(), ListReviewActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+        }
 
         final AlertDialog dialog = builder.create();
         dialog.show();
         return dialog;
     }
-
-
 }
 

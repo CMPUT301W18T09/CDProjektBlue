@@ -11,6 +11,7 @@
     <TextView
         android:id="@+id/username_title"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -71,4 +72,17 @@
         android:numStars="5"
         android:stepSize="0.5"
         android:theme="@style/RatingBar"/>
+
+    <TextView
+        android:id="@+id/noReviewText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignStart="@+id/phoneview"
+        android:layout_below="@+id/phoneview"
+        android:gravity="center"
+        android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:text="@string/no_reviews"
+        android:textColor="#fcfcf9"
+        android:textSize="24sp" />
 </RelativeLayout>

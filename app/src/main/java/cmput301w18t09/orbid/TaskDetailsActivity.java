@@ -45,25 +45,9 @@ public class TaskDetailsActivity extends NavigationActivity {
     public int isBid = 0;
     public Context context = this;
     protected ArrayList<Task> taskList = new ArrayList<>();
-    private DrawerLayout mDrawerLayout;
-    protected boolean mine = false;
     private String id;
 
-    private TextView textLowestBid;
-
-
-    private EditText bidUsername;
-    private EditText bidPrice;
-    private EditText bidDescription;
-
-    private EditText title;
     private EditText description;
-    private EditText lowestBid;
-    private EditText location;
-    private EditText username;
-    private EditText status;
-
-
 
     /**
      * Inflates the layout for task details. Sets the details of the task
@@ -74,6 +58,16 @@ public class TaskDetailsActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EditText bidUsername;
+        EditText bidPrice;
+        EditText bidDescription;
+
+        EditText title;
+        EditText lowestBid;
+        EditText location;
+        EditText username;
+        EditText status;
 
         // Set the attributes that are passed through with the intent
         setIntentArgs();
@@ -99,11 +93,10 @@ public class TaskDetailsActivity extends NavigationActivity {
             inflater.inflate(R.layout.activity_new_task_details, frameLayout);
             initStackView();
 
-            if (task.getRequester().toLowerCase().equals(LoginActivity.getCurrentUsername().toLowerCase())) {
+            if (task.getRequester().toLowerCase().equals(thisUser.toLowerCase())) {
                 Button btnBid = findViewById(R.id.btnBid);
                 btnBid.setVisibility(View.GONE);
             }
-
         } else {
             inflater.inflate(R.layout.activity_bidded_task, frameLayout);
 
@@ -171,12 +164,10 @@ public class TaskDetailsActivity extends NavigationActivity {
         else {
             location.setText(task.getStringLocation());
         }
-
-
     }
 
     /**
-     *
+     * Sets the functionality of the buttons in the view given the context
      */
     private void setButtonFunctionality() {
 
@@ -229,7 +220,6 @@ public class TaskDetailsActivity extends NavigationActivity {
                     }
                 });
             }
-
         }
     }
 
@@ -279,27 +269,19 @@ public class TaskDetailsActivity extends NavigationActivity {
     }
 
     /**
-     *
+     * Opens the user information for the task requester
      */
     public void openRequesterInfo(View view) {
         openUserInfo(task.getRequester());
     }
 
     /**
-     *
+     * Opens the user information for the task provider
      */
     public void openProviderInfo(View view) {
         openUserInfo(bid.getProvider());
     }
 
-
-//    /**
-//     * Setup the onClick listener for username tap
-//     */
-//    public void setTitleListener(View view) {
-//        openUserInfo(bid.getProvider());
-//
-//    }
 
     /**
      * Get the arguments that were passed with the intent.
@@ -315,10 +297,12 @@ public class TaskDetailsActivity extends NavigationActivity {
         try {
             isAssigned = getIntent().getIntExtra("isAssigned", 0);
         } catch(Error e) {
+
         }
         try {
             isBid = getIntent().getIntExtra("isBid", 0);
         } catch(Error e) {
+
         }
     }
 
@@ -404,6 +388,11 @@ public class TaskDetailsActivity extends NavigationActivity {
         finish();
     }
 
+    /**
+     * Opens the dialog to place a bid ona  given task
+     *
+     * @param view
+     */
     public void openBidDialog(View view) {
 
         //Inflate the dialog
@@ -412,7 +401,6 @@ public class TaskDetailsActivity extends NavigationActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailsActivity.this).setView(dialog_view);
         final AlertDialog dialog = builder.create();
         dialog.show();
-
 
         final EditText etPrice = dialog_view.findViewById(R.id.et_bidprice);
         final EditText etDescription = dialog_view.findViewById(R.id.et_biddescription);
@@ -426,7 +414,7 @@ public class TaskDetailsActivity extends NavigationActivity {
             }
         });
 
-        //
+        // Sets the bid button functionality
         bid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -454,15 +442,23 @@ public class TaskDetailsActivity extends NavigationActivity {
                     Toast.makeText(getBaseContext(), "This task has already been completed!", Toast.LENGTH_SHORT).show();
                 } else if (!etPrice.getText().toString().isEmpty() && !etDescription.getText().toString().isEmpty()) {
                     Double price = Double.parseDouble(etPrice.getText().toString());
-                    if(price > 1000000) {
+                    getTaskDetails();
+                    if(price > 99999) {
                         Toast.makeText(getBaseContext(), "You cannot bid over $1000000.", Toast.LENGTH_SHORT).show();
+                    } else if(task.getStatus()!= Task.TaskStatus.REQUESTED && task.getStatus() != Task.TaskStatus.BIDDED) {
+                        Toast.makeText(getBaseContext(), "This task is no longer available to bid on.", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
-                        ArrayList<Bid> temp = task.getBidList();
+                        Bid tempBid = null;
                         // Check if the user had a previous bid and delete it if so
-                        for(Bid b: temp) {
+                        for(Bid b: task.getBidList()) {
                             if(b.getProvider().toLowerCase().equals(thisUser.toLowerCase())){
-                                task.removeBid(b);
+                                tempBid = b;
+                                break;
                             }
+                        }
+                        if(tempBid != null) {
+                            task.removeBid(tempBid);
                         }
                         // Add the new bid to the bid list
                         Bid bid = new Bid(LoginActivity.getCurrentUsername(), price, etDescription.getText().toString());
@@ -486,8 +482,6 @@ public class TaskDetailsActivity extends NavigationActivity {
                 finish();
             }
         });
-
-
     }
 
     /**
@@ -504,12 +498,9 @@ public class TaskDetailsActivity extends NavigationActivity {
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
 
-
-
         UserProfileDialog dialog = new UserProfileDialog();
         dialog.setArguments(bundle);
         dialog.show(getFragmentManager(), "User Profile Dialog");
-
     }
 
     /**
@@ -521,59 +512,6 @@ public class TaskDetailsActivity extends NavigationActivity {
         DataManager.updateTasks object = new DataManager.updateTasks(this);
         object.execute(n);
     }
-
-//    /**
-//     * Find the lowest bid on the displayed task and then display its amount
-//     * in the text view, or display your bid
-//     *
-//     * @param text_lowest_bid The textview for the lowest bid
-//     */
-//    public void setBid(TextView text_lowest_bid) {
-//        Bid lowest_bid = null;
-//        if (task == null) {
-//            Log.i("MSG", "task isa null here");
-//        }
-//
-//        // Display your bid price
-//        if (isBid == 1) {
-//            ArrayList<Bid> temp;
-//            temp = task.getBidList();
-//            for (Bid b : temp) {
-//                if (b.getProvider().toLowerCase().equals(thisUser.toLowerCase())) {
-//                    bid = b;
-//                }
-//            }
-//            // Set your bid price, username, and description
-//            text_lowest_bid.setText("Your bid:\n$" + String.format("%.2f", bid.getPrice()));
-//            bidUsername.setVisibility(View.VISIBLE);
-//            bidUsername.setText(bid.getProvider());
-//            description.setVisibility(View.VISIBLE);
-//            description.setText(bid.getDescription());
-//        } else {
-//            // Check if the task is completed
-//            if (task.getStatus() == Task.TaskStatus.COMPLETED || task.getStatus() == Task.TaskStatus.ASSIGNED) {
-//                text_lowest_bid.setText("TASK FULFILLED");
-//            } else {
-//                if (task.getBidList().size() == 0) {
-//                    text_lowest_bid.setText("Price:\n$" + String.format("%.2f", task.getPrice()));
-//                } else {
-//                    // Find the lowest bid to display
-//                    for (Bid bid : task.getBidList()) {
-//                        if (lowest_bid != null) {
-//                            if (bid.getPrice() < lowest_bid.getPrice()) {
-//                                lowest_bid = bid;
-//                            }
-//                        } else {
-//                            lowest_bid = bid;
-//                        }
-//                    }
-//                    if (lowest_bid != null) {
-//                        text_lowest_bid.setText("Lowest Bid:\n$" + String.format("%.2f", lowest_bid.getPrice()));
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     /**
      * Gets the details of the task being loaded from the DM and then
@@ -610,6 +548,11 @@ public class TaskDetailsActivity extends NavigationActivity {
         }
     }
 
+    /**
+     * Sets the map to open when the location text box is clicked
+     *
+     * @param view
+     */
     public void onLocationClick(View view) {
         MapActivity mapActivity = new MapActivity();
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -618,5 +561,4 @@ public class TaskDetailsActivity extends NavigationActivity {
         mapActivity.setArguments(bundle);
         fm.beginTransaction().replace(R.id.navigation_content_frame, mapActivity).commit();
     }
-
 }

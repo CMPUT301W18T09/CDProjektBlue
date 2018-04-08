@@ -39,7 +39,6 @@ import org.w3c.dom.Text;
  * @see EditProfileActivity
  * @see ListTaskActivity
  * @see MapActivity
- * @see PlaceBidActivity
  * @see RecentListingsActivity
  * @see TaskDetailsActivity
  */
@@ -88,13 +87,6 @@ public class NavigationActivity extends AppCompatActivity
         View secondary = navigationView.getHeaderView(0);
         TextView username = secondary.findViewById(R.id.usernameTextView);
         username.setText(thisUser);
-        // Use actual ID of layout to inflate it
-//        int callerLayoutID = getIntent().getIntExtra("layout_id", 0);
-//        if (callerLayoutID != 0) {
-//            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            FrameLayout frameLayout = findViewById(R.id.navigation_content_frame);
-//            inflater.inflate(callerLayoutID, frameLayout);
-//        }
         notificationChecker = new DataManager.NotificationChecker(this);
 
 
@@ -104,9 +96,6 @@ public class NavigationActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
-
-
-
     }
 
     /**
@@ -135,20 +124,6 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     /**
-     * Handles the action bar item clicks. The action bar will automatically handle clicks
-     * on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-     *
-     * @param item The menu item clicked
-     * @return Boolean constant true (item was clicked successfully)
-     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-    /**
      * Handles the navigation item clicks (like my tasks, logout, etc).
      *
      * @param item The navigation menu item that was clicked
@@ -157,7 +132,6 @@ public class NavigationActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
 
         // Handle navigation view item clicks here.
         id = item.getItemId();
@@ -227,5 +201,4 @@ public class NavigationActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e("MAP", "There was an error connecting: " + connectionResult);
     }
-
 }

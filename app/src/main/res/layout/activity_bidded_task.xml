@@ -40,7 +40,7 @@
             android:inputType="none"
             android:text="14 1510 Parkland Drive"
             android:textAlignment="center"
-            android:textColor="?android:attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -84,15 +84,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#fcfcf9"
-            android:editable="false"
-            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true"
+            android:editable="false"            android:ems="10"
             android:inputType="none"
             android:maxLength="30"
             android:maxLines="1"
             android:onClick="openRequesterInfo"
             android:text="Requestor Username"
             android:textAlignment="center"
-            android:textColor="?android:attr/colorControlActivated"
+            android:textColor="#99ff00"
             android:textStyle="bold" />
 
         <EditText
@@ -143,13 +145,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#fcfcf9"
-                android:editable="false"
-                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="true"
+                android:editable="false"                android:ems="10"
                 android:inputType="none"
                 android:onClick="openProviderInfo"
                 android:text="Bidder's Username"
                 android:textAlignment="center"
-                android:textColor="?android:attr/colorControlActivated"
+                android:textColor="#99ff00"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -164,8 +168,9 @@
             android:editable="false"
             android:text="I can work any time of any day. I have all of the necessary tools and skills and am a really hard worker. I have many years of experience doing this job. I am a world class babysitter and you need me so bad."
             android:textAlignment="center"
-            android:textColor="#fcfcf9" />
-
+            android:textColor="#fcfcf9"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
         <LinearLayout
             android:id="@+id/btnLayout"
             android:layout_width="match_parent"
@@ -174,6 +179,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
             android:gravity="bottom"
             android:orientation="horizontal">
 
@@ -198,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
@@ -209,6 +215,6 @@
                 android:textColor="@color/colorTheme" />
         </LinearLayout>
 
-    </LinearLayout>
+
 
 </RelativeLayout>
