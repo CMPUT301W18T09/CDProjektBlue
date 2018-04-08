@@ -11,14 +11,16 @@ import com.robotium.solo.Solo;
 import java.util.ArrayList;
 
 /**
- * Created by zachredfern on 2018-04-07.
+ * This test covers the "Wow" factor use cases (UC 11.01.01, UC 11.02.01). In particular, we show
+ * a task requester making a review on a task provider only after setting the task they were
+ * involved in to status: complete. After the review is add, we view the list of reviews for the
+ * task provider.
  */
-
-public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
+public class ReviewTest extends ActivityInstrumentationTestCase2 {
 
     private Solo solo;
 
-    public ReviewAddTest() {
+    public ReviewTest() {
         super(cmput301w18t09.orbid.LoginActivity.class);
     }
 
@@ -81,12 +83,15 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         return queryList;
     }
 
+    /**
+     * Tests the ability to add a review and then see the added review after.
+     */
     public void testAddReview() {
 
         Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
         ArrayList<String> queryList = new ArrayList<>();
 
-        // Delete the test requester if their account already exists
+        // Delete the test reviewer if their account already exists
         DataManager.deleteUsers delReviewer = new DataManager.deleteUsers(context);
         queryList.clear();
         queryList = findUserID("testReviewer");
@@ -97,7 +102,7 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
 
         solo.sleep(1500);
 
-        // Delete the first test provider if their account already exists
+        // Delete the test reviewee if their account already exists
         DataManager.deleteUsers delReviewee = new DataManager.deleteUsers(context);
         queryList.clear();
         queryList = findUserID("testReviewee");
@@ -119,13 +124,13 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         solo.sleep(1500);
 
 
-        // Create an account for the test requester
+        // Create an account for the test reviewer
         // NOTE: Creating accounts is covered in another use case
         DataManager.addUsers addReviewer = new DataManager.addUsers(context);
         User reviewer = new User("testReviewer", "test", "zred@hotmail.com", "7809396963", "Zach", "Redfern");
         addReviewer.execute(reviewer);
 
-        // Create an account for the first test provider
+        // Create an account for the test reviewee
         // NOTE: Creating accounts is covered in another use case
         DataManager.addUsers addReviewee = new DataManager.addUsers(context);
         User reviewee = new User("testReviewee", "test","bpanda@hotmail.com", "5875551234", "Bobbi", "Pandachuck");
@@ -156,25 +161,27 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         solo.waitForText("New Listings", 1, 3000);
         solo.clickOnImageButton(1);
 
+        solo.sleep(1000);
         solo.waitForText("Bidded Listings", 1, 3000);
         solo.clickOnImageButton(1);
 
-        solo.waitForText("Assigned Listings");
+        solo.sleep(1000);
+        solo.waitForText("Assigned Listings", 1, 3000);
         solo.clickOnText("Cat Declawing");
 
         // Say the task was fulfilled
         solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
         solo.clickOnText("Fulfilled");
+        solo.sleep(1000);
 
         // Go to the completed requests page
-        solo.waitForText("Assigned Listings");
+        solo.waitForText("Assigned Listings", 1, 3000);
         solo.clickOnImageButton(1);
 
-        solo.waitForText("Completed Listings");
-        solo.waitForText("Cat Declawing");
+        solo.waitForText("Completed Listings", 1, 3000);
+        solo.waitForText("Cat Declawing", 1, 3000);
 
         solo.clickOnText("Cat Declawing");
-
         solo.clickOnText("Add Review");
 
 
@@ -184,12 +191,19 @@ public class ReviewAddTest extends ActivityInstrumentationTestCase2 {
         solo.enterText((EditText) solo.getView(R.id.review), "A skilled veterinarian who got the job done quick.");
         solo.sleep(3000);
 
-        solo.clickOnText("Add");
+        solo.clickOnButton("Add");
         solo.sleep(1000);
 
         // See the review for that individual
-        solo.waitForText("testReviewee");
+        solo.waitForText("testReviewee",1, 3000);
         solo.clickOnText("testReviewee");
+
+        solo.sleep(1500);
+
+        RatingBar ratingBar1 = (RatingBar) solo.getView(R.id.ratingBar);
+        solo.clickOnView(ratingBar1);
+
+        solo.sleep(3000);
 
 
         DataManager.deleteTasks deleteTasks = new DataManager.deleteTasks(solo.getCurrentActivity().getBaseContext());

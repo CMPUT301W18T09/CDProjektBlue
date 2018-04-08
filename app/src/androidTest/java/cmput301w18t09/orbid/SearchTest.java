@@ -11,7 +11,8 @@ import com.robotium.solo.Solo;
 import java.util.ArrayList;
 
 /**
- * Created by zachredfern on 2018-04-07.
+ * This test cover the Searching use cases (UC UC 04.01.01). In particular, we show a user logging
+ * in and filtering the requested and bidded tasks by a keyword.
  */
 public class SearchTest extends ActivityInstrumentationTestCase2 {
 
