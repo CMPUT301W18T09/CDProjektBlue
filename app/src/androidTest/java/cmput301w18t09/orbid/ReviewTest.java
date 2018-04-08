@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * a task requester making a review on a task provider only after setting the task they were
  * involved in to status: complete. After the review is add, we view the list of reviews for the
  * task provider.
+ *
+ * @author Zach Redfern
  */
 public class ReviewTest extends ActivityInstrumentationTestCase2 {
 

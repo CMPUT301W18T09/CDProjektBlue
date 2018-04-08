@@ -45,6 +45,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private SearchView searchView;
     private boolean permissionsGranted = false;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    public Switch tbtnToggle;
 
 
     /**
@@ -59,7 +60,6 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
         super.onCreate(savedInstanceState);
 
         RecyclerView recyclerView;
-        Switch tbtnToggle;
 
         int layoutID = getIntent().getIntExtra("recent_listings_layout_id", 0);
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
