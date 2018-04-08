@@ -44,7 +44,7 @@ public class RecentListingsActivity extends NavigationActivity implements ItemCl
     private TaskListAdapter taskListAdapter;
     private SearchView searchView;
     private boolean permissionsGranted = false;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
     public Switch tbtnToggle;
 
 

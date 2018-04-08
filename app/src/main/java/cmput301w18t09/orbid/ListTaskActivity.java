@@ -50,7 +50,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
     private int maxPages;
     private Task.TaskStatus taskStatus;
     private int shouldWait = 1;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
