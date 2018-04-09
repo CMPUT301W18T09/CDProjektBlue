@@ -68,11 +68,13 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
         solo.enterText((EditText) solo.getView(R.id.edit_profile_etEmail), "BigGunz@762runs.com");
         solo.enterText((EditText) solo.getView(R.id.edit_profile_etPhoneNumber), "7805551234");
         solo.enterText((EditText) solo.getView(R.id.create_account_etUsername), "testUser");
+        solo.enterText((EditText) solo.getView(R.id.edit_profile_etPassword), "testUser");
         solo.clickOnButton("Create");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
         //Sign in as testUser
         solo.enterText((EditText) solo.getView(R.id.login_etUsername), "testUser");
+        solo.enterText((EditText) solo.getView(R.id.login_etPassword), "testUser");
         solo.clickOnButton("Sign In");
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
