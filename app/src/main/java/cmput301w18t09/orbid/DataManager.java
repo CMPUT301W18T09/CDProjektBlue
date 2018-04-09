@@ -5,11 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -550,7 +552,6 @@ public class DataManager {
             }
         };
 
-
         /**
          * Initializes the notification
          */
@@ -574,7 +575,8 @@ public class DataManager {
             // Setup the notification with the proper settings
             mBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setSound(alarmSound) // A sound for the notification
-                    .setSmallIcon(R.drawable.ic_menu_send) //notification icon
+                    .setLights(Color.RED, 500, 500)
+                    .setSmallIcon(R.drawable.atom_flower_small) //notification icon
                     .setAutoCancel(true) // Set to cancel when tapped
                     .setContentTitle("Orbid") // Notification Title
                     .setContentText("You have a new Bid!") // Notification description
@@ -617,7 +619,6 @@ public class DataManager {
             }
         }
 
-
         /**
          * Sends the notification to the user
          */
@@ -626,6 +627,8 @@ public class DataManager {
             if(shouldSendNotification) {
                 // Send the notification
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(800);
                     manager.notify(1, mBuilder.build());
                 } else {
                     notificationManager.notify(1, mBuilder.build());

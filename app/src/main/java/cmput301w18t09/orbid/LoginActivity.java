@@ -21,7 +21,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("ALL")
+
 /**
  * The first screen when the application opens. Prompts user to login or make an account.
  *
@@ -29,14 +29,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class LoginActivity extends AppCompatActivity{
 
-    private Button btnLogin;
-    private Button btnCreateAccount;
     private EditText etUsername;
     private EditText etPassword;
     private static String currentUsername;
-
-    public static ArrayList<Task> backupTasks;
-    public static final String backupTasksFile = "backupTasks.sav";
 
     /**
      * Instantiates the login activity.
@@ -45,7 +40,12 @@ public class LoginActivity extends AppCompatActivity{
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        Button btnLogin;
+        Button btnCreateAccount;
+
         setContentView(R.layout.activity_login);
 
         etUsername = findViewById(R.id.login_etUsername);

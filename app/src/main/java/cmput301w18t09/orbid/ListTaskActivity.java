@@ -44,12 +44,13 @@ import java.util.concurrent.TimeUnit;
 public class ListTaskActivity extends NavigationActivity implements ItemClickListener{
 
     private ArrayList<Task> taskList = new ArrayList<>();
+    public RecyclerView recyclerView;
     private int currentPage = 0;
     private int isMyBids;
     private int maxPages;
     private Task.TaskStatus taskStatus;
     private int shouldWait = 1;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +190,7 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
                     taskStatus = Task.TaskStatus.BIDDED;
                     break;
                 case 1:
-                    getSupportActionBar().setTitle("My Assignements");
+                    getSupportActionBar().setTitle("My Assignments");
                     taskStatus = Task.TaskStatus.ASSIGNED;
                     break;
                 case 2:
@@ -206,8 +207,6 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
      * Initializes the recycler view with the task list
      */
     private void initRecyclerView() {
-
-        RecyclerView recyclerView;
 
         filterList();
         Log.i("LENGTH", Integer.toString(taskList.size()));
@@ -229,8 +228,8 @@ public class ListTaskActivity extends NavigationActivity implements ItemClickLis
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                taskAdapter.setTaskList(taskList);
-                taskAdapter.notifyDataSetChanged();
+                filterList();
+                initRecyclerView();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
