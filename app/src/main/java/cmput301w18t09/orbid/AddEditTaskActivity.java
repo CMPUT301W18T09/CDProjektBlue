@@ -380,11 +380,6 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * @see DataManager
      */
     private void update() {
-
-        // Get the new changes
-        task.setTitle(etTitle.getText().toString());
-        task.setDescription(etDescription.getText().toString());
-        Log.i("EDIT", "The task id is: " + task.getID());
         // Update the task if it's being editted
         Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         ListIterator<Task> it = DataManager.backupTasks.listIterator();
@@ -465,65 +460,65 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
             }
 
         } else {
-            changeTask = taskList.get(0);
-            return;
+            if(taskList.size() > 0) {
+                changeTask = taskList.get(0);
+            }
         }
 
-
-        // Set the lowest bid in the view, if there is one
-        if (task.getLowestBid() != -1) {
-            etPrice.setText("Lowest Bid: $" + Double.toString(task.getLowestBid()));
-        }
-        else {
-            etPrice.setText("Lowest Bid: N/A");
-        }
-
-        etTitle.setText(task.getTitle());
-        etDescription.setText(task.getDescription());
-        if (task.getStatus() == Task.TaskStatus.REQUESTED) {
-            etStatus.setText("Status: Requested");
-        }
-        else if (task.getStatus()  == Task.TaskStatus.BIDDED) {
-            etStatus.setText("Status: Bidded");
-        }
-
-        // Get the task locations details
-        LatLng location = task.getLocation();
-        if (location != null && DataManager.isNetworkAvailable(this)) {
-            if (!fromMap) {
-                Log.e("GEO", "FROM MAP IS FALSE");
-                String geoResult = null;
-                try {
-                    geoResult = MapActivity.getAddress(location, getResources());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                etLocation.setText(geoResult);
+        if(!checkChanged) {
+            // Set the lowest bid in the view, if there is one
+            if (task.getLowestBid() != -1) {
+                etPrice.setText("Lowest Bid: $" + Double.toString(task.getLowestBid()));
             } else {
-                if (getIntent().getStringExtra("location") != null) {
-                    String fromLocation = getIntent().getStringExtra("location");
-                    etLocation.setText(fromLocation);
+                etPrice.setText("Lowest Bid: N/A");
+            }
+
+            etTitle.setText(task.getTitle());
+            etDescription.setText(task.getDescription());
+            if (task.getStatus() == Task.TaskStatus.REQUESTED) {
+                etStatus.setText("Status: Requested");
+            } else if (task.getStatus() == Task.TaskStatus.BIDDED) {
+                etStatus.setText("Status: Bidded");
+            }
+
+            // Get the task locations details
+            LatLng location = task.getLocation();
+            if (location != null && DataManager.isNetworkAvailable(this)) {
+                if (!fromMap) {
+                    Log.e("GEO", "FROM MAP IS FALSE");
+                    String geoResult = null;
                     try {
-                        task.setLocation(MapActivity.fromAddress(fromLocation, getResources()));
+                        geoResult = MapActivity.getAddress(location, getResources());
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ApiException e) {
                         e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    etLocation.setText(geoResult);
+                } else {
+                    if (getIntent().getStringExtra("location") != null) {
+                        String fromLocation = getIntent().getStringExtra("location");
+                        etLocation.setText(fromLocation);
+                        try {
+                            task.setLocation(MapActivity.fromAddress(fromLocation, getResources()));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
-        }
-        if (!fromMap) {
-            if (task.getStringLocation() == null) {
-                etLocation.setText("No Location Specified");
-            } else {
-                etLocation.setText(task.getStringLocation());
+            if (!fromMap) {
+                if (task.getStringLocation() == null) {
+                    etLocation.setText("No Location Specified");
+                } else {
+                    etLocation.setText(task.getStringLocation());
+                }
             }
         }
     }
@@ -727,11 +722,12 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      * Checks if the task status has changed to bidded if you save it
      */
     private Boolean checkChanged() {
-
+        if(isAdd != 0) {
+            return false;
+        }
         if (!DataManager.isNetworkAvailable(this)) {
             return false;
         }
-
         load(true);
         if(changeTask.getStatus().equals(Task.TaskStatus.BIDDED)) {
             return true;
