@@ -381,6 +381,10 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
      */
     private void update() {
 
+        // Get the new changes
+        task.setTitle(etTitle.getText().toString());
+        task.setDescription(etDescription.getText().toString());
+        Log.i("EDIT", "The task id is: " + task.getID());
         // Update the task if it's being editted
         Button btnSavePost = (Button) findViewById(R.id.SavePostTaskButton);
         ListIterator<Task> it = DataManager.backupTasks.listIterator();
@@ -462,6 +466,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
 
         } else {
             changeTask = taskList.get(0);
+            return;
         }
 
 
@@ -532,6 +537,7 @@ public class AddEditTaskActivity extends NavigationActivity implements ItemClick
     public void postEditTask(View view) {
 
         // Check if the task has been bidded on if it is being editted
+        Log.i("EDIT", "Checkchanged: " + checkChanged().toString());
         if(isAdd == 0 && checkChanged()) {
             Toast.makeText(this, "Your task has been bidded on.", Toast.LENGTH_SHORT).show();
             finish();
