@@ -2,6 +2,7 @@ package cmput301w18t09.orbid;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
+import java.util.ArrayList;
 
 import com.robotium.solo.Solo;
 
@@ -15,7 +16,7 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
     public TaskBasicsTest() {
-        super(NavigationActivity.class);
+        super(LoginActivity.class);
     }
 
     public void setUp() {
@@ -23,35 +24,43 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testTaskBasics() throws Exception {
-        //This will be the user's username that we use for the test
-        NavigationActivity.thisUser = "Mica404";
 
-        //Takes us from the navigation to My Requests
+        //Adding test user
+        User testUser = new User("mica", "test", "mica@test.com", "1234567890", "Mica", "g");
+        DataManager.addUsers addUsers = new DataManager.addUsers(solo.getCurrentActivity().getBaseContext());
+        addUsers.execute(testUser);
+
+        // Login
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.enterText(0, "mica");
+        solo.enterText(1, "test");
+        solo.clickOnText("Sign In");
+
+        solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
+
+        // Going to My listings through navigation drawer
         solo.clickOnImageButton(0);
-        solo.clickOnText("My Requests");
+        solo.clickOnText("My Listings");
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
+        assertTrue(solo.waitForText("New Listings"));
 
         //Testing adding a task and posting it
-        solo.clickOnButton("Add");
+        solo.clickOnView(solo.getView(R.id.MenuItem_AddButton));;
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.enterText((EditText) solo.getView(R.id.EditTaskTitle), "Adding Test");
         solo.enterText((EditText) solo.getView(R.id.EditTaskComment), "Testing that we can add tasks");
-        solo.enterText((EditText) solo.getView(R.id.EditPrice), "50.00");
         solo.clickOnButton("Post");
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
         solo.sleep(1000);
 
         //Testing editing a task by changing all of the editable fields and saving
-        //solo.clickOnText("Adding Test");
         solo.clickInRecyclerView(0);
         solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.clearEditText((EditText) solo.getView(R.id.EditTaskTitle));
         solo.clearEditText((EditText) solo.getView(R.id.EditTaskComment));
-        solo.clearEditText((EditText) solo.getView(R.id.EditPrice));
         solo.enterText((EditText) solo.getView(R.id.EditTaskTitle), "Editing Test");
         solo.enterText((EditText) solo.getView(R.id.EditTaskComment), "Testing that we can edit tasks");
-        solo.enterText((EditText) solo.getView(R.id.EditPrice), "60.00");
         solo.clickOnButton("Save");
         solo.assertCurrentActivity("Wrong Activity", ListTaskActivity.class);
 
@@ -59,13 +68,19 @@ public class TaskBasicsTest extends ActivityInstrumentationTestCase2 {
         solo.sleep(1000);
 
         //Testing to delete a task
-        //solo.clickOnText("Editing Test");
         solo.clickInRecyclerView(0);
         solo.assertCurrentActivity("Wrong Activity",AddEditTaskActivity.class);
         solo.clickOnButton("Delete");
         solo.assertCurrentActivity("Wrong Activity",ListTaskActivity.class);
         solo.sleep(1000);
 
+
+        // Delete test user
+        ArrayList<String> ID = new ArrayList<>();
+        DataManager.deleteUsers deleteUsers = new DataManager.deleteUsers(solo.getCurrentActivity().getBaseContext());
+        ID.clear();
+        ID.add(testUser.getID());
+        deleteUsers.execute(ID);
     }
     @Override
     public void tearDown() throws Exception{

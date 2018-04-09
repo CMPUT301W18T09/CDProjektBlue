@@ -18,7 +18,7 @@ public class TaskDetailsTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
     public TaskDetailsTest() {
-        super(NavigationActivity.class);
+        super(LoginActivity.class);
     }
 
     public void setUp() {
@@ -27,32 +27,41 @@ public class TaskDetailsTest extends ActivityInstrumentationTestCase2 {
 
     public void testTaskDetails() throws Exception {
 
-        //Creating a new task by a different user than the one we are going to use
-        Task task = new Task("Mica", "testing UC 02.01.01", "Task details test", 50.00, Task.TaskStatus.REQUESTED);
+        // Adding test user
+        User testUser = new User("mica", "test", "mica@test.com", "1234567890", "Mica", "g");
+        DataManager.addUsers addUsers = new DataManager.addUsers(solo.getCurrentActivity().getBaseContext());
+        addUsers.execute(testUser);
+
+        // Create a new task
+        Task task = new Task("notMica", "Need someone to look after my dog.", "Looking for dog sitter", 99.99, Task.TaskStatus.REQUESTED);
         DataManager.addTasks addTasks = new DataManager.addTasks(solo.getCurrentActivity().getBaseContext());
         addTasks.execute(task);
 
-        //This is the user we are going to use
-        NavigationActivity.thisUser = "NotMica";
+        // Login
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.enterText(0, "mica");
+        solo.enterText(1, "test");
+        solo.clickOnText("Sign In");
 
-        //Going from navigation to Recent Listings page
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Recent Listings");
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         //Clicking on task to see the details
-        assertTrue(solo.waitForText("Task details test", 1, 3000));
-        //solo.clickOnText("Task details test");
         solo.clickInRecyclerView(0);
         solo.assertCurrentActivity("Wrong Activity", TaskDetailsActivity.class);
-
-        assertTrue(solo.waitForText("Task details test"));
+        assertTrue(solo.waitForText("Status"));
 
         //Deleting the task to keep the server clean from testing
         DataManager.deleteTasks deleteTasks = new DataManager.deleteTasks(solo.getCurrentActivity().getBaseContext());
         ArrayList<String> ID = new ArrayList<>();
         ID.add(task.getID());
         deleteTasks.execute(ID);
+
+        solo.sleep(1000);
+        // Delete test user
+        DataManager.deleteUsers deleteUsers = new DataManager.deleteUsers(solo.getCurrentActivity().getBaseContext());
+        ID.clear();
+        ID.add(testUser.getID());
+        deleteUsers.execute(ID);
     }
     @Override
     public void tearDown() throws Exception{
