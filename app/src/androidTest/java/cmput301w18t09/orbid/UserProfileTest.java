@@ -80,27 +80,18 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
 
         //Open up Navigation Drawer and select Edit Profile
         solo.clickOnImageButton(0); // open menu
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN); // select the fifth item
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Edit Profile");
 
         //Edit First name, go back to recent listings, return to edit profile to ensure change was saved
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
         solo.clearEditText(0);
         solo.enterText(0, "James");
+        solo.enterText(4, "testUser");
         solo.clickOnButton("Save");
-        solo.goBack();
+//        solo.goBack();
 
         solo.clickOnImageButton(0); // open menu
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN); // select the fifth item
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Edit Profile");
         solo.searchText("James");
 
         //Create a task, open its details and view user details from there
@@ -109,8 +100,7 @@ public class UserProfileTest extends ActivityInstrumentationTestCase2 {
         new DataManager.addTasks(solo.getCurrentActivity().getBaseContext()).execute(task);
         solo.goBack();
         solo.clickOnImageButton(0);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
-        solo.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+        solo.clickOnText("Recent Listings");
         solo.assertCurrentActivity("Wrong Activity", RecentListingsActivity.class);
 
         solo.clickOnText("Cut My Hair");
