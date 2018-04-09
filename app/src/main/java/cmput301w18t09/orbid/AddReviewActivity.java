@@ -78,6 +78,11 @@ public class AddReviewActivity extends NavigationActivity {
      */
     private void addReview() {
 
+        if (!DataManager.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Can't add reviews offline", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         EditText etReview = findViewById(R.id.review);
         RatingBar ratingBar = findViewById(R.id.ratingBar2);
 
