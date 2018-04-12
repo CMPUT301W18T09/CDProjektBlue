@@ -104,19 +104,19 @@
 
     <EditText
         android:id="@+id/edit_profile_etPassword"
-        android:layout_below="@+id/edit_profile_etPhoneNumber"
-        android:layout_marginTop="30dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="New Password"
-        android:inputType="textPassword"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_profile_etPhoneNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#fcfcf9"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
         android:textAlignment="center"
-        android:textColorHint="#fcfcf9"
-        android:textColor="#fcfcf9"/>
+        android:textColor="#fcfcf9"
+        android:textColorHint="#fcfcf9" />
 
 
 </RelativeLayout>
