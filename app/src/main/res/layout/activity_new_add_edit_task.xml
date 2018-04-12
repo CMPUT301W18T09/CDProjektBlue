@@ -39,7 +39,7 @@
                 android:layout_below="@+id/EditTaskTitle"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:background="@color/colorTheme" />
+                android:background="@android:color/transparent"/>
         </LinearLayout>
 
         <EditText
